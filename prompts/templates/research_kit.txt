@@ -1,0 +1,15 @@
+Based on this academic debate, generate a structured research kit for a PhD student.
+
+Topic: {topic}
+Field: {field}
+
+Debate Summary:
+{debate_summary}
+
+Generate components as specified:
+1. Paper outline
+2. Key findings  
+3. Open research questions
+4. Recommendations
+
+Use Vietnamese. Be specific and actionable for ICLR-level research.

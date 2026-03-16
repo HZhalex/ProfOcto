@@ -1,0 +1,13 @@
+Generate an opening question that will spark an engaging debate.
+
+Topic: {topic}
+Participants: {participants}
+
+Requirements:
+- Ask a specific, focused question (not too broad)
+- Make it relevant to all participants' expertise
+- In Vietnamese
+- Provocative enough to generate diverse viewpoints
+- 2-3 sentences max
+
+Example format: "Considering [context], is [position A] more effective than [position B]? Why?"

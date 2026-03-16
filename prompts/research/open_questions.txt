@@ -1,0 +1,15 @@
+Based on this academic debate about {topic} in {field}, identify open research questions.
+
+{debate_summary}
+
+Generate 5-7 specific, actionable research questions in Vietnamese that:
+- Extend the debate further
+- Address mentioned limitations
+- Suggest new research directions
+- Are ICLR-relevant for PhD research
+
+Format as JSON array of strings:
+["Question 1?", "Question 2?", ...]
+
+Only return JSON array, no markdown.
+Questions should be specific enough to guide a research project.

@@ -22,7 +22,12 @@ MAX_TOKENS_PER_TURN = 400
 FACT_CHECK_ENABLED = True
 LANGUAGE = "vi"
 
+# Research Mode (khi ON: generate research kit + paper outline sau debate)
+RESEARCH_MODE = True  # Bật research synthesis + paper outline
+RESEARCH_MAX_RECOMMENDATIONS = 5
+
 # Display
 STREAM_OUTPUT = True
 SAVE_TRANSCRIPT = True
 TRANSCRIPT_DIR = "transcripts"
+RESEARCH_KIT_DIR = "research_kits"  # Nơi lưu research kits

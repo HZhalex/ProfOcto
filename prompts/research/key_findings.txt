@@ -1,0 +1,18 @@
+From this academic debate, identify the top key research findings.
+
+Topic: {topic}
+
+Debate content:
+{debate_content}
+
+Extract findings as JSON array (3-5 findings):
+[
+  {{"finding": "concise statement", "evidence": "where it came from", "impact": "why it matters"}},
+  ...
+]
+
+Only return JSON array, no markdown.
+Requirements:
+- Findings must be specific and evidence-based
+- Evidence should reference debate participants or discussion
+- Impact should explain research significance

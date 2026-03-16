@@ -1,0 +1,20 @@
+Based on these research findings, suggest concrete next steps for PhD research.
+
+Topic: {topic}
+Field: {field}
+
+Key findings:
+{findings}
+
+Suggest {num_recommendations} concrete recommendations in Vietnamese:
+1. Type your recommendation
+2. Type your recommendation
+...
+
+Each should be:
+- Specific and actionable
+- ICLR-relevant for publication
+- Building on debate insights
+- Feasible for PhD-level work
+
+Be direct and practical.

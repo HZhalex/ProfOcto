@@ -3,6 +3,7 @@ import time
 from google import genai
 from google.genai import errors as genai_errors
 from debate.session import DebateSession
+from prompts import load_system, load_template
 import config
 
 
@@ -28,42 +29,43 @@ def _call(prompt: str, max_tokens: int) -> str:
         return client.models.generate_content(
             model=config.MODEL,
             contents=prompt,
-            config={
-                "max_output_tokens": max_tokens,
-                "temperature": 0.5,
-                "stop_sequences": ["\n\n\n\n"],
-            },
+            config={"max_output_tokens": max_tokens, "temperature": 0.5,
+                    "stop_sequences": ["\n\n\n\n"]},
         ).text.strip()
     return _retry(do)
 
 
 def generate_moderator_summary(session: DebateSession) -> str:
-    # Lấy tối đa 3 turns gần nhất — model nhỏ không cần nhiều hơn
+    system = load_system("moderator")
     history = session.get_history_text(max_turns=3)
-    prompt = f"""Bạn là Moderator. Topic: "{session.topic}"
+    prompt = f"""{system}
 
-Các giáo sư vừa tranh luận:
+Topic: "{session.topic}" | Round {session.current_round} just ended.
+
+RECENT DEBATE:
 {history}
 
-Viết đúng 3 câu bằng tiếng Việt:
-1. Điểm bất đồng lớn nhất là gì.
-2. Ai có lập luận thuyết phục nhất và tại sao.
-3. Câu hỏi mới để tiếp tục tranh luận."""
+Write exactly 3 sentences in Vietnamese:
+1. The biggest point of disagreement.
+2. Who made the most compelling argument and why.
+3. A new question to deepen the debate."""
     return _call(prompt, max_tokens=200)
 
 
 def generate_final_summary(session: DebateSession) -> str:
-    # Chỉ lấy 6 turns cuối để tránh context quá dài gây loop
+    system = load_system("moderator")
     history = session.get_history_text(max_turns=6)
-    prompt = f"""Bạn là Moderator. Topic: "{session.topic}"
+    prompt = f"""{system}
 
-Tranh luận:
+Topic: "{session.topic}"
+
+DEBATE:
 {history}
 
-Tóm tắt ngắn gọn bằng tiếng Việt theo đúng format sau, mỗi mục chỉ 1-2 dòng:
+Summarize in Vietnamese using this exact format, 1-2 lines each:
 
-Đồng thuận: [viết ở đây]
-Bất đồng: [viết ở đây]
-Câu hỏi mở: [viết ở đây]
-Nghiên cứu tiếp: [viết ở đây]"""
+Đồng thuận: [write here]
+Bất đồng: [write here]
+Câu hỏi mở: [write here]
+Nghiên cứu tiếp: [write here]"""
     return _call(prompt, max_tokens=300)

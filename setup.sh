@@ -29,4 +29,3 @@ echo "  1. Điền API key vào file .env"
 echo "  2. source .venv/bin/activate"
 echo "  3. python main.py"
 echo ""
-~

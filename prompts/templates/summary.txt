@@ -1,0 +1,12 @@
+Summarize the key points, areas of agreement, and remaining disagreements from this round of debate.
+
+Debate so far:
+{debate_content}
+
+Format in Vietnamese:
+1. Points of Agreement:
+2. Key Disagreements:
+3. New Questions Raised:
+4. Suggestion for Next Round:
+
+Keep it concise (5-7 sentences).
