@@ -210,3 +210,4 @@ __marimo__/
 logs/
 transcripts/
 phd_analysis/
+.env
