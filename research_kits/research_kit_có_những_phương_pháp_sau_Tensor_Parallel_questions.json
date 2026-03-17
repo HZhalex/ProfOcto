@@ -1,9 +1,0 @@
-[
-  "How can we develop more efficient methods for dynamically routing data across Tensor Parallelism and MoE layers, accounting for varying data sizes and computational demands?",
-  "What are the most effective techniques for mitigating the communication overhead associated with large-scale Tensor Parallelism, particularly in heterogeneous memory systems?",
-  "Can we design novel architectures that inherently leverage the strengths of both Tensor Parallelism and MoE, leading to improved scaling efficiency?",
-  "How can we better understand and quantify the impact of data distribution across different parallelism strategies on the overall performance of LLMs?",
-  "What are the trade-offs between the scalability gains offered by Tensor Parallelism and MoE, considering factors like inference latency and memory footprint?",
-  "Can we develop methods for systematically optimizing the hyperparameters of Tensor Parallelism and MoE to achieve optimal performance across diverse LLM tasks and datasets?",
-  "How can we leverage techniques from domain-specific LLMs (e.g., code generation, question answering) to guide the scaling of these parallelization strategies?"
-]

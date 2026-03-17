@@ -1,9 +1,0 @@
-[
-  "Câu hỏi 1: Làm thế nào để giảm thiểu độ phức tạp giao tiếp trong kiến trúc MoE, đặc biệt là khi số lượng expert tăng lên đáng kể, để cải thiện hiệu quả tính toán?",
-  "Câu hỏi 2: Các phương pháp tối ưu hóa nào có thể được phát triển để đảm bảo tính ổn định của kiến trúc MoE, giảm thiểu rủi ro về sự mất cân bằng giữa các expert?",
-  "Câu hỏi 3: Liệu có thể phát triển các thuật toán học tập tự động (auto-tuning) để tự động điều chỉnh cấu hình MoE (số lượng expert, kích thước expert, tỷ lệ kích hoạt) dựa trên đặc điểm của dữ liệu và mô hình?",
-  "Câu hỏi 4: Nghiên cứu sâu hơn về mối quan hệ giữa độ phức tạp giao tiếp và hiệu suất tính toán trong cả MoE, Tensor Parallelism và Pipeline Parallelism, để xác định điểm tối ưu cho từng loại kiến trúc?",
-  "Câu hỏi 5: Làm thế nào để tích hợp hiệu quả Tensor Parallelism và Pipeline Parallelism với MoE, tận dụng ưu điểm của từng phương pháp để đạt được khả năng mở rộng tối đa?",
-  "Câu hỏi 6: Các kỹ thuật nào có thể được sử dụng để dự đoán và giảm thiểu các vấn đề về 'load imbalance' trong MoE, đảm bảo rằng tất cả các expert đều được sử dụng một cách hiệu quả?",
-  "Câu hỏi 7: Nghiên cứu về các kiến trúc MoE mới, vượt ra ngoài các phương pháp truyền thống, có thể giảm thiểu độ phức tạp tính toán và giao tiếp, đồng thời cải thiện hiệu suất tổng thể."
-]
