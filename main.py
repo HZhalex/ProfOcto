@@ -30,7 +30,11 @@ from output.terminal_renderer import (
     print_final_summary, print_saved, stream_write,
 )
 from output.exporter import export_markdown
+from output.phase5_exporter import export_phase5_json, export_phase5_html
+from output.interactive_cli import launch_interactive_cli
+from agents.gap_ranker import generate_comparison_table, identify_pareto_frontier
 from utils.logger import init_logger, get_logger
+from utils.retry_cache import get_cache_stats
 
 
 def run_debate(topic: str, field: str):
@@ -203,15 +207,17 @@ def run_debate(topic: str, field: str):
     
     # NEW: ICLR READINESS PIPELINE (Phase 5) ──────────────────
     # Convert gaps → formal problems → novelty assessment → solution sketches → readiness scores
+    # ROBUST: Handles per-gap errors, continues processing, returns partial results
     if config.ICLR_READINESS_ENABLED and session.research_gaps:
         console.print("\n[bold bright_cyan]━━━ ICLR READINESS ASSESSMENT PIPELINE ━━━[/bold bright_cyan]\n")
         
+        # Initialize variables for each phase
+        formal_problems = []
+        novelty_results = []
+        solution_sketches = []
+        readiness_scores = []
+        
         try:
-            # Initialize variables for each phase (to avoid NameError if a phase is disabled)
-            formal_problems = []
-            novelty_results = []
-            solution_sketches = []
-            
             # Prepare debate context for tracing
             debate_context = {
                 "turns": [{
@@ -241,27 +247,38 @@ def run_debate(topic: str, field: str):
                 avg = session.get_average_rigor_score(prof.name)
                 all_rigor_scores.append(avg)
             
-            # Phase 5-1: Gap → Formal Problem
+            # Phase 5-1: Gap → Formal Problem (robust per-gap processing)
             if config.GAP_TO_FORMAL_PROBLEM_ENABLED and config.SHOW_FORMAL_PROBLEMS:
                 console.print("[dim]→ Formalizing gaps to mathematical problems...[/dim]")
-                formal_problems = formalize_all_gaps(session.research_gaps, debate_context, session.topic)
+                for gap in session.research_gaps:
+                    try:
+                        from agents.gap_to_formal_problem import formalize_research_gap
+                        formal = formalize_research_gap(gap, debate_context, session.topic)
+                        formal_problems.append(formal)
+                    except Exception as e:
+                        logger.log_error("gap_formalization", e, context=f"Gap: {gap.get('title')}")
+                        console.print(f"  [yellow]⚠ Skip gap '{gap.get('title')}': {str(e)[:60]}[/yellow]")
+                
                 session.set_formal_problems(formal_problems)
-                console.print(f"[green]✓ Formalized {len(formal_problems)} problems[/green]\n")
+                console.print(f"[green]✓ Formalized {len(formal_problems)}/{len(session.research_gaps)} problems[/green]\n")
             
-            # Phase 5-2: Novelty Analysis
-            if config.NOVELTY_ANALYZER_ENABLED and config.SHOW_NOVELTY_ANALYSIS:
+            # Phase 5-2: Novelty Analysis (robust per-problem)
+            if config.NOVELTY_ANALYZER_ENABLED and config.SHOW_NOVELTY_ANALYSIS and formal_problems:
                 console.print("[dim]→ Analyzing novelty vs SOTA...[/dim]")
-                novelty_results = analyze_novelty_batch(
-                    formal_problems if formal_problems else [],
-                    all_citations,
-                    debate_context,
-                    session.topic
-                )
+                for problem in formal_problems:
+                    try:
+                        from agents.novelty_analyzer import score_novelty
+                        result = score_novelty(problem, all_citations, debate_context, session.topic)
+                        novelty_results.append(result)
+                    except Exception as e:
+                        logger.log_error("novelty_analysis", e, context=f"Problem: {problem.get('gap_title')}")
+                        console.print(f"  [yellow]⚠ Skip novelty for '{problem.get('gap_title')}': {str(e)[:60]}[/yellow]")
+                
                 session.set_novelty_assessments(novelty_results)
-                console.print(f"[green]✓ Analyzed {len(novelty_results)} problems[/green]\n")
+                console.print(f"[green]✓ Analyzed {len(novelty_results)}/{len(formal_problems)} problems[/green]\n")
             
-            # Phase 5-3: Solution Sketches
-            if config.SOLUTION_SKETCH_ENABLED and config.SHOW_SOLUTION_SKETCHES:
+            # Phase 5-3: Solution Sketches (robust per-problem)
+            if config.SOLUTION_SKETCH_ENABLED and config.SHOW_SOLUTION_SKETCHES and formal_problems:
                 console.print("[dim]→ Generating solution sketches from debate arguments...[/dim]")
                 
                 # Collect professor arguments
@@ -274,27 +291,42 @@ def run_debate(topic: str, field: str):
                             "mathematical_support": turn.theorems_data.get("summary", "")
                         })
                 
-                solution_sketches = generate_sketches_batch(
-                    formal_problems if formal_problems else [],
-                    debate_context,
-                    professor_arguments
-                )
-                session.set_solution_sketches(solution_sketches)
-                console.print(f"[green]✓ Generated {len(solution_sketches)} solution sketches[/green]\n")
-            
-            # Phase 5-4: ICLR Readiness Assessment
-            if config.ICLR_READINESS_ENABLED and config.SHOW_ICLR_READINESS:
-                console.print("[dim]→ Assessing ICLR readiness for PhD pursuit...[/dim]")
-                readiness_scores = assess_batch(
-                    formal_problems if formal_problems else [],
-                    novelty_results if novelty_results else [],
-                    solution_sketches if solution_sketches else [],
-                    all_rigor_scores
-                )
-                session.set_iclr_readiness_scores(readiness_scores)
-                console.print(f"[green]✓ Assessed readiness for {len(readiness_scores)} gaps[/green]\n")
+                for problem in formal_problems:
+                    try:
+                        from agents.solution_sketch import generate_solution_sketch
+                        sketch = generate_solution_sketch(problem, debate_context, professor_arguments)
+                        solution_sketches.append(sketch)
+                    except Exception as e:
+                        logger.log_error("solution_sketch", e, context=f"Problem: {problem.get('gap_title')}")
+                        console.print(f"  [yellow]⚠ Skip sketch for '{problem.get('gap_title')}': {str(e)[:60]}[/yellow]")
                 
-                # Display executive summary
+                session.set_solution_sketches(solution_sketches)
+                console.print(f"[green]✓ Generated {len(solution_sketches)}/{len(formal_problems)} sketches[/green]\n")
+            
+            # Phase 5-4: ICLR Readiness Assessment (robust per-gap)
+            if config.ICLR_READINESS_ENABLED and config.SHOW_ICLR_READINESS and formal_problems:
+                console.print("[dim]→ Assessing ICLR readiness for PhD pursuit...[/dim]")
+                
+                # Match problems to novelty and sketches
+                novelty_map = {n.get("gap_title"): n for n in novelty_results}
+                sketch_map = {s.get("gap_title"): s for s in solution_sketches}
+                
+                for problem in formal_problems:
+                    try:
+                        from agents.iclr_readiness_scorer import assess_iclr_readiness
+                        novelty = novelty_map.get(problem.get("gap_title"), {})
+                        sketch = sketch_map.get(problem.get("gap_title"), {})
+                        
+                        assessment = assess_iclr_readiness(problem, novelty, sketch, all_rigor_scores)
+                        readiness_scores.append(assessment)
+                    except Exception as e:
+                        logger.log_error("iclr_readiness", e, context=f"Problem: {problem.get('gap_title')}")
+                        console.print(f"  [yellow]⚠ Skip readiness for '{problem.get('gap_title')}': {str(e)[:60]}[/yellow]")
+                
+                session.set_iclr_readiness_scores(readiness_scores)
+                console.print(f"[green]✓ Assessed readiness for {len(readiness_scores)}/{len(formal_problems)} gaps[/green]\n")
+                
+                # Display executive summary if have results
                 if readiness_scores:
                     summary = format_executive_summary(readiness_scores, top_n=3)
                     console.print(summary)
@@ -308,10 +340,75 @@ def run_debate(topic: str, field: str):
                             priority_icon = "🔴" if item.get("priority") == "High" else "🟡" if item.get("priority") == "Medium" else "🟢"
                             console.print(f"{priority_icon} [{item.get('priority')}] {item.get('action')}")
                             console.print(f"    ⏱ {item.get('timeline')}\n")
+            
+            # Log phase 5 completion stats
+            logger.gap_logger.info(f"Phase 5 complete: {len(formal_problems)} problems, {len(novelty_results)} novelty, {len(solution_sketches)} sketches, {len(readiness_scores)} readiness")
         
         except Exception as e:
-            logger.log_error("iclr_pipeline", e, context="Phase 5 ICLR pipeline error")
+            logger.log_error("iclr_pipeline", e, context="Phase 5 setup error")
             console.print(f"[red]⚠ ICLR pipeline error: {str(e)}[/red]\n")
+        
+        # NEW: Phase 5 Export (JSON + HTML) ─────────────────────────────
+        if config.EXPORT_PHASE5_JSON and readiness_scores:
+            console.print("[dim]→ Exporting Phase 5 results to JSON...[/dim]")
+            try:
+                export_dir = export_phase5_json(
+                    session.topic,
+                    formal_problems,
+                    novelty_results,
+                    solution_sketches,
+                    readiness_scores,
+                    config.PhD_ANALYSIS_DIR
+                )
+                console.print(f"[green]✓ JSON exported to {export_dir}[/green]")
+            except Exception as e:
+                logger.log_error("export_json", e, context="JSON export failed")
+                console.print(f"[yellow]⚠ JSON export failed: {str(e)[:60]}[/yellow]")
+        
+        if config.EXPORT_PHASE5_HTML and readiness_scores:
+            console.print("[dim]→ Generating HTML report...[/dim]")
+            try:
+                html_file = export_phase5_html(
+                    session.topic,
+                    readiness_scores,
+                    config.PhD_ANALYSIS_DIR
+                )
+                console.print(f"[green]✓ HTML report: {html_file}[/green]")
+                if config.EXPORT_AUTO_OPEN_HTML:
+                    import webbrowser
+                    webbrowser.open(f"file://{os.path.abspath(html_file)}")
+            except Exception as e:
+                logger.log_error("export_html", e, context="HTML export failed")
+                console.print(f"[yellow]⚠ HTML export failed: {str(e)[:60]}[/yellow]")
+        
+        # NEW: Show Gap Comparison & Rankings ───────────────────────────
+        if config.ENABLE_GAP_COMPARISON and readiness_scores and len(readiness_scores) > 1:
+            console.print("\n[bold cyan]📊 GAP COMPARISON[/bold cyan]\n")
+            comparison = generate_comparison_table(readiness_scores)
+            console.print(comparison)
+            
+            # Show Pareto frontier
+            frontier = identify_pareto_frontier(readiness_scores)
+            if len(frontier) < len(readiness_scores):
+                console.print(f"\n[bold]Pareto-optimal gaps ({len(frontier)}):[/bold]")
+                for gap in frontier:
+                    console.print(f"  ✓ {gap}")
+        
+        # NEW: Show API cache stats ──────────────────────────────────────
+        if config.CACHE_PHASE5_RESULTS:
+            cache_stats = get_cache_stats()
+            console.print(f"\n[dim]Cache: {cache_stats['cached_items']} items, {cache_stats['total_accesses']} accesses[/dim]")
+        
+        # NEW: Interactive Refinement CLI ─────────────────────────────────
+        if config.ENABLE_INTERACTIVE_REFINEMENT and readiness_scores:
+            should_interact = Prompt.ask(
+                "\n[bold cyan]🔍 Explore gaps interactively?[/bold cyan]",
+                choices=["y", "n"],
+                default="n"
+            )
+            if should_interact.lower() == "y":
+                launch_interactive_cli(readiness_scores)
+    
     
     # ── Log debate completion ─────────────────────────────────
     logger = get_logger()

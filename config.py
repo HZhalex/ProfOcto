@@ -12,7 +12,7 @@ if os.path.exists(_env_path):
 
 GEMINI_API_KEY = os.environ.get("GEMINI_API_KEY", "")
 
-MODEL = "gemini-2.5-flash-lite"
+MODEL = "gemma-3-12b"
 
 # Debate settings
 NUM_PROFESSORS = 2    # số giáo sư, min 2 max 5
@@ -67,3 +67,18 @@ SHOW_NOVELTY_ANALYSIS = True  # Display novelty vs SOTA comparison
 SHOW_SOLUTION_SKETCHES = True  # Display proof strategies
 SHOW_ICLR_READINESS = True  # Display final readiness assessment
 SHOW_ACTION_ITEMS = True  # Display concrete action items for pursuing gap
+
+# CACHING & OPTIMIZATION (Phase 6)
+CACHE_PHASE5_RESULTS = True  # Cache Gemini API results to reduce cost/speed up re-runs
+CACHE_DIR = "phd_analysis/.cache"  # Where to store cached API results
+CACHE_MAX_SIZE = 500  # Maximum number of cached items
+
+# PHASE 5 EXPORT & VISUALIZATION
+EXPORT_PHASE5_JSON = True  # Export Phase 5 results to JSON
+EXPORT_PHASE5_HTML = True  # Generate HTML reports for visualization
+EXPORT_INCLUDE_DETAILED_ANALYSIS = True  # Include full trace logs in exports
+EXPORT_AUTO_OPEN_HTML = False  # Auto-open generated HTML in browser
+
+# INTERACTIVE FEATURES
+ENABLE_INTERACTIVE_REFINEMENT = True  # Allow user to refine analysis after pipeline
+ENABLE_GAP_COMPARISON = True  # Show gap comparison/ranking table
