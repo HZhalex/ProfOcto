@@ -22,7 +22,8 @@ from orchestrator import create_session, generate_opening_question
 from agents.professor import generate_professor_turn
 from agents.moderator import generate_moderator_summary, generate_final_summary
 from agents.fact_checker import fact_check_turn
-from agents.research_synthesizer import generate_research_kit
+from agents.research_synthesizer import generate_research_kit, save_research_kit
+from output.exporter import export_markdown
 from debate.session import Turn
 
 app = FastAPI(title="Academic Debate Arena")
@@ -174,7 +175,7 @@ def _run_debate(topic: str, field: str, q: queue.Queue):
         # 5. Lưu transcript
         if config.SAVE_TRANSCRIPT:
             try:
-                filename = session.save_transcript(config.TRANSCRIPT_DIR)
+                filename = export_markdown(session, config.TRANSCRIPT_DIR)
                 q.put(_sse("saved", {"filename": filename}))
                 print(f"[Debate] Transcript saved: {filename}", flush=True)
             except Exception as e:
@@ -185,13 +186,34 @@ def _run_debate(topic: str, field: str, q: queue.Queue):
             q.put(_sse("status", {"message": "Đang tổng hợp research insights..."}))
             try:
                 research_kit = generate_research_kit(session, session.topic, session.field)
+                # Save research kit to files
+                kit_filename = save_research_kit(research_kit, config.RESEARCH_KIT_DIR)
+                
+                # Send comprehensive research insights to UI
                 q.put(_sse("research_kit", {
                     "outline": research_kit.get("outline", ""),
                     "key_findings": research_kit.get("key_findings", []),
+                    "research_gaps": research_kit.get("research_gaps", []),  # NEW
+                    "novel_approaches": research_kit.get("novel_approaches", []),  # NEW
+                    "breakthrough_areas": research_kit.get("breakthrough_areas", []),  # NEW
+                    "theoretical_foundations": research_kit.get("theoretical_foundations", []),  # NEW
+                    "methodology_innovations": research_kit.get("methodology_innovations", []),  # NEW
+                    "cross_domain_insights": research_kit.get("cross_domain_insights", []),  # NEW
+                    "counterarguments": research_kit.get("counterarguments", {}),  # NEW
+                    "mathematical_frameworks": research_kit.get("mathematical_frameworks", []),  # MATHEMATICAL ANALYSIS
+                    "mathematical_gaps": research_kit.get("mathematical_gaps", {}),  # MATHEMATICAL ANALYSIS
+                    "mathematical_comparison": research_kit.get("mathematical_comparison", []),  # MATHEMATICAL ANALYSIS
+                    "foundational_papers": research_kit.get("foundational_papers", {}),  # ACADEMIC RIGOR
+                    "verified_claims": research_kit.get("verified_claims", {}),  # ACADEMIC RIGOR
+                    "citation_analysis": research_kit.get("citation_analysis", {}),  # ACADEMIC RIGOR
+                    "debate_rigor": research_kit.get("debate_rigor", {}),  # ACADEMIC RIGOR
+                    "evidence_strength": research_kit.get("evidence_strength", {}),  # EVIDENCE VALIDATION
+                    "gap_foundation_solution": research_kit.get("gap_foundation_solution", {}),  # ARGUMENT STRUCTURE
                     "open_questions": research_kit.get("open_questions", []),
                     "recommendations": research_kit.get("recommendations", []),
                 }))
-                print(f"[Debate] Research kit generated", flush=True)
+                q.put(_sse("saved", {"filename": kit_filename}))
+                print(f"[Debate] Research kit generated and saved: {kit_filename}", flush=True)
             except Exception as e:
                 print(f"[Debate WARNING] Research kit generation failed: {e}", flush=True)
                 import traceback

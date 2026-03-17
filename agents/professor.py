@@ -1,7 +1,5 @@
 import re
 import time
-from google import genai
-from google.genai import errors as genai_errors
 from debate.session import DebateSession, ProfessorProfile
 from prompts import load_system
 import config
@@ -43,18 +41,15 @@ def _is_primarily_english(text: str) -> bool:
     return english_ratio > 0.35 or (has_english_sequence and english_ratio > 0.25)
 
 
-def _call_with_retry(fn, max_retries: int = 5):
+def _call_with_retry(fn, max_retries: int = 2):
+    """Retry with minimal delays to avoid hanging."""
     for attempt in range(max_retries):
         try:
             return fn()
-        except genai_errors.ClientError as e:
-            if e.status_code == 429 and attempt < max_retries - 1:
-                wait = 60
-                m = re.search(r'retry in (\d+)', str(e), re.IGNORECASE)
-                if m:
-                    wait = int(m.group(1)) + 3
-                print(f"\n  [rate limit] chờ {wait}s rồi thử lại...", flush=True)
-                time.sleep(wait)
+        except Exception as e:  # Broad exception for API errors
+            if attempt < max_retries - 1:
+                import time
+                time.sleep(0.5)  # Short fixed delay instead of exponential
             else:
                 raise
 
@@ -64,10 +59,16 @@ def generate_professor_turn(
     session: DebateSession,
     stream_callback=None,
 ) -> str:
+    try:
+        from google import genai
+    except ImportError:
+        raise ImportError("google-genai not installed. Run: pip install google-genai")
+    
     client = genai.Client(api_key=config.GEMINI_API_KEY)
 
-    # Load system prompt từ file
-    system = load_system("professor",
+    # Load system prompt từ file (rigor mode or standard mode)
+    system_prompt_name = "professor_rigor" if config.ACADEMIC_RIGOR_MODE else "professor"
+    system = load_system(system_prompt_name,
         name=prof.name,
         university=prof.university,
         expertise=prof.expertise,

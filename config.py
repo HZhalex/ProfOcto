@@ -17,7 +17,7 @@ MODEL = "gemma-3-1b-it"
 # Debate settings
 NUM_PROFESSORS = 2    # số giáo sư, min 2 max 5
 MAX_TURNS_PER_ROUND = 1
-MAX_ROUNDS = 2
+MAX_ROUNDS = 1
 MAX_TOKENS_PER_TURN = 400
 FACT_CHECK_ENABLED = True
 LANGUAGE = "vi"
@@ -25,6 +25,9 @@ LANGUAGE = "vi"
 # Research Mode (khi ON: generate research kit + paper outline sau debate)
 RESEARCH_MODE = True  # Bật research synthesis + paper outline
 RESEARCH_MAX_RECOMMENDATIONS = 5
+
+# Academic Rigor Mode (khi ON: professors must back claims with theorems + citations)
+ACADEMIC_RIGOR_MODE = True  # Enforce mathematical backing in debates
 
 # Display
 STREAM_OUTPUT = True

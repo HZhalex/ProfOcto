@@ -1,0 +1,150 @@
+{
+  "topics": [
+    {
+      "id": "inr_basis",
+      "title": "Implicit Neural Representations: Fixed Positional Encoding vs Learnable Activations",
+      "field": "Neural Network Theory & Coordinate-Based Representations",
+      "description": "Debate on the best approach for INRs: fixed Fourier basis (Tancik et al.) vs learnable activations (SIREN)",
+      "key_concepts": [
+        "Spectral bias (Rahaman et al., 2019)",
+        "Positional encoding and frequency coverage",
+        "Learnable vs fixed activations",
+        "Convergence rates and sample complexity",
+        "Approximation error bounds"
+      ],
+      "foundational_papers": [
+        "Mildenhall et al., 2020 - NeRF",
+        "Sitzmann et al., 2020 - SIREN",
+        "Tancik et al., 2020 - Fourier Features",
+        "Rahaman et al., 2019 - Spectral Bias",
+        "Barron, 1993 - Neural Net Approximation"
+      ],
+      "research_gaps": [
+        "How to handle non-bandlimited signals (natural images)?",
+        "What is the exact sample complexity for learnable activations?",
+        "How does dimension d affect different approaches?",
+        "Can we prove convergence rates for SIREN on realistic data?"
+      ]
+    },
+    {
+      "id": "inr_resolution",
+      "title": "Implicit Neural Representations: Super-Resolution and Upsampling",
+      "field": "Computer Vision & Signal Processing",
+      "description": "Can INRs solve super-resolution better than traditional methods? What are the theoretical limits?",
+      "key_concepts": [
+        "Nyquist-Shannon sampling theorem",
+        "Reconstruction from subsampled signals",
+        "Generalization bounds for continuous functions",
+        "Information-theoretic limits on super-resolution",
+        "Training data requirements"
+      ],
+      "foundational_papers": [
+        "Dupont et al., 2022 - TransINR",
+        "Sitzmann et al., 2022 - Signal Processing with INRs",
+        "Shannon, 1949 - Information Theory",
+        "Cohen & Welling, 2016 - Group Equivariance in CNNs"
+      ],
+      "research_gaps": [
+        "Can INRs recover frequencies beyond Nyquist limit?",
+        "How much training data is needed for different upsampling factors?",
+        "Do INRs generalize to unseen frequency content?"
+      ]
+    },
+    {
+      "id": "inr_efficiency",
+      "title": "Implicit Neural Representations: Efficiency vs Accuracy Trade-offs",
+      "field": "Neural Network Optimization",
+      "description": "How should we trade off model size, training cost, and representation accuracy in INRs?",
+      "key_concepts": [
+        "Model compression and pruning",
+        "Training computational complexity",
+        "Memory complexity vs representation accuracy",
+        "Network width and depth trade-offs",
+        "Optimization landscape and local minima"
+      ],
+      "foundational_papers": [
+        "Sitzmann et al., 2020 - SIREN",
+        "Tancik et al., 2020 - Fourier Features",
+        "Ba et al., 2016 - Layer Normalization",
+        "He et al., 2016 - ResNets"
+      ],
+      "research_gaps": [
+        "What is the minimal representation size for a given signal?",
+        "How does optimization difficulty scale with coordinate dimension?",
+        "Can we prove lower bounds on representation size?"
+      ]
+    },
+    {
+      "id": "neural_differential_equations",
+      "title": "Neural ODEs vs Discrete Neural Networks: Function Approximation",
+      "field": "Dynamical Systems & Deep Learning",
+      "description": "Are continuous Neural ODEs fundamentally better for approximating smooth functions?",
+      "key_concepts": [
+        "Differential equations and neural networks",
+        "Lipschitz continuity and smoothness",
+        "Approximation theory for function spaces",
+        "Computational efficiency of neural ODEs",
+        "Stability and numerical integration"
+      ],
+      "foundational_papers": [
+        "Chen et al., 2018 - Neural Ordinary Differential Equations",
+        "E, 2017 - A Proposal on Machine Learning via Dynamical Systems",
+        "Dupont et al., 2019 - Augmented Neural ODEs",
+        "Dormand & Prince, 1980 - RK45 Methods"
+      ],
+      "research_gaps": [
+        "What function classes require neural ODEs vs discrete networks?",
+        "Is continuous time strictly more expressive?",
+        "What are the approximation lower bounds?"
+      ]
+    },
+    {
+      "id": "attention_mechanism",
+      "title": "Transformer Attention: Self-Attention vs Cross-Attention for Representation Learning",
+      "field": "Sequence Modeling & Machine Learning",
+      "description": "What are the theoretical advantages of different attention mechanisms?",
+      "key_concepts": [
+        "Information bottleneck theory",
+        "Expressive power of attention",
+        "Sample complexity of attention-based learning",
+        "Bias in attention mechanisms",
+        "Comparison with Markov chains"
+      ],
+      "foundational_papers": [
+        "Vaswani et al., 2017 - Attention is All You Need",
+        "Tishby & Schwartz-Ziv, 2015 - Information Bottleneck",
+        "Pérez et al., 2019 - Attention is Not All You Need",
+        "Choromanski et al., 2021 - Rethinking Attention with Performers"
+      ],
+      "research_gaps": [
+        "What is the exact expressiveness of self-attention?",
+        "Can attention be replaced by simpler mechanisms for some tasks?",
+        "What are the approximation rates?"
+      ]
+    },
+    {
+      "id": "loss_landscape",
+      "title": "Mode Connectivity in Neural Network Loss Landscapes: Theory vs Practice",
+      "field": "Optimization Theory",
+      "description": "Why are neural networks trainable? Do all critical points connect in loss space?",
+      "key_concepts": [
+        "Loss landscape geometry",
+        "Mode connectivity and linear interpolation",
+        "Non-convex optimization theory",
+        "Critical points and saddle points",
+        "Generalization gaps and loss landscape"
+      ],
+      "foundational_papers": [
+        "Garipov et al., 2018 - Loss Surfaces, Mode Connectivity",
+        "Draxler et al., 2018 - Mode Connectivity",
+        "Jastrzębski et al., 2021 - Loss Landscape Structure",
+        "Keskar et al., 2017 - On Large-Batch Training"
+      ],
+      "research_gaps": [
+        "Do all local minima have similar generalization?",
+        "Can we characterize the global loss landscape?",
+        "What determines trainability?"
+      ]
+    }
+  ]
+}

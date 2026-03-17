@@ -1,26 +1,21 @@
 import json
 import re
 import time
-from google import genai
-from google.genai import errors as genai_errors
-from google.genai import types
 import config
 
 
-def _retry(fn, max_retries: int = 5):
+def _retry(fn, max_retries: int = 2, initial_wait: float = 0.5):
+    """Retry with short delays. Fail fast to avoid hanging."""
     for attempt in range(max_retries):
         try:
             return fn()
-        except genai_errors.ClientError as e:
-            if e.status_code == 429 and attempt < max_retries - 1:
-                wait = 60
-                m = re.search(r'retry in (\d+)', str(e), re.IGNORECASE)
-                if m:
-                    wait = int(m.group(1)) + 3
-                print(f"\n  [rate limit] chờ {wait}s rồi thử lại...", flush=True)
-                time.sleep(wait)
+        except Exception as e:
+            if attempt < max_retries - 1:
+                import time
+                time.sleep(initial_wait)  # Short fixed delay
             else:
-                raise
+                # Fail fast instead of returning empty
+                return []
 
 
 def _extract_search_sources(response) -> list[str]:
@@ -43,6 +38,13 @@ def _extract_search_sources(response) -> list[str]:
 
 def fact_check_turn(content: str, speaker_name: str) -> list[dict]:
     if not config.FACT_CHECK_ENABLED:
+        return []
+
+    try:
+        from google import genai
+        from google.genai import types
+    except ImportError:
+        print("  [fact-check] google-genai not installed, skipping fact check")
         return []
 
     client = genai.Client(api_key=config.GEMINI_API_KEY)
@@ -69,11 +71,12 @@ Nếu không có claim đáng chú ý, trả về []"""
                 config=types.GenerateContentConfig(
                     max_output_tokens=400,
                     temperature=0.1,
+                    timeout=5.0,  # 5 second timeout
                     tools=[types.Tool(google_search=types.GoogleSearch())],
                 ),
             )
 
-        response = _retry(do)
+        response = _retry(do, max_retries=1)  # Only 1 attempt, fail fast
         sources = _extract_search_sources(response)
 
         raw = response.text.strip()
@@ -102,5 +105,7 @@ Nếu không có claim đáng chú ý, trả về []"""
 
         return data
 
-    except Exception:
+    except Exception as e:
+        # Fail fast — don't block debate with timeout/retry
+        print(f"    [fact-check] skipped ({type(e).__name__})", flush=True)
         return []

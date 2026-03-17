@@ -14,6 +14,7 @@ from orchestrator import create_session, generate_opening_question
 from agents.professor import generate_professor_turn
 from agents.moderator import generate_moderator_summary, generate_final_summary
 from agents.fact_checker import fact_check_turn
+from agents.research_synthesizer import generate_research_kit, save_research_kit
 from debate.session import Turn
 from debate.turn_manager import TurnManager
 from output.terminal_renderer import (
@@ -116,6 +117,14 @@ def run_debate(topic: str, field: str):
     if config.SAVE_TRANSCRIPT:
         filename = export_markdown(session, config.TRANSCRIPT_DIR)
         print_saved(filename)
+
+    # ── 7. Research Kit (Academic Analysis) ────────────────────
+    if config.RESEARCH_MODE:
+        console.print("[dim]Đang sinh research kit...[/dim]\n")
+        research_kit = generate_research_kit(session, session.topic, session.field)
+        if research_kit:
+            save_research_kit(research_kit, session.topic, config.RESEARCH_KIT_DIR)
+            console.print("[green]✓ Research kit đã lưu[/green]\n")
 
 
 def main():

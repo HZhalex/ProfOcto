@@ -1,0 +1,51 @@
+[
+  {
+    "framework": "Information Theory (specifically, the Information Bottleneck principle)",
+    "theorems": [
+      "Shannon's Source Coding Theorem (implied - the log(N) term relates to the number of bits needed to represent routing decisions)",
+      "Information-theoretic lower bound on communication cost"
+    ],
+    "assumptions": [
+      "Binary routing scheme (K << N)",
+      "Token-expert interaction"
+    ],
+    "bounds": "Communication cost scales approximately as *M* * *K* * log(N) / log(K)*",
+    "properties": "The communication cost is fundamentally limited by the information required to represent the routing decisions."
+  },
+  {
+    "framework": "Capacity Utilization Analysis",
+    "theorems": [
+      "None explicitly stated, but relies on the concept of capacity utilization as a key factor in MoE convergence"
+    ],
+    "assumptions": [
+      "MoE layer has a defined capacity",
+      "Token distribution influences expert activation"
+    ],
+    "bounds": "Convergence rate is tied to the capacity utilization – the fraction of experts activated per token.",
+    "properties": "Low capacity utilization hinders convergence."
+  },
+  {
+    "framework": "Combinatorics (specifically, set theory and cardinality)",
+    "theorems": [
+      "None explicitly stated, but the *N*, *M*, and *K* variables represent cardinalities of sets"
+    ],
+    "assumptions": [
+      "*N* is the number of experts",
+      "*M* is the number of tokens",
+      "*K* is the number of experts per token"
+    ],
+    "bounds": "The scaling of communication cost depends on the relative sizes of *M*, *K*, and *N*.",
+    "properties": "The relationship between the number of experts, tokens, and the number of experts per token dictates the communication overhead."
+  },
+  {
+    "framework": "Cover's Theorem (1999)",
+    "theorems": [
+      "Information-theoretic lower bound on the number of bits required to transmit the routing decisions"
+    ],
+    "assumptions": [
+      "Binary routing scheme"
+    ],
+    "bounds": "The communication cost scales approximately as *M* * *K* * log(N) / log(K)*",
+    "properties": "Provides a theoretical limit on the communication required for routing."
+  }
+]

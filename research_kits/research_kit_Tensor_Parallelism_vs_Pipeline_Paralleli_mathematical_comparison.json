@@ -1,0 +1,47 @@
+[
+  {
+    "approach_name": "Tensor Parallelism",
+    "key_theorem": "Strassen's Algorithm (for matrix multiplication) and distributed matrix computation theorems.",
+    "approximation_bound": "O(n log n) for matrix multiplication, where n is the size of the matrix.  Accuracy depends on the precision of the arithmetic used.",
+    "time_complexity": "O(N) where N is the total number of operations, assuming a balanced distribution of computation across devices.  Communication overhead is significant and depends on the degree of parallelism.",
+    "convergence_rate": "Linear with respect to the number of iterations, assuming a well-conditioned problem and appropriate learning rate schedule.  Convergence is heavily influenced by the batch size and learning rate.",
+    "assumptions": [
+      "Matrix dimensions are divisible by the number of devices.",
+      "Communication bandwidth is sufficient to transfer intermediate results.",
+      "No synchronization overhead dominates the computation."
+    ],
+    "advantages": "Relatively straightforward to implement, especially with existing deep learning frameworks.  Good for models where computation is the primary bottleneck.",
+    "disadvantages": "Communication overhead can become a significant bottleneck as model size increases.  Load imbalance can occur if not carefully managed.  Doesn't inherently address the routing problem in MoE.",
+    "compared_to": "Pipeline parallelism and MoE.  Tensor parallelism is simpler but less scalable for extremely large models due to communication limitations."
+  },
+  {
+    "approach_name": "Pipeline Parallelism",
+    "key_theorem": "Strassen's Algorithm and the concept of overlapping computation and communication.",
+    "approximation_bound": "O(n log n) for matrix multiplication, similar to tensor parallelism.  Accuracy is affected by the latency of inter-stage communication.",
+    "time_complexity": "O(N) where N is the total number of operations, assuming a balanced pipeline.  Latency due to pipeline stages and communication dominates.",
+    "convergence_rate": "Linear with respect to the number of iterations, similar to tensor parallelism.  However, the effective learning rate is reduced by the pipeline latency.",
+    "assumptions": [
+      "Stages of the pipeline can be executed concurrently.",
+      "Communication latency between stages is relatively low.",
+      "Model can be divided into stages without significant performance degradation."
+    ],
+    "advantages": "Can improve throughput by overlapping computation and communication.  Relatively easy to implement in some cases.",
+    "disadvantages": "Pipeline bubbles (idle stages) can significantly reduce efficiency.  Load imbalance can be a major issue.  Difficult to optimize for very deep models.",
+    "compared_to": "Tensor parallelism and MoE.  Pipeline parallelism is better for deep models but struggles with communication bottlenecks and load imbalance."
+  },
+  {
+    "approach_name": "Mixture of Experts (MoE)",
+    "key_theorem": "Routing algorithms (e.g., Top-k gating, learned routing), and the principle of sparse activation.",
+    "approximation_bound": "Highly dependent on the routing algorithm.  Top-k gating has an approximation error of O(1/k) where k is the number of experts selected.  Learned routing can achieve better accuracy but with increased complexity.",
+    "time_complexity": "O(N) where N is the total number of operations, but with a significant portion of operations being performed only on a subset of experts. Routing adds additional computational overhead.",
+    "convergence_rate": "Potentially slower than dense models due to the routing process. Convergence conditions depend heavily on the routing algorithm and the data distribution.  Requires careful tuning of routing parameters.",
+    "assumptions": [
+      "The routing algorithm accurately selects the relevant experts.",
+      "Experts have sufficient capacity to handle their assigned workload.",
+      "Communication bandwidth is sufficient to transfer activations between experts and the router."
+    ],
+    "advantages": "Can achieve higher capacity and performance with fewer parameters compared to dense models.  Allows for specialization of experts for different tasks.",
+    "disadvantages": "Routing complexity and communication overhead can be significant.  Load imbalance between experts can lead to underutilization.  Training instability is a common issue.",
+    "compared_to": "Tensor parallelism and pipeline parallelism. MoE offers the potential for greater scalability but introduces significant complexity and communication challenges."
+  }
+]
