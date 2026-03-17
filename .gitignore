@@ -211,3 +211,4 @@ logs/
 transcripts/
 phd_analysis/
 .env
+research_kits/*

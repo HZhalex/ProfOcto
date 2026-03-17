@@ -12,12 +12,12 @@ if os.path.exists(_env_path):
 
 GEMINI_API_KEY = os.environ.get("GEMINI_API_KEY", "")
 
-MODEL = "gemma-3-12b"
+MODEL = "gemma-3-4b-it"
 
 # Debate settings
 NUM_PROFESSORS = 2    # số giáo sư, min 2 max 5
 MAX_TURNS_PER_ROUND = 1
-MAX_ROUNDS = 2
+MAX_ROUNDS = 1
 MAX_TOKENS_PER_TURN = 400
 FACT_CHECK_ENABLED = True
 LANGUAGE = "vi"
