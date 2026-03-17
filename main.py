@@ -36,6 +36,15 @@ from agents.gap_ranker import generate_comparison_table, identify_pareto_frontie
 from utils.logger import init_logger, get_logger
 from utils.retry_cache import get_cache_stats
 
+# Phase 7: PhD UX Improvements
+from output.phd_startup_cli import run_startup, PhDStartupCLI
+from output.cost_estimator import estimate_cost_for_gaps, CostEstimator
+from output.gap_dashboard import show_gap_dashboard
+from output.elevator_pitch import generate_elevator_pitch, format_pitch_for_display
+from output.pdf_exporter import export_for_advisor, export_debate_summary
+from utils.bookmark_history import get_bookmark_manager, get_history_manager
+from output.batch_processor import BatchProcessor
+
 
 def run_debate(topic: str, field: str):
 
@@ -210,6 +219,25 @@ def run_debate(topic: str, field: str):
     # ROBUST: Handles per-gap errors, continues processing, returns partial results
     if config.ICLR_READINESS_ENABLED and session.research_gaps:
         console.print("\n[bold bright_cyan]━━━ ICLR READINESS ASSESSMENT PIPELINE ━━━[/bold bright_cyan]\n")
+        
+        # Phase 7: Show cost estimate before running
+        if config.ESTIMATE_API_COST:
+            num_gaps = len(session.research_gaps)
+            estimator = CostEstimator()
+            estimate = estimator.estimate_for_gaps(num_gaps)
+            
+            console.print(estimator.format_cost_summary(estimate))
+            
+            # Ask for confirmation if cost is high
+            if estimator.should_confirm_cost(estimate):
+                should_proceed = Prompt.ask(
+                    "[bold yellow]Proceed with analysis?[/bold yellow]",
+                    choices=["y", "n"],
+                    default="y"
+                )
+                if should_proceed.lower() != "y":
+                    console.print("[yellow]Analysis skipped by user.[/yellow]")
+                    return
         
         # Initialize variables for each phase
         formal_problems = []
@@ -401,13 +429,105 @@ def run_debate(topic: str, field: str):
         
         # NEW: Interactive Refinement CLI ─────────────────────────────────
         if config.ENABLE_INTERACTIVE_REFINEMENT and readiness_scores:
+            # Phase 7: Show dashboard first
+            if config.SHOW_TOP_GAP_DASHBOARD:
+                dashboard = show_gap_dashboard(readiness_scores, session.topic)
+                console.print(dashboard)
+            
+            # Track run in history
+            if config.ENABLE_RUN_HISTORY:
+                history_mgr = get_history_manager()
+                history_mgr.record_run(session.topic, session.field, readiness_scores)
+            
+            # Interactive menu with Phase 7 options
             should_interact = Prompt.ask(
                 "\n[bold cyan]🔍 Explore gaps interactively?[/bold cyan]",
                 choices=["y", "n"],
                 default="n"
             )
             if should_interact.lower() == "y":
-                launch_interactive_cli(readiness_scores)
+                console.print("\n[dim]Interactive Options:[/dim]")
+                console.print("[1] View detailed gap analysis")
+                
+                if config.ENABLE_BOOKMARKING:
+                    console.print("[2] Bookmark your favorite gap")
+                
+                if config.ENABLE_PDF_EXPORT:
+                    console.print("[3] Export gap analysis for advisor")
+                
+                if config.ENABLE_ELEVATOR_PITCH:
+                    console.print("[4] Generate elevator pitch")
+                
+                if config.ENABLE_RUN_HISTORY:
+                    console.print("[5] Compare with previous runs")
+                
+                console.print("[0] Continue to detailed interactive mode")
+                
+                choice = Prompt.ask("Select option", default="0")
+                
+                # Phase 7: Handle new options
+                if choice == "2" and config.ENABLE_BOOKMARKING:
+                    gap_to_bookmark = Prompt.ask(
+                        "Which gap to bookmark? (enter gap number or 0 for top gap)",
+                        default="1"
+                    )
+                    try:
+                        gap_idx = (int(gap_to_bookmark) - 1) if gap_to_bookmark != "0" else 0
+                        if 0 <= gap_idx < len(readiness_scores):
+                            bookmark_mgr = get_bookmark_manager()
+                            bookmark_mgr.bookmark(
+                                readiness_scores[gap_idx].get('gap_title'),
+                                readiness_scores[gap_idx],
+                                notes=Prompt.ask("Optional notes", default="")
+                            )
+                            console.print(f"[green]✓ Gap bookmarked![/green]")
+                    except:
+                        console.print("[yellow]Invalid selection[/yellow]")
+                
+                elif choice == "3" and config.ENABLE_PDF_EXPORT:
+                    gap_to_export = Prompt.ask(
+                        "Which gap to export? (enter number or 'all')",
+                        default="1"
+                    )
+                    try:
+                        if gap_to_export.lower() == "all":
+                            export_debate_summary(session.topic, readiness_scores, format="txt")
+                            console.print("[green]✓ Full summary exported![/green]")
+                        else:
+                            gap_idx = int(gap_to_export) - 1
+                            if 0 <= gap_idx < len(readiness_scores):
+                                filepath = export_for_advisor(readiness_scores[gap_idx], format="txt")
+                                console.print(f"[green]✓ Exported to: {filepath}[/green]")
+                    except:
+                        console.print("[yellow]Invalid selection[/yellow]")
+                
+                elif choice == "4" and config.ENABLE_ELEVATOR_PITCH:
+                    gap_to_pitch = Prompt.ask("Which gap? (enter number)", default="1")
+                    try:
+                        gap_idx = int(gap_to_pitch) - 1
+                        if 0 <= gap_idx < len(readiness_scores):
+                            pitch = generate_elevator_pitch(readiness_scores[gap_idx])
+                            console.print("\n[bold cyan]📢 Elevator Pitch (30 sec):[/bold cyan]\n")
+                            console.print(pitch['short'])
+                            console.print("\n[bold cyan]Key Points:[/bold cyan]")
+                            for bullet in pitch['bullet_points']:
+                                console.print(f"  {bullet}")
+                    except:
+                        console.print("[yellow]Invalid selection[/yellow]")
+                
+                elif choice == "5" and config.ENABLE_RUN_HISTORY:
+                    history_mgr = get_history_manager()
+                    recent = history_mgr.get_recent_runs(3)
+                    if len(recent) > 1:
+                        console.print("\n[bold cyan]📋 Recent Runs:[/bold cyan]")
+                        for i, run in enumerate(recent, 1):
+                            console.print(f"  {i}. {run['topic']} ({run['run_at'][:10]})")
+                        # Simple comparison logic
+                        console.print(f"\n[green]✓ Showing {len(recent)} recent debates[/green]")
+                
+                # Launch full interactive CLI if user wants more details
+                if choice == "0" or choice not in ["2", "3", "4", "5"]:
+                    launch_interactive_cli(readiness_scores)
     
     
     # ── Log debate completion ─────────────────────────────────
@@ -435,7 +555,12 @@ def run_debate(topic: str, field: str):
 def main():
     console.print("\n[bold bright_blue]Academic Debate Arena[/bold bright_blue]\n")
 
-    if len(sys.argv) >= 3:
+    # Phase 7: Hybrid startup CLI (quick by default, interactive optional)
+    if config.QUICK_START_MODE or config.INTERACTIVE_SETUP:
+        startup_settings = run_startup()
+        topic = startup_settings['topic']
+        field = startup_settings['field']
+    elif len(sys.argv) >= 3:
         topic, field = sys.argv[1], sys.argv[2]
     else:
         field = Prompt.ask("[cyan]Lĩnh vực nghiên cứu[/cyan]",

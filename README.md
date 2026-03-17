@@ -2,11 +2,11 @@
 
 # ⚔️ Academic Debate Arena
 
-**Học qua tranh luận giữa các giáo sư AI hàng đầu thế giới**
+**AI-Powered Research Gap Discovery for PhD Students**
+
+Research smarter by debating with multiple AI professors, identifying ICLR-ready gaps, and sharing with your advisor.
 
 [![Python](https://img.shields.io/badge/Python-3.10+-3776AB?style=flat-square&logo=python&logoColor=white)](https://python.org)
-[![FastAPI](https://img.shields.io/badge/FastAPI-0.115-009688?style=flat-square&logo=fastapi&logoColor=white)](https://fastapi.tiangolo.com)
-[![React](https://img.shields.io/badge/React-18-61DAFB?style=flat-square&logo=react&logoColor=black)](https://react.dev)
 [![Gemini](https://img.shields.io/badge/Gemini_API-Free_Tier-4285F4?style=flat-square&logo=google&logoColor=white)](https://aistudio.google.com)
 [![License](https://img.shields.io/badge/License-MIT-green?style=flat-square)](LICENSE)
 
@@ -14,83 +14,96 @@
 
 ---
 
-## ⚡ Tổng quan
+## 🎯 Quick Start
 
-**Academic Debate Arena** là một hệ thống học tập thông qua tranh luận học thuật giữa các AI agents đóng vai giáo sư quốc tế. Người dùng chỉ cần nhập một topic nghiên cứu — hệ thống tự động tạo ra một panel các giáo sư hàng đầu từ MIT, Stanford, CMU... với quan điểm đối lập nhau, tranh luận gay gắt, và fact-check lẫn nhau theo thời gian thực.
+```bash
+# 1. Setup (2 min)
+echo "GEMINI_API_KEY=your-key" > .env
+pip install -r requirements.txt
 
-> *Tại sao học qua tranh luận? Vì não bộ tiếp thu thông tin hiệu quả hơn nhiều khi phải xử lý nhiều góc nhìn mâu thuẫn nhau cùng lúc.*
+# 2. Run (5 min)
+python main.py
 
-### 🚀 4 điểm khác biệt chính
+# 3. Explore
+[dashboard shows top gap]
+[bookmark / export / pitch options]
+```
 
-1. **Professors tự động theo lĩnh vực** — Nhập topic về Distributed LLM thì ra MIT CSAIL, Stanford AI Lab. Nhập về Computer Vision thì ra CMU Robotics, Berkeley BAIR. Không hardcode sẵn.
-
-2. **Fact-checker tích hợp Google Search** — Mỗi claim của professor được tự động kiểm chứng bằng web search thật, gắn tag `VERIFIED` / `CONTESTED` / `OPINION` ngay bên dưới lượt nói.
-
-3. **Streaming real-time như ChatGPT** — Web UI hiển thị từng chữ xuất hiện, không phải chờ cả đoạn. Sidebar hiển thị professors, fact tags, key insights.
-
-4. **Topic Library có sẵn** — 19 topic chất lượng cao phân theo 5 lĩnh vực AI, click là chạy ngay. Lịch sử tranh luận được lưu lại để đọc sau.
+**Full guide:** See [Quick Start Guide](docs/guides/01_QUICK_START.md)
 
 ---
 
-## 🏗️ Kiến trúc hệ thống
+## 📚 Documentation
 
-```
-User Input
-    │
-    ▼
-Orchestrator ──── tự sinh professors phù hợp với lĩnh vực
-    │
-    ▼
-┌───────────────────────────────────────┐
-│           Professor Panel             │
-│  Empiricist │ Theorist │ Skeptic │ …  │
-└───────────────────────────────────────┘
-    │                         │
-    ▼                         ▼
-Moderator Agent          Fact-Checker Agent
-(tóm tắt, câu hỏi mới)  (Google Search + tag claim)
-    │
-    ▼
+All documentation is organized in the **`docs/`** folder:
+
+### Getting Started
+
+- **[Quick Start](docs/guides/01_QUICK_START.md)** — 5-minute setup
+- **[Phase 7 User Guide](docs/guides/03_PHASE7_USER_GUIDE.md)** — All 7 new features (bookmarking, PDF export, elevator pitch, etc.)
+
+### Features & How They Work
+
+- **[Config Reference](docs/development/CONFIG_REFERENCE.md)** — 100+ configuration flags
+- **[Phase 5: ICLR Pipeline](docs/features/PHASE5_ICLR_PIPELINE.md)** — Readiness scoring
+- **[Phase 7 Report](docs/features/PHASE7_COMPLETION_REPORT.md)** — Implementation details
+
+### Troubleshooting
+
+- **[Debugging Guide](docs/development/DEBUGGING.md)** — Common issues & logs
+
+**[→ View all docs](docs/README.md)**
+
+---
+
+## ✨ Features (Phase 7)
+
+(tóm tắt, câu hỏi mới) (Google Search + tag claim)
+│
+▼
 Output Layer
 ├── Terminal (Rich UI)
 ├── Web UI (React + SSE streaming)
 └── Transcript (.md export)
+
 ```
 
 ### Cấu trúc thư mục
 
 ```
+
 academic_debate_arena/
-├── main.py                      # Entry point — Terminal UI
-├── config.py                    # Cấu hình toàn bộ hệ thống
-├── orchestrator.py              # Tạo professors + câu hỏi mở màn
+├── main.py # Entry point — Terminal UI
+├── config.py # Cấu hình toàn bộ hệ thống
+├── orchestrator.py # Tạo professors + câu hỏi mở màn
 │
 ├── agents/
-│   ├── professor.py             # Professor agent — generate lượt nói
-│   ├── moderator.py             # Tóm tắt round + key insights cuối
-│   └── fact_checker.py          # Web search + gắn tag claim
+│ ├── professor.py # Professor agent — generate lượt nói
+│ ├── moderator.py # Tóm tắt round + key insights cuối
+│ └── fact_checker.py # Web search + gắn tag claim
 │
 ├── debate/
-│   ├── session.py               # State: professors, turns, history
-│   └── turn_manager.py          # Quản lý thứ tự, phát hiện lặp lại
+│ ├── session.py # State: professors, turns, history
+│ └── turn_manager.py # Quản lý thứ tự, phát hiện lặp lại
 │
 ├── output/
-│   ├── terminal_renderer.py     # Rich terminal — màu sắc, panel
-│   └── exporter.py              # Export Markdown + PDF
+│ ├── terminal_renderer.py # Rich terminal — màu sắc, panel
+│ └── exporter.py # Export Markdown + PDF
 │
 ├── prompts/
-│   ├── professor_base.txt       # System prompt professor
-│   ├── moderator.txt            # System prompt moderator
-│   └── fact_checker.txt         # System prompt fact-checker
+│ ├── professor_base.txt # System prompt professor
+│ ├── moderator.txt # System prompt moderator
+│ └── fact_checker.txt # System prompt fact-checker
 │
 ├── web/
-│   ├── server.py                # FastAPI + SSE streaming
-│   └── src/
-│       ├── App.jsx              # React UI
-│       └── topics.js            # Topic library data
+│ ├── server.py # FastAPI + SSE streaming
+│ └── src/
+│ ├── App.jsx # React UI
+│ └── topics.js # Topic library data
 │
-└── transcripts/                 # Transcript .md tự động lưu
-```
+└── transcripts/ # Transcript .md tự động lưu
+
+````
 
 ---
 
@@ -116,7 +129,7 @@ python -m venv .venv
 
 # macOS / Linux
 .venv/bin/pip install -r requirements.txt
-```
+````
 
 ### 2. Cấu hình API Key
 
@@ -148,6 +161,7 @@ python main.py "MoE vs Dense: trade-off nào tốt hơn cho production?" "Distri
 ### 3b. Chạy Web UI
 
 Cài Node packages (lần đầu):
+
 ```bash
 cd web
 npm install
@@ -173,24 +187,24 @@ Mở trình duyệt: **http://127.0.0.1:3000**
 
 Tất cả tham số chỉnh trong `config.py`:
 
-| Tham số | Mặc định | Ý nghĩa |
-|---------|----------|---------|
-| `MODEL` | `gemma-3-1b-it` | Model Gemini đang dùng |
-| `NUM_PROFESSORS` | `4` | Số giáo sư (2–5) |
-| `MAX_ROUNDS` | `2` | Số vòng tranh luận |
-| `MAX_TURNS_PER_ROUND` | `1` | Số lượt nói/professor/round |
-| `MAX_TOKENS_PER_TURN` | `400` | Độ dài tối đa mỗi lượt |
-| `FACT_CHECK_ENABLED` | `True` | Bật/tắt fact-checker |
-| `STREAM_OUTPUT` | `True` | Stream text real-time |
-| `SAVE_TRANSCRIPT` | `True` | Lưu transcript .md |
+| Tham số               | Mặc định        | Ý nghĩa                     |
+| --------------------- | --------------- | --------------------------- |
+| `MODEL`               | `gemma-3-1b-it` | Model Gemini đang dùng      |
+| `NUM_PROFESSORS`      | `4`             | Số giáo sư (2–5)            |
+| `MAX_ROUNDS`          | `2`             | Số vòng tranh luận          |
+| `MAX_TURNS_PER_ROUND` | `1`             | Số lượt nói/professor/round |
+| `MAX_TOKENS_PER_TURN` | `400`           | Độ dài tối đa mỗi lượt      |
+| `FACT_CHECK_ENABLED`  | `True`          | Bật/tắt fact-checker        |
+| `STREAM_OUTPUT`       | `True`          | Stream text real-time       |
+| `SAVE_TRANSCRIPT`     | `True`          | Lưu transcript .md          |
 
 ### Chọn model
 
-| Model | Free tier | Chất lượng | Tốc độ |
-|-------|-----------|------------|--------|
-| `gemma-3-1b-it` | ✅ Không giới hạn | ⭐⭐ | ⚡⚡⚡ |
-| `gemini-1.5-flash` | ✅ 15 req/phút | ⭐⭐⭐⭐ | ⚡⚡ |
-| `gemini-2.5-flash` | ✅ 5 req/phút | ⭐⭐⭐⭐⭐ | ⚡ |
+| Model              | Free tier         | Chất lượng | Tốc độ |
+| ------------------ | ----------------- | ---------- | ------ |
+| `gemma-3-1b-it`    | ✅ Không giới hạn | ⭐⭐       | ⚡⚡⚡ |
+| `gemini-1.5-flash` | ✅ 15 req/phút    | ⭐⭐⭐⭐   | ⚡⚡   |
+| `gemini-2.5-flash` | ✅ 5 req/phút     | ⭐⭐⭐⭐⭐ | ⚡     |
 
 ---
 

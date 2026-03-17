@@ -72,6 +72,7 @@ SHOW_ACTION_ITEMS = True  # Display concrete action items for pursuing gap
 CACHE_PHASE5_RESULTS = True  # Cache Gemini API results to reduce cost/speed up re-runs
 CACHE_DIR = "phd_analysis/.cache"  # Where to store cached API results
 CACHE_MAX_SIZE = 500  # Maximum number of cached items
+USE_RETRY_CACHE = True  # Enable LRU cache with disk persistence for API calls
 
 # PHASE 5 EXPORT & VISUALIZATION
 EXPORT_PHASE5_JSON = True  # Export Phase 5 results to JSON
@@ -82,3 +83,64 @@ EXPORT_AUTO_OPEN_HTML = False  # Auto-open generated HTML in browser
 # INTERACTIVE FEATURES
 ENABLE_INTERACTIVE_REFINEMENT = True  # Allow user to refine analysis after pipeline
 ENABLE_GAP_COMPARISON = True  # Show gap comparison/ranking table
+
+# ══════════════════════════════════════════════════════════════
+# PhD STUDENT UX IMPROVEMENTS (NEW)
+# ══════════════════════════════════════════════════════════════
+
+# STARTUP MODE
+QUICK_START_MODE = True  # True: skip optional questions, just ask topic. False: configure everything
+INTERACTIVE_SETUP = True  # Allow refining settings after quick start
+
+# OUTPUT STYLE  
+MINIMAL_OUTPUT = False  # True: only critical info. False: detailed. Can toggle interactively
+DETAILED_OUTPUT = True  # Complement to MINIMAL: show both if True
+SHOW_PROGRESS_BARS = True  # Show progress during Phase 5
+VERBOSE_LOGGING = False  # Print all logs to console (not just file)
+
+# SKIP OPTIONAL FEATURES (for speed)
+SKIP_RESEARCH_KIT = False  # Skip research synthesis step
+SKIP_RIGOR_SCORING = False  # Skip mathematical rigor analysis
+SKIP_FACT_CHECK = False  # Skip fact-checking step
+FAST_MODE = False  # Master toggle: skip all optional features
+
+# COST & TIMELINE AWARENESS
+ESTIMATE_API_COST = True  # Show estimated API cost before running
+COST_CONFIRMATION_THRESHOLD = 0.50  # Ask user to confirm if cost > $X
+ESTIMATE_RUNTIME = True  # Estimate total runtime
+COST_PER_API_CALL = 0.001  # USD per Gemini API call (for estimation)
+SKIP_IF_COST_EXCEEDS = None  # Skip if estimated cost > this ($ value), None = always run
+DEFAULT_NUM_GAPS = 5  # Default number of gaps to analyze in cost estimation
+
+# TOP GAP RECOMMENDATION
+SHOW_TOP_GAP_DASHBOARD = True  # Show #1 recommended gap prominently after pipeline
+SHOW_STATISTICS_DASHBOARD = True  # Show average scores and statistics on dashboard
+DASHBOARD_TOP_N = 3  # Show top N gaps in dashboard
+DASHBOARD_MINIMAL_VIEW = False  # Show minimal dashboard (just titles + scores)
+
+# BOOKMARKING & HISTORY
+ENABLE_BOOKMARKING = True  # Allow PhD to bookmark favorite gaps
+BOOKMARK_FILE = "phd_analysis/bookmarks.json"  # Where to save bookmarks
+ENABLE_RUN_HISTORY = True  # Track all debate runs for comparison
+HISTORY_FILE = "phd_analysis/run_history.json"  # Where to save run history
+MAX_HISTORY_ENTRIES = 50  # Keep last 50 runs
+
+# PDF EXPORT FOR ADVISOR
+ENABLE_PDF_EXPORT = True  # Export gap analysis as PDF
+PDF_INCLUDE_TRACE = False  # Include detailed trace logs in PDF (longer)
+ADVISOR_EXPORT_DIR = "phd_analysis/advisor_reports"  # Where to save advisor PDFs
+
+# ELEVATOR PITCH GENERATOR
+ENABLE_ELEVATOR_PITCH = True  # Generate 15-30 sec summaries of gaps
+ELEVATOR_PITCH_SECONDS = 15  # Target duration (affects length)
+
+# BATCH MODE
+ENABLE_BATCH_MODE = True  # Run multiple debates in sequence
+BATCH_FILE = None  # Path to CSV with (topic, field) pairs. None = ask user
+BATCH_RESULTS_DIR = "phd_analysis/batch_results"  # Where to save batch processing results
+BATCH_SKIP_DUPLICATE_TOPICS = True  # Don't re-run if cached
+
+# PREFERENCES
+LANGUAGE_MIXED_MODE = True  # Use Vietnamese for UI, English for technical terms
+COLOR_THEME = "purple"  # Color scheme: "purple", "blue", "green"
+AUTO_SAVE_RESULTS = True  # Auto-save results without asking
