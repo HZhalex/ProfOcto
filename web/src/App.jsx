@@ -59,13 +59,13 @@ function HistoryPanel({ onView }) {
       .catch(() => setLoading(false));
   }, []);
 
-  if (loading) return <div style={s.histEmpty}>Đang tải...</div>;
+  if (loading) return <div style={s.histEmpty}>Loading...</div>;
   if (!sessions.length)
-    return <div style={s.histEmpty}>Chưa có cuộc tranh luận nào.</div>;
+    return <div style={s.histEmpty}>No debates yet.</div>;
 
   return (
     <div style={s.histWrap}>
-      <div style={s.libTitle}>🕘 Lịch sử</div>
+      <div style={s.libTitle}>🕘 History</div>
       {sessions.map((sess, i) => (
         <div key={i} style={s.histCard} onClick={() => onView(sess)}>
           <div style={s.histTopic}>{sess.topic || "(no topic)"}</div>
@@ -96,14 +96,14 @@ function TranscriptViewer({ session, onBack }) {
   return (
     <div style={s.transcriptWrap}>
       <button style={s.backBtn} onClick={onBack}>
-        ← Quay lại
+        ← Back
       </button>
       <h2 style={s.transcriptTitle}>{session.topic}</h2>
       <div style={s.transcriptMeta}>
         {session.field} · {session.date?.slice(0, 10)}
       </div>
       {loading ? (
-        <div style={s.histEmpty}>Đang tải...</div>
+        <div style={s.histEmpty}>Loading...</div>
       ) : (
         <pre style={s.transcriptContent}>{content}</pre>
       )}
@@ -115,7 +115,7 @@ function TranscriptViewer({ session, onBack }) {
 function SetupForm({ onStart }) {
   const [field, setField] = useState("Distributed / Efficient LLM");
   const [topic, setTopic] = useState(
-    "Tensor Parallelism vs Pipeline Parallelism vs MoE: đâu là chiến lược tối ưu để scale LLM lên hàng nghìn tỷ tham số?",
+    "Tensor Parallelism vs Pipeline Parallelism vs MoE: what is the best strategy to scale LLMs to trillions of parameters?",
   );
   const [tab, setTab] = useState("new"); // new | library | history
   const [viewSession, setViewSession] = useState(null);
@@ -140,7 +140,7 @@ function SetupForm({ onStart }) {
       <div style={s.setupLeft}>
         <h1 style={s.logo}>⚔ Academic Debate Arena</h1>
         <p style={s.subtitle}>
-          Học qua tranh luận giữa các giáo sư AI hàng đầu
+          Learn by debating with top AI professors
         </p>
 
         <div style={s.tabs}>
@@ -151,30 +151,30 @@ function SetupForm({ onStart }) {
               onClick={() => setTab(t)}
             >
               {t === "new"
-                ? "✏ Mới"
+                ? "✏ New"
                 : t === "library"
                   ? "📚 Library"
-                  : "🕘 Lịch sử"}
+                  : "🕘 History"}
             </button>
           ))}
         </div>
 
         {tab === "new" && (
           <div style={s.form}>
-            <label style={s.label}>Lĩnh vực nghiên cứu</label>
+            <label style={s.label}>Research field</label>
             <input
               style={s.input}
               value={field}
               onChange={(e) => setField(e.target.value)}
             />
-            <label style={s.label}>Câu hỏi tranh luận</label>
+            <label style={s.label}>Debate question</label>
             <textarea
               style={{ ...s.input, height: 90, resize: "vertical" }}
               value={topic}
               onChange={(e) => setTopic(e.target.value)}
             />
             <button style={s.btn} onClick={() => onStart(topic, field)}>
-              🚀 Bắt đầu tranh luận
+              🚀 Start debate
             </button>
           </div>
         )}
@@ -355,7 +355,7 @@ export default function App() {
 
   const startDebate = (topic, field) => {
     setPhase("running");
-    setStatus("Đang kết nối...");
+    setStatus("Connecting...");
     setTurns([]);
     setProfessors([]);
 
@@ -369,7 +369,7 @@ export default function App() {
           throw new Error(`API error: ${res.status} ${res.statusText}`);
         }
         if (!res.body) {
-          throw new Error("Không thể đọc response body");
+          throw new Error("Unable to read response body");
         }
         const reader = res.body.getReader();
         const decoder = new TextDecoder();
@@ -415,7 +415,7 @@ export default function App() {
             .then(read)
             .catch((err) => {
               console.error("[Reader error]", err);
-              setStatus("Lỗi: Mất kết nối - " + err.message);
+              setStatus("Error: connection lost - " + err.message);
               setPhase("done");
             });
         };
@@ -424,13 +424,13 @@ export default function App() {
           .then(read)
           .catch((err) => {
             console.error("[Initial read error]", err);
-            setStatus("Lỗi: Không thể đọc stream - " + err.message);
+            setStatus("Error: unable to read stream - " + err.message);
             setPhase("done");
           });
       })
       .catch((err) => {
         console.error("[Fetch error]", err);
-        setStatus("Lỗi: " + err.message);
+        setStatus("Error: " + err.message);
         setPhase("setup");
       });
   };
@@ -507,9 +507,9 @@ export default function App() {
           id: "research_kit",
         },
       ]);
-    if (event === "saved") setStatus("✓ Đã lưu: " + data.filename);
+    if (event === "saved") setStatus("✓ Saved: " + data.filename);
     if (event === "error") {
-      setStatus("Lỗi: " + data.message);
+      setStatus("Error: " + data.message);
       setPhase("done");
     }
   };
@@ -525,7 +525,7 @@ export default function App() {
         ))}
         {phase === "done" && (
           <button style={s.newBtn} onClick={() => setPhase("setup")}>
-            ← Tranh luận mới
+            ← New debate
           </button>
         )}
       </aside>
