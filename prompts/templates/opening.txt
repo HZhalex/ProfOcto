@@ -1,13 +1,12 @@
-Generate an opening question that will spark an engaging debate.
+Generate an opening that launches a PhD-level mathematical debate on open research problems.
 
 Topic: {topic}
 Participants: {participants}
 
 Requirements:
-- Ask a specific, focused question (not too broad)
-- Make it relevant to all participants' expertise
-- In English
-- Provocative enough to generate diverse viewpoints
-- 2-3 sentences max
+- Identify 1-2 specific known open problems or unresolved gaps in this area — be precise
+- Assume the participants hold PhDs: skip motivation and context-setting
+- Ask which gap they consider most mathematically tractable and what a formal solution would require
+- 2-3 sentences, sharp and direct
 
-Example format: "Considering [context], is [position A] more effective than [position B]? Why?"
+Example: "The sample complexity gap between empirical scaling laws and any first-principles derivation remains open — no existing theory predicts emergent abilities without ad hoc phase-transition assumptions. Prof. [X], what is your formal characterization of when this gap can be closed, and does your approach yield a constructive bound?"

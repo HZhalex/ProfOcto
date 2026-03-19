@@ -86,17 +86,18 @@ def generate_professors(topic: str, field: str) -> list[ProfessorProfile]:
 
     template = "[\n" + ",\n".join(slots) + "\n]"
 
-    prompt = f"""You are designing an academic debate panel of {n} US professors.
+    prompt = f"""You are assembling a PhD research seminar panel of {n} top US researchers.
 Topic: "{topic}"
 Field: {field}
 
+These researchers will mathematically debate the hardest open problems in this field.
 Fill in the JSON template below. Rules:
 - name: realistic American academic name (e.g. "Prof. Hinton", "Prof. LeCun")
-- personality: 1 short sentence describing debate style
-- stance: 1 specific sentence — their concrete position ON THIS TOPIC (not generic)
-- expertise: their specific research area
-- Each professor must have a DIFFERENT stance, roles are: {", ".join(roles)}
-- The Skeptic must strongly challenge the mainstream view
+- personality: 1 short sentence describing their debate style (e.g. "Confronts opponents with counterexamples")
+- stance: 1 specific sentence — their concrete MATHEMATICAL or METHODOLOGICAL approach to the key open problem in this field; name a specific technique, bound, or framework they advocate (not generic — never "evidence-based approach")
+- expertise: their specific research specialization
+- Each professor must have a DIFFERENT mathematical stance, roles are: {", ".join(roles)}
+- The Skeptic must challenge the dominant approach's mathematical foundations directly
 - Return ONLY the JSON array, no markdown, no extra text
 
 {template}"""

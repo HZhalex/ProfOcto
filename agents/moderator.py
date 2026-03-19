@@ -40,15 +40,15 @@ def generate_moderator_summary(session: DebateSession) -> str:
     history = session.get_history_text(max_turns=3)
     prompt = f"""{system}
 
-Topic: "{session.topic}" | Round {session.current_round} just ended.
+Topic: "{session.topic}" | Field: {session.field} | Round {session.current_round} just ended.
 
-RECENT DEBATE:
+RECENT EXCHANGE:
 {history}
 
 Write exactly 3 sentences in English:
-1. The biggest point of disagreement.
-2. Who made the most compelling argument and why.
-3. A new question to deepen the debate."""
+1. The specific mathematical claim or approach proposed, and whether it formally holds given its stated conditions.
+2. The sharpest unresolved flaw, missing condition, or open sub-problem remaining in the argument.
+3. One targeted question attacking the weakest formal assumption just made."""
     return _call(prompt, max_tokens=200)
 
 
@@ -57,15 +57,15 @@ def generate_final_summary(session: DebateSession) -> str:
     history = session.get_history_text(max_turns=6)
     prompt = f"""{system}
 
-Topic: "{session.topic}"
+Topic: "{session.topic}" | Field: {session.field}
 
-DEBATE:
+FULL DEBATE:
 {history}
 
 Summarize in English using this exact format, 1-2 lines each:
 
-Consensus: [write here]
-Disagreement: [write here]
-Open Questions: [write here]
-Next Research: [write here]"""
+Open Gaps: [which research gaps were precisely identified in the debate]
+Proposed Approaches: [formal mathematical approaches proposed, with their key conditions or requirements]
+Unresolved: [what mathematical questions remain open after this debate]
+Most Tractable: [which problem is closest to formal resolution based on the arguments made]"""
     return _call(prompt, max_tokens=300)

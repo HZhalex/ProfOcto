@@ -77,7 +77,7 @@ def generate_professor_turn(
         professors_summary=session.get_professors_summary(),
     )
 
-    last_turn = session.get_history_text(max_turns=2)
+    last_turn = session.get_history_text(max_turns=3)
     
     # Try up to 2 times - first normally, second with stronger English enforcement
     for attempt in range(2):
@@ -88,12 +88,13 @@ def generate_professor_turn(
         
         prompt = f"""{system}
 
+Field: {session.field}
 Topic: "{session.topic}"
 
-RECENT DEBATE:
+RECENT EXCHANGE:
 {last_turn}
 
-Your turn — {prof.name}. Respond now in English only.{extra_instruction}"""
+Your turn — {prof.name}. Advance the mathematical argument on the open problem under discussion. English only.{extra_instruction}"""
 
         gen_config = {
             "max_output_tokens": config.MAX_TOKENS_PER_TURN,

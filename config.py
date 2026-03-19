@@ -23,7 +23,7 @@ MODEL = "gemma-3-4b-it"
 NUM_PROFESSORS = 2    # number of professors (min 2, max 5)
 MAX_TURNS_PER_ROUND = 1
 MAX_ROUNDS = 1
-MAX_TOKENS_PER_TURN = 400
+MAX_TOKENS_PER_TURN = 700
 FACT_CHECK_ENABLED = True
 LANGUAGE = "en"
 
