@@ -107,7 +107,7 @@ npm install    # first time only
 npm run dev
 ```
 
-Open http://localhost:5173 in your browser.
+Open http://127.0.0.1:3000/ in your browser.
 
 For production deployment, build the frontend:
 

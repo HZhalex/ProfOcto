@@ -128,7 +128,7 @@ cd web
 npm install   # first time only
 npm run dev
 
-# Open http://localhost:5173
+# Open http://127.0.0.1:3000/
 ```
 
 For production, run `npm run build` inside `web/` — FastAPI will serve the built frontend from `web/dist/`.
