@@ -5,13 +5,15 @@ Get ProfOcto running in 5 minutes.
 ## Prerequisites
 
 - **Python 3.8+**
-- **Gemini API Key** (free from [Google AI Studio](https://makersuite.google.com/app/apikey))
+- **Gemini API Key** (free from [Google AI Studio](https://aistudio.google.com/app/apikey))
+  - **Free Tier Models Available:**
+  - **Rate Limits:** 15 requests/min, 1M tokens/minute on free tier
 
 ---
 
 ## Step 1: Get API Key (1 minute)
 
-1. Go to [Google AI Studio](https://makersuite.google.com/app/apikey)
+1. Go to [Google AI Studio](https://aistudio.google.com/app/apikey)
 2. Click "Create API Key"
 3. Copy the key
 
@@ -58,6 +60,15 @@ Total: 7/7 tests passed
 
 ---
 
+## Switching Models
+
+Edit [config.py](../../config.py) to change the default model:
+
+```python
+MODEL = "gemma-3-1b-it"
+```
+
+
 ## Step 4: Run First Analysis (3 minutes)
 
 ```bash
@@ -98,7 +109,7 @@ FAST_MODE = False                # Skip optional features
 ### API Key Error
 
 - Verify `.env` file exists and is in root directory
-- Check key is correct (copy from [Google AI Studio](https://www.makersuite.google.com/app/apikey))
+- Check key is correct (copy from [Google AI Studio](https://aistudio.google.com/app/apikey))
 - Regenerate key if needed
 
 ### Import Errors

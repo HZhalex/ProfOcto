@@ -5,7 +5,9 @@ Get ProfOcto running and analyze your first research gap in 5 minutes.
 ## Prerequisites
 
 - Python 3.8+
-- Gemini API key (free from [Google AI Studio](https://makersuite.google.com/app/apikey))
+- Gemini API key (free from [Google AI Studio](https://aistudio.google.com/app/apikey))
+  - Free tier: `gemini-2.0-flash` or `gemini-1.5-flash` recommended
+  - Rate limit: 15 requests/min, 1M tokens/min
 
 ## 1. Setup (2 minutes)
 
@@ -152,7 +154,7 @@ COST_CONFIRMATION_THRESHOLD = 0.25  # Ask before $0.25+
 ### "API key error"
 
 - Check `.env` file has correct key
-- Regenerate key at [Google AI Studio](https://makersuite.google.com/app/apikey)
+- Regenerate key at [Google AI Studio](https://aistudio.google.com/app/apikey)
 
 ### "Cost too high"
 

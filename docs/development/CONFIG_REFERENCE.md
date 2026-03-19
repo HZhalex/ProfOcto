@@ -16,13 +16,41 @@ Flags are organized by feature area:
 
 ---
 
+## AI Model Settings
+
+```python
+# Choose AI model (all free tier)
+MODEL = "gemini-2.0-flash"      # Options: "gemini-2.0-flash" (default, fastest)
+                                #          "gemini-1.5-flash" (balanced)
+                                #          "gemini-1.5-pro" (highest quality, limited)
+
+GEMINI_API_KEY = os.environ.get("GEMINI_API_KEY", "")  # From .env file
+LANGUAGE = "en"                 # Enforce English responses
+```
+
+**Free Tier Rate Limits:**
+
+- 15 requests per minute
+- 1,000,000 tokens per minute
+- Resets daily
+
+**Model Comparison:**
+
+| Model              | Speed  | Quality    | Best For                     | Max Context |
+| ------------------ | ------ | ---------- | ---------------------------- | ----------- |
+| `gemini-2.0-flash` | ⚡⚡⚡ | ⭐⭐⭐     | Fast debates, quick feedback | 1M tokens   |
+| `gemini-1.5-flash` | ⚡⚡   | ⭐⭐⭐⭐   | Balanced performance         | 1M tokens   |
+| `gemini-1.5-pro`   | ⚡     | ⭐⭐⭐⭐⭐ | Rigorous PhD debates         | 2M tokens   |
+
+---
+
 ## Debate Settings
 
 ```python
 NUM_PROFESSORS = 2              # Number of professors (2-5, more = more expensive)
 MAX_ROUNDS = 2                  # Debate rounds
 MAX_TURNS_PER_ROUND = 1         # Turns per professor per round
-MAX_TOKENS_PER_TURN = 400       # Max tokens per response
+MAX_TOKENS_PER_TURN = 700       # Max tokens per response (increased for math rigor)
 FACT_CHECK_ENABLED = True       # Fact-check each turn
 STREAM_OUTPUT = True            # Stream responses in real-time
 SAVE_TRANSCRIPT = True          # Save debate transcript
@@ -56,10 +84,10 @@ PhD_RECOMMENDATIONS_ENABLED = True      # Generate PhD advice
 ### Enable/Disable
 
 ```python
-GAP_TO_FORMAL_PROBLEM_ENABLED = True    # Convert gaps to formal problems
-NOVELTY_ANALYZER_ENABLED = True         # Analyze novelty (0-100)
-SOLUTION_SKETCH_ENABLED = True          # Generate proof sketches
-ICLR_READINESS_ENABLED = True           # Complete readiness scoring
+GAP_TO_FORMAL_PROBLEM_ENABLED = False   # Convert gaps to formal problems (disabled)
+NOVELTY_ANALYZER_ENABLED = False        # Analyze novelty (disabled by default)
+SOLUTION_SKETCH_ENABLED = False         # Generate proof sketches (disabled)
+ICLR_READINESS_ENABLED = False          # Complete readiness scoring (disabled)
 ```
 
 ### Thresholds

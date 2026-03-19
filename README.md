@@ -180,8 +180,6 @@ npm run dev
 
 ```python
 # In config.py
-MODEL = "gemini-2.0-flash"          # Highest quality (slower)
-MODEL = "gemini-1.5-flash"          # Balanced quality/speed
 MODEL = "gemma-3-1b-it"             # Fastest (free tier)
 ```
 
@@ -245,13 +243,11 @@ ProfOcto/
 
 | Model                | Free Tier     | Quality    | Speed  | Cost/Month |
 | -------------------- | ------------- | ---------- | ------ | ---------- |
-| **Gemma 3.1B**       | ✅ Unlimited  | ⭐⭐       | ⚡⚡⚡ | Free       |
-| **Gemini 1.5 Flash** | ✅ 15 req/min | ⭐⭐⭐⭐   | ⚡⚡   | Free/tier  |
-| **Gemini 2.0 Flash** | ✅ 10 req/min | ⭐⭐⭐⭐⭐ | ⚡     | Free/tier  |
+| **Gemma 3.1B**       | ✅ 30 req     | ⭐⭐       | ⚡⚡⚡ | Free       |
 
 ### Estimated costs for a typical debate:
 
-- **Model**: Gemini 1.5 Flash (recommended)
+- **Model**: Gemma 3.1B (recommended)
 - **Topic complexity**: Medium (5 professors, 2 rounds)
 - **Cost per debate**: ~$0.01-0.05 USD
 - **100 debates/month**: <$5 USD
@@ -313,7 +309,7 @@ cd web && npm run dev
 **Problem**: Professors responding with generic answers  
 **Solution**:
 
-- Use a stronger model (Gemini 2.0 Flash instead of Gemma)
+- Use a stronger model (Gemma 3.1B)
 - Make topic more specific
 - Increase `MAX_TOKENS_PER_TURN` in config
 

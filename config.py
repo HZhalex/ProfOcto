@@ -17,7 +17,7 @@ if not GEMINI_API_KEY:
         "or set the environment variable before running."
     )
 
-MODEL = "gemma-3-4b-it"
+MODEL = "gemma-3-1b-it"
 
 # Debate settings
 NUM_PROFESSORS = 2    # number of professors (min 2, max 5)

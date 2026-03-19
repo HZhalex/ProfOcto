@@ -107,6 +107,16 @@ docs/
 
 ---
 
+## 🤖 AI Models
+
+ProfOcto supports all free Gemini models:
+
+- **`Gemma-3-1B`** (Default) — Fastest, best for rapid debates
+
+Change in [config.py](config.py): `MODEL = "gemma-3-1b-it"`
+
+---
+
 ## 🔧 Configuration Highlights
 
 Key settings to know:
