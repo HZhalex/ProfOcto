@@ -1,6 +1,6 @@
 """
 FastAPI server — Academic Debate Arena
-Chạy: uvicorn web.server:app --reload --port 8000
+Run: uvicorn web.server:app --reload --port 8000
 """
 import sys, os
 sys.path.insert(0, os.path.dirname(os.path.dirname(__file__)))
@@ -51,19 +51,19 @@ class DebateRequest(BaseModel):
 # ── SSE helper ────────────────────────────────────────────────────────────────
 
 def _sse(event: str, data: dict) -> str:
-    """Format một SSE message."""
+    """Format an SSE message."""
     return f"event: {event}\ndata: {json.dumps(data, ensure_ascii=False)}\n\n"
 
 
-# ── Debate runner (chạy trong thread riêng, đẩy events vào queue) ─────────────
+# ── Debate runner (runs in a separate thread, pushes events to queue) ─────────
 
 def _run_debate(topic: str, field: str, q: queue.Queue):
-    """Toàn bộ logic debate chạy ở đây, gửi events vào queue."""
+    """Run the full debate and push events into the queue."""
     try:
         print(f"[Debate] Starting: {topic}", flush=True)
         
-        # 1. Tạo professors
-        q.put(_sse("status", {"message": "Đang tạo professor profiles..."}))
+        # 1. Create professors
+        q.put(_sse("status", {"message": "Creating professor profiles..."}))
         print("[Debate] Creating session...", flush=True)
         session = create_session(topic, field)
         print(f"[Debate] Session created with {len(session.professors)} professors", flush=True)
@@ -77,7 +77,7 @@ def _run_debate(topic: str, field: str, q: queue.Queue):
         print(f"[Debate] Sent professors data", flush=True)
 
         # 2. Opening
-        q.put(_sse("status", {"message": "Moderator đang chuẩn bị..."}))
+        q.put(_sse("status", {"message": "Moderator is preparing..."}))
         print("[Debate] Generating opening question...", flush=True)
         opening = generate_opening_question(topic, session.professors)
         turn = Turn(turn_number=session.current_turn, speaker_key="moderator",
@@ -85,7 +85,7 @@ def _run_debate(topic: str, field: str, q: queue.Queue):
                     content=opening, is_moderator=True)
         session.add_turn(turn)
         q.put(_sse("moderator", {"turn": session.current_turn - 1,
-                                  "label": "Mở màn", "content": opening}))
+                                  "label": "Opening", "content": opening}))
         print("[Debate] Opening sent", flush=True)
 
         # 3. Debate loop
@@ -99,7 +99,7 @@ def _run_debate(topic: str, field: str, q: queue.Queue):
                     turn_num = session.current_turn
                     print(f"[Debate] {prof.name} speaking (turn {turn_num})", flush=True)
 
-                    # Thông báo ai sắp nói
+                    # Notify who is speaking next
                     q.put(_sse("speaker_start", {
                         "turn": turn_num,
                         "key": prof.key,
@@ -107,7 +107,7 @@ def _run_debate(topic: str, field: str, q: queue.Queue):
                         "role": prof.role,
                     }))
 
-                    # Stream từng chunk
+                    # Stream chunks
                     chunks = []
                     def on_chunk(text, _q=q, _chunks=chunks):
                         _chunks.append(text)
@@ -130,27 +130,27 @@ def _run_debate(topic: str, field: str, q: queue.Queue):
                         print(f"[Debate WARNING] Fact check failed for {prof.name}: {e}", flush=True)
                         fact_tags = []
 
-                    # Lưu turn
+                    # Save turn
                     turn = Turn(turn_number=turn_num, speaker_key=prof.key,
                                 speaker_name=prof.name, role=prof.role,
                                 content=full_text, fact_tags=fact_tags)
                     session.add_turn(turn)
 
-                    # Gửi fact tags
+                    # Send fact tags
                     q.put(_sse("speaker_end", {
                         "turn": turn_num,
                         "key": prof.key,
                         "fact_tags": fact_tags,
                     }))
 
-            # Moderator tóm tắt
+            # Moderator summary
             if round_num < config.MAX_ROUNDS:
-                q.put(_sse("status", {"message": f"Moderator tóm tắt round {round_num}..."}))
+                q.put(_sse("status", {"message": f"Moderator is summarizing round {round_num}..."}))
                 try:
                     summary = generate_moderator_summary(session)
                 except Exception as e:
                     print(f"[Debate WARNING] Moderator summary failed: {e}", flush=True)
-                    summary = "(Tóm tắt không khả dụng)"
+                    summary = "(Summary unavailable)"
                 
                 mod_turn = Turn(turn_number=session.current_turn, speaker_key="moderator",
                                 speaker_name="Moderator", role="Moderator",
@@ -158,21 +158,21 @@ def _run_debate(topic: str, field: str, q: queue.Queue):
                 session.add_turn(mod_turn)
                 q.put(_sse("moderator", {
                     "turn": session.current_turn - 1,
-                    "label": f"Tóm tắt Round {round_num}",
+                    "label": f"Round {round_num} Summary",
                     "content": summary,
                 }))
 
         # 4. Final summary
-        q.put(_sse("status", {"message": "Đang tổng kết..."}))
+        q.put(_sse("status", {"message": "Writing final summary..."}))
         try:
             final = generate_final_summary(session)
         except Exception as e:
             print(f"[Debate WARNING] Final summary failed: {e}", flush=True)
-            final = "(Tóm tắt cuối không khả dụng)"
+            final = "(Final summary unavailable)"
         
         q.put(_sse("final", {"content": final}))
 
-        # 5. Lưu transcript
+        # 5. Save transcript
         if config.SAVE_TRANSCRIPT:
             try:
                 filename = export_markdown(session, config.TRANSCRIPT_DIR)
@@ -181,9 +181,9 @@ def _run_debate(topic: str, field: str, q: queue.Queue):
             except Exception as e:
                 print(f"[Debate WARNING] Failed to save transcript: {e}", flush=True)
         
-        # 6. Generate research kit (nếu RESEARCH_MODE ON)
+        # 6. Generate research kit (if RESEARCH_MODE is ON)
         if config.RESEARCH_MODE:
-            q.put(_sse("status", {"message": "Đang tổng hợp research insights..."}))
+            q.put(_sse("status", {"message": "Synthesizing research insights..."}))
             try:
                 research_kit = generate_research_kit(session, session.topic, session.field)
                 # Save research kit to files
@@ -228,7 +228,7 @@ def _run_debate(topic: str, field: str, q: queue.Queue):
         traceback.print_exc()
         q.put(_sse("error", {"message": error_msg}))
     finally:
-        q.put(None)  # sentinel — báo stream kết thúc
+        q.put(None)  # sentinel — stream finished
 
 
 # ── Routes ────────────────────────────────────────────────────────────────────
@@ -244,11 +244,11 @@ def index():
 
 @app.post("/api/debate/stream")
 def debate_stream(req: DebateRequest):
-    """SSE endpoint — stream toàn bộ cuộc tranh luận."""
+    """SSE endpoint — stream the full debate session."""
     print(f"[API] /api/debate/stream called: {req.topic[:50]}", flush=True)
     q: queue.Queue = queue.Queue()
 
-    # Chạy debate trong thread riêng để không block event loop
+    # Run the debate in a separate thread to avoid blocking
     thread = threading.Thread(
         target=_run_debate,
         args=(req.topic, req.field, q),
@@ -288,7 +288,7 @@ def health():
 
 @app.get("/api/history")
 def list_history():
-    """Trả về danh sách các transcript đã lưu."""
+    """Return a list of saved transcripts."""
     transcript_dir = config.TRANSCRIPT_DIR
     if not os.path.exists(transcript_dir):
         return {"sessions": []}
@@ -298,7 +298,7 @@ def list_history():
         if not fname.endswith(".md"):
             continue
         fpath = os.path.join(transcript_dir, fname)
-        # Đọc 3 dòng đầu để lấy topic + field
+        # Read a few header lines to get topic + field
         try:
             with open(fpath, encoding="utf-8") as f:
                 lines = [f.readline().strip() for _ in range(4)]
@@ -321,8 +321,8 @@ def list_history():
 
 @app.get("/api/history/{filename}")
 def get_transcript(filename: str):
-    """Trả về nội dung markdown của 1 transcript."""
-    # Chỉ cho phép đọc file .md trong thư mục transcripts
+    """Return markdown content of a transcript."""
+    # Only allow reading `.md` files inside the transcripts directory
     if not filename.endswith(".md") or "/" in filename or "\\" in filename:
         from fastapi import HTTPException
         raise HTTPException(status_code=400, detail="Invalid filename")
@@ -342,7 +342,7 @@ def get_transcript(filename: str):
 
 @app.get("/api/history")
 def get_history():
-    """Trả về danh sách các transcript đã lưu."""
+    """Return a list of saved transcripts."""
     import glob
     from pathlib import Path
 
@@ -352,9 +352,9 @@ def get_history():
 
     files = sorted(glob.glob(f"{transcript_dir}/*.md"), reverse=True)
     sessions = []
-    for f in files[:20]:  # tối đa 20 sessions gần nhất
+    for f in files[:20]:  # at most 20 recent sessions
         path = Path(f)
-        # Đọc 5 dòng đầu để lấy topic và field
+        # Read the first few lines to get topic/field
         lines = path.read_text(encoding="utf-8").splitlines()
         topic, field, date = "", "", ""
         for line in lines[:6]:
@@ -375,9 +375,9 @@ def get_history():
 
 @app.get("/api/history/{filename}")
 def get_transcript(filename: str):
-    """Trả về nội dung một transcript cụ thể."""
+    """Return the content of a specific transcript."""
     from pathlib import Path
-    # Sanitize filename — chỉ cho phép .md files, không path traversal
+    # Sanitize filename — allow `.md` only, prevent path traversal
     if "/" in filename or "\\" in filename or not filename.endswith(".md"):
         return {"error": "Invalid filename"}
     path = Path(config.TRANSCRIPT_DIR) / filename

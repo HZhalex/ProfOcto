@@ -1,6 +1,6 @@
 import os
 
-# Tự động đọc .env nếu có
+# Auto-load `.env` if present
 _env_path = os.path.join(os.path.dirname(__file__), ".env")
 if os.path.exists(_env_path):
     with open(_env_path) as _f:
@@ -15,18 +15,18 @@ GEMINI_API_KEY = os.environ.get("GEMINI_API_KEY", "")
 MODEL = "gemma-3-4b-it"
 
 # Debate settings
-NUM_PROFESSORS = 2    # số giáo sư, min 2 max 5
+NUM_PROFESSORS = 2    # number of professors (min 2, max 5)
 MAX_TURNS_PER_ROUND = 1
 MAX_ROUNDS = 1
 MAX_TOKENS_PER_TURN = 400
 FACT_CHECK_ENABLED = True
-LANGUAGE = "vi"
+LANGUAGE = "en"
 
-# Research Mode (khi ON: generate research kit + paper outline sau debate)
-RESEARCH_MODE = True  # Bật research synthesis + paper outline
+# Research Mode (when ON: generate research kit + paper outline after the debate)
+RESEARCH_MODE = True  # Enable research synthesis + paper outline
 RESEARCH_MAX_RECOMMENDATIONS = 5
 
-# Academic Rigor Mode (khi ON: professors must back claims with theorems + citations)
+# Academic Rigor Mode (when ON: professors must back claims with theorems + citations)
 ACADEMIC_RIGOR_MODE = True  # Enforce mathematical backing in debates
 
 # Mathematical Rigor Scoring (NEW - PhD focus)
@@ -43,10 +43,10 @@ DETAILED_THEOREM_ANALYSIS = True  # Show theorem breakdowns
 STREAM_OUTPUT = True
 SAVE_TRANSCRIPT = True
 TRANSCRIPT_DIR = "transcripts"
-RESEARCH_KIT_DIR = "research_kits"  # Nơi lưu research kits
+RESEARCH_KIT_DIR = "research_kits"  # Where to save research kits
 
 # PhD Analysis Output Directory
-PhD_ANALYSIS_DIR = "phd_analysis"  # Nơi lưu rigor scores, gaps, recommendations
+PhD_ANALYSIS_DIR = "phd_analysis"  # Where to save rigor scores, gaps, recommendations
 
 # ICLR READINESS PIPELINE (Phase 5 - NEW)
 # This pipeline: Gap → Formal Problem → Novelty → Solution Sketch → ICLR Readiness
@@ -141,6 +141,6 @@ BATCH_RESULTS_DIR = "phd_analysis/batch_results"  # Where to save batch processi
 BATCH_SKIP_DUPLICATE_TOPICS = True  # Don't re-run if cached
 
 # PREFERENCES
-LANGUAGE_MIXED_MODE = True  # Use Vietnamese for UI, English for technical terms
+LANGUAGE_MIXED_MODE = False  # English-only UI/messages
 COLOR_THEME = "purple"  # Color scheme: "purple", "blue", "green"
 AUTO_SAVE_RESULTS = True  # Auto-save results without asking
