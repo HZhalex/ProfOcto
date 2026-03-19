@@ -1,183 +1,117 @@
-# 📚 ProfOcto Documentation
+# ProfOcto Documentation
 
-Welcome to ProfOcto - AI-Powered Research Gap Discovery for PhD Students.
-
-## 📖 Quick Navigation
-
-### 🚀 Getting Started
-
-- **[Quick Start Guide](guides/01_QUICK_START.md)** — Run your first analysis in 5 minutes
-- **[Installation & Setup](guides/02_SETUP.md)** — Configure environment variables
-
-### 🎓 Features
-
-#### Phase 7: PhD-Friendly UX (LATEST)
-
-- **[Phase 7 User Guide](guides/03_PHASE7_USER_GUIDE.md)** — All 7 new features explained
-  - Quick/Interactive startup
-  - Cost estimation
-  - Gap dashboard
-  - Bookmarking system
-  - Elevator pitch generator
-  - PDF export for advisor
-  - Batch processing
-
-#### Phase 5: ICLR Readiness Pipeline
-
-- **[Phase 5 Implementation](features/PHASE5_ICLR_PIPELINE.md)** — Formalize → Novelty → Sketch → Readiness
-- **[Academic Rigor System](features/ACADEMIC_RIGOR.md)** — Mathematical rigor scoring
-
-#### Phase 1-4: Core Debate Engine
-
-- **[Research Mode Guide](features/RESEARCH_MODE.md)** — Automatic paper outline generation
-- **[Debate System](features/DEBATE_SYSTEM.md)** — Multi-professor discussion engine
-
-### 🛠️ Development & Configuration
-
-- **[Configuration Reference](development/CONFIG_REFERENCE.md)** — All 100+ config flags explained
-- **[Debugging Guide](development/DEBUGGING.md)** — Troubleshooting and logs
-
-### 📋 Project Status
-
-- **[Phase 7 Completion Report](features/PHASE7_COMPLETION_REPORT.md)** — Implementation details, test results
-- **[Test Reports](development/TESTING.md)** — Validation results
+Welcome to the ProfOcto documentation — an AI-powered research gap discovery platform for PhD students and researchers.
 
 ---
 
-## 🎯 Choose Your Starting Point
+## Guides
 
-**I'm a PhD student ready to start:**
-→ Go to [Quick Start Guide](guides/01_QUICK_START.md)
+| Guide                                           | Description                                                                      |
+| ----------------------------------------------- | -------------------------------------------------------------------------------- |
+| [Quick Start](guides/01_QUICK_START.md)         | Get running and analyze your first research gap in 5 minutes                     |
+| [Setup & Installation](guides/02_SETUP.md)      | Detailed environment setup, API key configuration, and verification              |
+| [Feature Guide](guides/03_PHASE7_USER_GUIDE.md) | Complete walkthrough of all features: dashboard, bookmarking, export, batch mode |
 
-**I want to understand all features:**
-→ Go to [Phase 7 User Guide](guides/03_PHASE7_USER_GUIDE.md)
+## Reference
 
-**I need to configure something:**
-→ Go to [Config Reference](development/CONFIG_REFERENCE.md)
+| Reference                                                  | Description                                                 |
+| ---------------------------------------------------------- | ----------------------------------------------------------- |
+| [Configuration Reference](development/CONFIG_REFERENCE.md) | All 100+ configuration flags with descriptions and defaults |
 
-**I'm having issues:**
-→ Go to [Debugging Guide](development/DEBUGGING.md)
+## Web UI
 
-**I want to contribute/understand codebase:**
-→ Go to [Architecture & Development](development/ARCHITECTURE.md)
+| Guide                                | Description                                      |
+| ------------------------------------ | ------------------------------------------------ |
+| [Web UI Setup](../web/README_WEB.md) | React frontend + FastAPI backend setup and usage |
 
 ---
 
-## 🗂️ Directory Structure
+## Where to Start
+
+**New user?** Start with the [Quick Start Guide](guides/01_QUICK_START.md) — you'll have your first research gap analysis running in 5 minutes.
+
+**Want to customize behavior?** See the [Configuration Reference](development/CONFIG_REFERENCE.md) for all available flags.
+
+**Want the web interface?** See the [Web UI Setup](../web/README_WEB.md) guide.
+
+---
+
+## How ProfOcto Works
+
+ProfOcto runs a multi-phase pipeline:
+
+### Phase 1–4: Debate & Analysis
+
+1. **Professor Generation** — Creates a panel of 2–5 AI professors with distinct roles (Empiricist, Theorist, Skeptic, Pragmatist, Historian) and realistic academic affiliations
+2. **Structured Debate** — Professors debate your topic across multiple rounds, enforcing mathematical rigor with theorem citations and proofs
+3. **Fact-Checking** — Each turn is verified using web search
+4. **Research Synthesis** — Generates a research kit with findings, paper outline, and recommendations
+
+### Phase 5: ICLR Readiness Pipeline (Optional)
+
+When enabled, each identified gap goes through:
+
+1. **Gap Formalization** — Converts informal gaps to formal mathematical problem statements
+2. **Novelty Analysis** — Scores novelty vs. state-of-the-art (0–100)
+3. **Solution Sketch** — Generates proof strategies and methodological approaches
+4. **Readiness Assessment** — Combines all scores into an overall ICLR readiness rating
+
+### Phase 7: PhD-Friendly UX
+
+Interactive features for PhD workflow:
+
+- **Quick Start** — Just enter your topic
+- **Cost Estimator** — See projected cost and runtime before execution
+- **Top Gap Dashboard** — See the #1 recommended gap prominently displayed
+- **Bookmarking** — Save gaps for later
+- **Elevator Pitch** — Generate verbal summaries for advisor meetings
+- **Advisor Export** — Professional reports in TXT/HTML/JSON
+- **Batch Mode** — Process multiple topics from CSV
+- **Run History** — Track and compare past sessions
+
+---
+
+## Key Concepts
+
+| Term                     | Definition                                                                      |
+| ------------------------ | ------------------------------------------------------------------------------- |
+| **Research Gap**         | An unsolved problem in academic literature, suitable for PhD research           |
+| **ICLR Readiness Score** | 0–100 score indicating publication readiness at top-tier venues                 |
+| **Novelty Score**        | How novel a gap is compared to existing state-of-the-art                        |
+| **Feasibility Score**    | How realistic the gap is to solve within a PhD timeline                         |
+| **Rigor Score**          | 0–10 rating of mathematical backing in a debate turn                            |
+| **Elevator Pitch**       | A 15–60 second verbal summary for presentations                                 |
+| **Research Kit**         | Structured output containing findings, gaps, recommendations, and paper outline |
+
+---
+
+## Configuration Overview
+
+All configuration is centralized in `config.py`. Key areas:
+
+- **AI Model** — Default: `gemma-3-1b-it` (Gemini free tier)
+- **Debate Structure** — Number of professors, rounds, tokens per turn
+- **Research Analysis** — Theorem extraction, rigor scoring, gap detection
+- **ICLR Pipeline** — Formalization, novelty, solution sketches, readiness (disabled by default)
+- **PhD UX** — Quick start, cost estimation, dashboard, bookmarking, export
+- **Caching** — API result caching for ~60% cost savings
+
+See [Configuration Reference](development/CONFIG_REFERENCE.md) for the complete list.
+
+---
+
+## Output Files
+
+After running ProfOcto, output is saved to:
 
 ```
-docs/
-├── guides/                 # User guides for running ProfOcto
-│   ├── 01_QUICK_START.md
-│   ├── 02_SETUP.md
-│   └── 03_PHASE7_USER_GUIDE.md
-├── features/              # Feature documentation
-│   ├── DEBATE_SYSTEM.md
-│   ├── ACADEMIC_RIGOR.md
-│   ├── RESEARCH_MODE.md
-│   ├── PHASE5_ICLR_PIPELINE.md
-│   └── PHASE7_COMPLETION_REPORT.md
-├── development/           # Development & configuration
-│   ├── CONFIG_REFERENCE.md
-│   ├── DEBUGGING.md
-│   ├── TESTING.md
-│   └── ARCHITECTURE.md
-└── archive/               # Legacy documentation (earlier phases)
-    ├── ACADEMIC_RIGOR_SYSTEM.md
-    ├── DEBUGGING.md
-    ├── ENHANCED_RIGOR_SUMMARY.md
-    ├── LOGGING_GUIDE.md
-    ├── PROMPTS_STRUCTURE.md
-    ├── RESEARCH_MODE_GUIDE.md
-    └── START_HERE_TESTING.md
+transcripts/              # Debate transcripts (Markdown)
+research_kits/            # Research kits (JSON)
+logs/                     # Session, theorem, rigor, gap, and error logs
+phd_analysis/             # PhD analysis output (when ICLR pipeline is enabled)
+├── bookmarks.json        #   Saved research gaps
+├── run_history.json      #   Past debate sessions
+├── advisor_reports/      #   Exported reports for advisor
+├── batch_results/        #   Batch processing output
+└── .cache/               #   API result cache
 ```
-
----
-
-## 📊 Feature Overview
-
-| Phase | Feature          | Status    | Docs                                         |
-| ----- | ---------------- | --------- | -------------------------------------------- |
-| 1-4   | Debate Engine    | ✅ Active | [Debate System](features/DEBATE_SYSTEM.md)   |
-| 1-4   | Research Kit     | ✅ Active | [Research Mode](features/RESEARCH_MODE.md)   |
-| 1-4   | Rigor Scoring    | ✅ Active | [Academic Rigor](features/ACADEMIC_RIGOR.md) |
-| 5     | ICLR Readiness   | ✅ Active | [Phase 5](features/PHASE5_ICLR_PIPELINE.md)  |
-| 6     | Caching & Export | ✅ Active | Config Flags                                 |
-| 7     | PhD UX           | ✅ Active | [Phase 7](guides/03_PHASE7_USER_GUIDE.md)    |
-
----
-
-## 🤖 AI Models
-
-ProfOcto supports all free Gemini models:
-
-- **`Gemma-3-1B`** (Default) — Fastest, best for rapid debates
-
-Change in [config.py](config.py): `MODEL = "gemma-3-1b-it"`
-
----
-
-## 🔧 Configuration Highlights
-
-Key settings to know:
-
-```python
-# Startup behavior
-QUICK_START_MODE = True          # Ask only for topic
-INTERACTIVE_SETUP = True         # Allow settings refinement
-
-# Show what you want
-SHOW_TOP_GAP_DASHBOARD = True    # Prominent #1 gap
-ESTIMATE_API_COST = True         # Show cost before running
-
-# Enable features
-ENABLE_BOOKMARKING = True        # Save favorite gaps
-ENABLE_RUN_HISTORY = True        # Track all debates
-ENABLE_PDF_EXPORT = True         # Export for advisor
-ENABLE_BATCH_MODE = True         # Run multiple topics
-
-# Full reference: see development/CONFIG_REFERENCE.md
-```
-
----
-
-## 🚀 Quick Commands
-
-```bash
-# Run a single debate with Phase 5 analysis
-python main.py
-
-# Run test suite
-python test_phase7.py
-
-# Custom topic from CLI
-python main.py "Your research question here" "Research field"
-```
-
----
-
-## 💡 Key Concepts
-
-**Research Gap** — A problem not yet solved in academic literature, suitable for PhD research
-
-**ICLR Readiness Score** — 0-100 score indicating if a gap is ready for top-tier publication
-
-**Novelty Score** — How novel the gap is vs. state-of-the-art
-
-**Feasibility Score** — How realistic the gap is to solve in 6-18 months
-
-**Elevator Pitch** — Quick 30-second verbal summary for presentations/discussions
-
----
-
-## 📞 Support
-
-- Check [Debugging Guide](development/DEBUGGING.md) for common issues
-- Review configuration flags in [CONFIG_REFERENCE.md](development/CONFIG_REFERENCE.md)
-- See test results in [TESTING.md](development/TESTING.md)
-
----
-
-**Last Updated:** March 17, 2026  
-**Phase:** 7 (PhD UX Improvements)  
-**Version:** 1.0

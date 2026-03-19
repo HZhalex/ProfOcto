@@ -1,183 +1,176 @@
-# Phase 7: PhD-Friendly UX Improvements - Complete Guide
+# Feature Guide
 
-**7 brand new features** designed for PhD students pursuing ICLR publication. Focus on **speed**, **cost transparency**, and **advisor sharing**.
-
-## ✨ 7 Features Overview
-
-| Feature               | What It Does             | Use Case                    |
-| --------------------- | ------------------------ | --------------------------- |
-| **Quick Start**       | Ask topic only           | Save 25 seconds per run     |
-| **Cost Estimate**     | Show cost before running | Prevent surprises           |
-| **Top Gap Dashboard** | Highlight #1 gap         | Make decision easy          |
-| **Bookmarking**       | Save favorite gaps       | Long-term research planning |
-| **Elevator Pitch**    | 30-sec summaries         | Office hours prep           |
-| **PDF Export**        | Share with advisor       | Professional communication  |
-| **Batch Mode**        | Run multiple topics      | Multi-angle analysis        |
+Complete walkthrough of all ProfOcto features. This covers the debate engine, research analysis, ICLR readiness pipeline, and PhD-friendly UX features.
 
 ---
 
-## 🚀 Feature 1: Hybrid Quick Start Mode
+## Table of Contents
 
-### What Changed
+- [Quick Start Mode](#quick-start-mode)
+- [Cost & Timeline Estimator](#cost--timeline-estimator)
+- [Top Gap Dashboard](#top-gap-dashboard)
+- [Bookmarking](#bookmarking)
+- [Elevator Pitch Generator](#elevator-pitch-generator)
+- [Advisor Export](#advisor-export)
+- [Run History & Comparison](#run-history--comparison)
+- [Batch Mode](#batch-mode)
+- [Configuration Quick Reference](#configuration-quick-reference)
+- [Typical PhD Workflow](#typical-phd-workflow)
+- [Troubleshooting](#troubleshooting)
 
-- **Before:** 5-10 setup questions every run
-- **After:** Just ask for topic, refine settings inline if needed
+---
 
-### How to Use
+## Quick Start Mode
+
+**What it does:** Reduces startup to a single question — your research topic. All other settings use defaults.
+
+**Before:** 5–10 setup questions every run.  
+**After:** One prompt, then automatic execution.
+
+### Usage
 
 ```bash
 python main.py
 ```
 
 ```
-🎯 Research Gap Analysis
-What research topic would you like to explore?
+What research topic or problem would you like to explore?
 > [Your question here]
 
-📊 Estimated Cost & Timeline:
-  • API Cost: $0.87
-  • Runtime: 2.7m
+Estimated Cost & Timeline:
+  API Cost: $0.87
+  Runtime: 2.7m
 
-🔬 Run advanced ICLR readiness analysis? [Y/n]: y
+Run advanced ICLR readiness analysis? [Y/n]: y
 
-⚙️  Customize settings before running? [y/N]: y
-# Optionally refine without restarting
+Customize settings before running? [y/N]: n
 ```
 
-### Why It Works
+If you choose to customize, you can adjust settings inline:
 
-- 80% of use cases: just run with defaults
-- Settings refinement is INLINE (no restart)
-- Cost shown BEFORE spending money
-- Time saved: ~25 seconds per run
+```
+Options:
+  [1] Change topic
+  [2] Change field
+  [3] Toggle Phase 5 analysis
+  [5] Skip optional features (fast mode)
+```
+
+### Configuration
+
+```python
+QUICK_START_MODE = True         # Enable one-question startup
+INTERACTIVE_SETUP = True        # Allow inline refinement
+```
 
 ---
 
-## 💰 Feature 2: Cost & Timeline Estimator
+## Cost & Timeline Estimator
 
-### What It Does
+**What it does:** Shows the projected API cost and runtime **before** execution begins, so you can decide whether to proceed.
 
-Shows **before** running:
-
-- API cost in USD
-- Runtime in minutes
-- Cost breakdown per phase
-- Cache efficiency multiplier
-
-### Example Output
+### Output Example
 
 ```
 Cost & Timeline Estimate
-──────────────────────────────────────────────────────────
+──────────────────────────────────────────
 
 Gaps to Process: 5
 Estimated API Cost: $0.87
 Estimated Runtime: 2.7m
 
 Cost Breakdown:
-  • Gap Formalization: $0.20
-  • Novelty Analysis: $0.15
-  • Solution Sketching: $0.27
-  • Readiness Scoring: $0.25
+  Gap Formalization: $0.20
+  Novelty Analysis: $0.15
+  Solution Sketching: $0.27
+  Readiness Scoring: $0.25
 
 Cache Status: Enabled (60% cost reduction)
 ```
 
-### Money-Saving Features
-
-- **Caching ON by default** → 60% cost reduction on repeated analyses
-- **Cost confirmation** → Asks if cost > $0.50 (customizable)
-- **Fast mode** → -30-40% cost/time when optional features skipped
+If the estimated cost exceeds the confirmation threshold, ProfOcto asks for confirmation before proceeding.
 
 ### Configuration
 
 ```python
-ESTIMATE_API_COST = True
-COST_CONFIRMATION_THRESHOLD = 0.50  # Ask before $X cost
-USE_RETRY_CACHE = True              # 60% savings
-FAST_MODE = False                   # Skip optional features?
+ESTIMATE_API_COST = True                # Show cost estimate
+COST_CONFIRMATION_THRESHOLD = 0.50      # Confirm if cost > $0.50
+ESTIMATE_RUNTIME = True                 # Show runtime estimate
+COST_PER_API_CALL = 0.001              # Estimated cost per API call (USD)
+USE_RETRY_CACHE = True                  # ~60% cost savings via caching
+FAST_MODE = False                       # Skip optional features to save cost
 ```
 
 ---
 
-## 📊 Feature 3: Top Gap Dashboard
+## Top Gap Dashboard
 
-### What It Does
+**What it does:** After analysis completes, prominently displays the #1 recommended research gap with all scores.
 
-After Phase 5 completes, displays **#1 recommended gap prominently** with:
-
-- Readiness score (0-100)
-- Novelty vs. SOTA
-- Feasibility assessment
-- Timeline estimate
-- Quick action buttons
-
-### Dashboard Display
+### Display
 
 ```
-╔════════════════════════════════════════════════════════════════╗
-║ TOP GAP #1 (RECOMMENDED FOR PURSUIT)                          ║
-╠════════════════════════════════════════════════════════════════╣
-║ Novel transformer efficiency optimization via low-rank approx  │
-╠════════════════════════════════════════════════════════════════╣
-║ Status: ✅ HIGHLY READY                                        ║
-║ Readiness Score: 85/100 ████████████████░                    ║
-║ Novelty: 80/100 | Feasibility: 85/100 ███████████████░       ║
-║ Timeline: ~6 months (Shorter is better)                       ║
-╠════════════════════════════════════════════════════════════════╣
-║ Recommendation:                                               ║
-║ This gap is ready for PhD pursuit. Strong novelty + high      ║
-║ feasibility = ICLR-competitive. Start with literature review. ║
-╚════════════════════════════════════════════════════════════════╝
+╔════════════════════════════════════════════════════╗
+║ TOP GAP #1 (RECOMMENDED FOR PURSUIT)               ║
+╠════════════════════════════════════════════════════╣
+║ Novel transformer efficiency optimization          ║
+║ via low-rank approximation                         ║
+╠════════════════════════════════════════════════════╣
+║ Status: HIGHLY READY                              ║
+║ Readiness Score: 85/100                           ║
+║ Novelty: 80/100 | Feasibility: 85/100             ║
+║ Timeline: ~6 months                               ║
+╠════════════════════════════════════════════════════╣
+║ Recommendation: Strong novelty + high              ║
+║ feasibility = ICLR-competitive. Start with         ║
+║ literature review.                                 ║
+╚════════════════════════════════════════════════════╝
 ```
 
-### Statistics View
+The statistics view also shows averages across all identified gaps:
 
-Also shows averages:
-
-- Average readiness across all gaps
-- Average novelty
-- Average feasibility
+- Average readiness score
+- Average novelty score
+- Average feasibility score
 
 ### Configuration
 
 ```python
-SHOW_TOP_GAP_DASHBOARD = True
-SHOW_STATISTICS_DASHBOARD = True
-DASHBOARD_TOP_N = 3  # Show top 3 gaps
+SHOW_TOP_GAP_DASHBOARD = True       # Enable dashboard display
+SHOW_STATISTICS_DASHBOARD = True    # Show averages
+DASHBOARD_TOP_N = 3                 # Number of top gaps to show
+DASHBOARD_MINIMAL_VIEW = False      # Compact layout
 ```
 
 ---
 
-## 📌 Feature 4: Bookmark Your Gaps
+## Bookmarking
 
-### What It Does
+**What it does:** Save research gaps for later reference — useful for long-term topic selection across multiple sessions.
 
-**Pinterest for research ideas** — Save gaps you want to come back to later
+### Usage
 
-### How to Use
+From the interactive menu after a debate:
 
 ```
-Interactive menu:
-
-[2] 📌 Bookmark your favorite gap
+[2] Bookmark your favorite gap
 
 Which gap to bookmark? (1-5 or 0 for top): 1
-Optional notes: "Need to verify with latest papers"
+Optional notes: "Verify against latest ICML 2025 papers"
 
-✓ Gap bookmarked!
+Gap bookmarked!
 ```
 
-### Your Bookmark Library
+### Features
 
-All saved in: `phd_analysis/bookmarks.json`
+- View all bookmarked gaps with scores
+- Add or update personal notes on each bookmark
+- Remove bookmarks
+- Bookmarks persist across sessions
 
-You can:
+### Storage
 
-- ✅ View all bookmarked gaps with scores
-- ✅ Add/update personal notes
-- ✅ Remove bookmarks
-- ✅ Use for long-term PhD topic selection
+Saved to: `phd_analysis/bookmarks.json`
 
 ### Configuration
 
@@ -188,27 +181,20 @@ BOOKMARK_FILE = "phd_analysis/bookmarks.json"
 
 ---
 
-## 💬 Feature 5: Elevator Pitch Generator
+## Elevator Pitch Generator
 
-### What It Does
+**What it does:** Generates a concise verbal summary of a research gap, suitable for advisor meetings, lab presentations, or interview explanations.
 
-Generate **quick verbal summaries** in 15-30 seconds:
+### Usage
 
-- Office hours explaining research
-- Lab meeting introductions
-- Presentation opening hooks
-- Interview explanations
-
-### How to Use
+From the interactive menu:
 
 ```
-Interactive menu:
-
-[4] 💬 Generate elevator pitch
+[4] Generate elevator pitch
 
 Which gap? (1-5): 2
 
-📢 Elevator Pitch (30 sec):
+Elevator Pitch (30 sec):
 
 This research gap addresses transformer efficiency limitations.
 By tackling this novel opportunity, we can advance the field in
@@ -216,162 +202,140 @@ By tackling this novel opportunity, we can advance the field in
 combined with dynamic compression.
 
 Key Points:
-🎯 Gap: Novel low-rank transformer approximation
-📊 Novelty Score: 80/100
-⚙️ Innovation Level: Significant
-⏱️ Timeline: 6 months realistic
-📈 Readiness: 85/100 ICLR-ready
+  Gap: Novel low-rank transformer approximation
+  Novelty Score: 80/100
+  Innovation Level: Significant
+  Timeline: 6 months realistic
+  Readiness: 85/100 ICLR-ready
 ```
 
-### Multiple Formats
+### Duration Options
 
-- **Short (15s):** Just the hook
-- **Medium (30s):** Full pitch (recommended)
-- **Long (60s):** With motivation & impact
-- **Bullets:** Key points only
+| Duration   | Use Case                                  |
+| ---------- | ----------------------------------------- |
+| 15 seconds | Quick hook for hallway conversations      |
+| 30 seconds | Standard pitch for office hours (default) |
+| 60 seconds | Extended pitch with motivation and impact |
 
 ### Configuration
 
 ```python
 ENABLE_ELEVATOR_PITCH = True
-ELEVATOR_PITCH_SECONDS = 15  # 15, 30, or 60
+ELEVATOR_PITCH_SECONDS = 15         # Default: 15, 30, or 60
 ```
 
 ---
 
-## 🚀 Feature 6: PDF Export for Advisor
+## Advisor Export
 
-### What It Does
+**What it does:** Exports a gap analysis as a professional report for sharing with your advisor or committee members.
 
-Export gap analysis as **professional PDF** for advisor discussion:
+### Usage
 
-- Email to advisor
-- Include in research proposals
-- Share with committee members
-
-### How to Use
+From the interactive menu:
 
 ```
-Interactive menu:
-
-[3] 🚀 Export gap analysis for advisor
+[3] Export gap analysis for advisor
 
 Which gap to export? (1-5 or 'all'): 1
 
-✓ Exported to: phd_analysis/advisor_reports/
+Exported to: phd_analysis/advisor_reports/
   Novel_transformer_20260317_120000.txt
 ```
 
-### What's Included
+### Report Contents
 
 - Gap title and readiness score
-- Problem statement (formal)
+- Formal problem statement
 - Key innovations
-- Timeline breakdown
-  - Literature review: 4 weeks
-  - Problem formalization: 2 weeks
-  - Solution development: 4 months
-  - Experimentation: 3 months
-  - Paper writing: 4 weeks
-- Key risks and mitigation
-- Next steps for researcher
+- Timeline breakdown (literature review, formalization, development, experimentation, writing)
+- Key risks and mitigation strategies
+- Next steps
 - Required resources
-- Professional formatting
 
-### File Formats
+### Export Formats
 
-- **`.txt`** — Plain text (simple)
-- **`.html`** — Beautiful HTML (open in browser)
-- **`.json`** — Machine-readable (for processing)
+| Format  | Best For                                  |
+| ------- | ----------------------------------------- |
+| `.txt`  | Email attachments, simple sharing         |
+| `.html` | Browser viewing, formatted reports        |
+| `.json` | Programmatic processing, data integration |
 
 ### Configuration
 
 ```python
 ENABLE_PDF_EXPORT = True
 ADVISOR_EXPORT_DIR = "phd_analysis/advisor_reports"
-PDF_INCLUDE_TRACE = False  # Include debug logs?
+PDF_INCLUDE_TRACE = False               # Include debug logs in export
 ```
 
 ---
 
-## 📋 Feature 7: Run History & Comparison
+## Run History & Comparison
 
-### What It Does
+**What it does:** Tracks all debate sessions so you can compare results across runs and identify gaps that persist across different topic formulations.
 
-Track all debates you run to **identify persistent gaps**
+### Usage
 
-### Questions It Answers
-
-- "Did this gap appear in my last 3 analyses?"
-- "How did my readiness scores improve?"
-- "Which gaps are robust across formulations?"
-
-### How to Use
+From the interactive menu:
 
 ```
-Interactive menu:
+[5] Compare with previous runs
 
-[5] 📋 Compare with previous runs
-
-📋 Recent Debates:
+Recent Debates:
   1. Transformer efficiency (2026-03-17)
   2. MoE scaling strategies (2026-03-16)
   3. Attention mechanisms (2026-03-15)
-
-✓ Showing 3 recent debates
 ```
 
-### History Tracking
-
-Saved in: `phd_analysis/run_history.json`
-
-Tracks:
+### What's Tracked
 
 - Topic analyzed
-- Date/time
+- Date and time
 - Number of gaps found
-- Top gaps and scores
+- Top gaps with scores
 - Full gap details
 
 ### Why This Matters
 
-- **Robust gaps** = appear in multiple analyses (more publishable)
-- **Score improvements** = getting better at finding ideas
-- **Patterns** = understand your research interests
+- **Robust gaps** = gaps that appear across multiple analyses are more likely publishable
+- **Score trends** = see how your gap identification improves over time
+- **Patterns** = understand your research interests from history
 
 ### Configuration
 
 ```python
 ENABLE_RUN_HISTORY = True
 HISTORY_FILE = "phd_analysis/run_history.json"
-MAX_HISTORY_ENTRIES = 50  # Keep last 50 runs
+MAX_HISTORY_ENTRIES = 50
 ```
 
 ---
 
-## ⚡ Bonus: Batch Mode (Run 5 Topics at Once)
+## Batch Mode
 
-### What It Does
+**What it does:** Process multiple research questions in sequence from a CSV file. Useful for comparing the same topic from different angles or exploring a set of related questions.
 
-Process **multiple research questions** in sequence:
+### Setup
 
-- Compare same gap across different angles
-- Identify most robust research directions
-- Build portfolio of related gaps
+Create a CSV file:
 
-### How to Use
+```csv
+topic,field
+"How to improve transformer efficiency?","NLP"
+"MoE scaling strategies","Distributed Systems"
+"Attention optimization","Computer Vision"
+```
+
+### Usage
 
 ```python
-# Create batch.csv:
-topic,field
-"How to improve transformer efficiency?", NLP
-"MoE scaling strategies", Distributed Systems
-"Attention optimization", Computer Vision
-
-# Then run:
+# In config.py:
 ENABLE_BATCH_MODE = True
 BATCH_FILE = "batch.csv"
+```
 
+```bash
 python main.py
 ```
 
@@ -382,51 +346,53 @@ Processing 1/3: Transformer efficiency...
 Processing 2/3: MoE scaling...
 Processing 3/3: Attention optimization...
 
-📊 Batch Summary:
-Total gaps found: 15
-Recurring gaps: 3
-Average readiness: 72/100
+Batch Summary:
+  Total gaps found: 15
+  Recurring gaps: 3
+  Average readiness: 72/100
 ```
+
+Results saved to `phd_analysis/batch_results/`.
 
 ### Configuration
 
 ```python
 ENABLE_BATCH_MODE = True
-BATCH_FILE = "batch.csv"  # or None to ask
+BATCH_FILE = None                               # Path to CSV, or None to prompt
 BATCH_RESULTS_DIR = "phd_analysis/batch_results"
-BATCH_SKIP_DUPLICATE_TOPICS = True
+BATCH_SKIP_DUPLICATE_TOPICS = True              # Skip already-processed topics
 ```
 
 ---
 
-## ⚙️ Configuration Reference
+## Configuration Quick Reference
 
 ### Startup
 
 ```python
-QUICK_START_MODE = True           # Quick first, interactive later
-INTERACTIVE_SETUP = True          # Allow inline refinement
+QUICK_START_MODE = True
+INTERACTIVE_SETUP = True
 ```
 
 ### Display
 
 ```python
-MINIMAL_OUTPUT = False            # Skip verbose output
-DETAILED_OUTPUT = True            # Allow detailed mode
-SHOW_TOP_GAP_DASHBOARD = True    # Highlight #1 gap
-SHOW_STATISTICS_DASHBOARD = True  # Show averages
+MINIMAL_OUTPUT = False
+DETAILED_OUTPUT = True
+SHOW_TOP_GAP_DASHBOARD = True
+SHOW_STATISTICS_DASHBOARD = True
 ```
 
-### Cost Management
+### Cost
 
 ```python
 ESTIMATE_API_COST = True
-COST_CONFIRMATION_THRESHOLD = 0.50  # Ask before $X
-USE_RETRY_CACHE = True             # 60% savings on cache hits
-FAST_MODE = False                  # Skip optional features
+COST_CONFIRMATION_THRESHOLD = 0.50
+USE_RETRY_CACHE = True
+FAST_MODE = False
 ```
 
-### Features (Enable/Disable)
+### Features
 
 ```python
 ENABLE_BOOKMARKING = True
@@ -436,99 +402,88 @@ ENABLE_ELEVATOR_PITCH = True
 ENABLE_BATCH_MODE = True
 ```
 
-### Files & Paths
+### File Paths
 
 ```python
 BOOKMARK_FILE = "phd_analysis/bookmarks.json"
 HISTORY_FILE = "phd_analysis/run_history.json"
 ADVISOR_EXPORT_DIR = "phd_analysis/advisor_reports"
-BATCH_FILE = None  # CSV with topics
+BATCH_FILE = None
 BATCH_RESULTS_DIR = "phd_analysis/batch_results"
 ```
 
+See [Configuration Reference](../development/CONFIG_REFERENCE.md) for the complete list.
+
 ---
 
-## 🎯 Typical PhD Workflow
+## Typical PhD Workflow
 
 ### Day 1: Explore
 
 ```bash
 python main.py
-# Type topic → See cost → Run → Top gap dashboard
+# Enter your research topic → review cost → run → see top gap dashboard
 
-[2] 📌 Bookmark this gap
+# Bookmark the best gap:
+[2] Bookmark this gap
 # Notes: "Start literature review next week"
 ```
 
 ### Day 2: Advisor Meeting
 
 ```
-[3] 🚀 Export for advisor
-# Email PDF to advisor for feedback
+# Export a report:
+[3] Export for advisor
 
-[4] 💬 Generate elevator pitch
-# Practice 30-second explanation
+# Prepare a verbal summary:
+[4] Generate elevator pitch
 ```
 
 ### Week 1: Multi-Angle Research
 
-```
-# Run 3 different formulations of same gap
+```bash
+# Run 3 formulations of the same question
+python main.py "Transformer efficiency" "NLP"
+python main.py "Low-rank model compression" "ML Systems"
+python main.py "Efficient attention mechanisms" "Computer Vision"
 
-[5] 📋 Compare with previous runs
-# See which gaps appear consistently (robust!)
+# Compare results:
+[5] Compare with previous runs
+# Gaps appearing in multiple runs → robust research directions
 ```
 
 ---
 
-## 💡 Pro Tips
-
-1. **Use quick start for speed** — Usually you just want defaults
-2. **Check cost before running** — Set threshold to your budget
-3. **Bookmark high readiness gaps** — Return for final PhD topic choice
-4. **Export early for feedback** — Get advisor input when ideas are fresh
-5. **Run batch analyses** — See how gaps hold up across formulations
-6. **Use elevator pitch** — Practice explaining while idea is fresh
-7. **Track history** — Find patterns in your research interests
-
----
-
-## 🐛 Troubleshooting
+## Troubleshooting
 
 ### Cost is too high
 
-- Caching is ON (60% savings) — verify `USE_RETRY_CACHE = True`
-- Use `FAST_MODE = True` to skip optional features
-- Reduce `NUM_PROFESSORS` in config (fewer debaters)
+- Caching is on by default (`USE_RETRY_CACHE = True`)
+- Enable fast mode: `FAST_MODE = True`
+- Reduce panel: `NUM_PROFESSORS = 2`
+- Disable Phase 5: all four `*_ENABLED` flags = `False` (default)
 
 ### Dashboard not showing
 
-- Verify Phase 5 completed (check logs)
-- Check `SHOW_TOP_GAP_DASHBOARD = True` in config
-- Ensure at least 2 gaps were identified
+- Ensure `SHOW_TOP_GAP_DASHBOARD = True`
+- Ensure `RESEARCH_GAP_DETECTION_ENABLED = True`
+- At least 2 gaps must be identified
 
 ### Bookmarks not saving
 
 - Check write permissions on `phd_analysis/` directory
-- Verify path in `BOOKMARK_FILE` config
-- Look for file in configured path
+- Verify `BOOKMARK_FILE` path in `config.py`
 
 ### Export files missing
 
-- Check `ADVISOR_EXPORT_DIR` path exists
-- Verify `ENABLE_PDF_EXPORT = True`
-- Look in `phd_analysis/advisor_reports/`
+- Ensure `ENABLE_PDF_EXPORT = True`
+- Check that `phd_analysis/advisor_reports/` exists or can be created
+- Reports are saved as `.txt` / `.html` / `.json` (not actual PDF)
 
 ---
 
-## 📖 See Also
+**See also:**
 
-- **[Config Reference](../development/CONFIG_REFERENCE.md)** — All 100+ flags explained
-- **[Debugging Guide](../development/DEBUGGING.md)** — Troubleshooting all issues
-- **[Quick Start](01_QUICK_START.md)** — 5-minute setup guide
-
----
-
-**Version:** Phase 7.0  
-**Last Updated:** March 17, 2026  
-**For:** PhD students targeting ICLR publication
+- [Quick Start](01_QUICK_START.md) — 5-minute setup
+- [Setup & Installation](02_SETUP.md) — Detailed environment setup
+- [Configuration Reference](../development/CONFIG_REFERENCE.md) — All 100+ flags

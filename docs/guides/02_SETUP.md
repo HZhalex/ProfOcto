@@ -1,106 +1,185 @@
-# Installation & Setup
+# Setup & Installation
 
-Get ProfOcto running in 5 minutes.
+Detailed instructions for setting up ProfOcto on your machine.
+
+---
 
 ## Prerequisites
 
-- **Python 3.8+**
-- **Gemini API Key** (free from [Google AI Studio](https://aistudio.google.com/app/apikey))
-  - **Free Tier Models Available:**
-  - **Rate Limits:** 15 requests/min, 1M tokens/minute on free tier
+- **Python 3.10+** — [python.org/downloads](https://www.python.org/downloads/)
+- **Gemini API Key** — free from [Google AI Studio](https://aistudio.google.com/app/apikey)
+- **Node.js 18+** (only required for the Web UI) — [nodejs.org](https://nodejs.org)
 
 ---
 
-## Step 1: Get API Key (1 minute)
+## Step 1: Get a Gemini API Key
 
 1. Go to [Google AI Studio](https://aistudio.google.com/app/apikey)
-2. Click "Create API Key"
-3. Copy the key
+2. Sign in with your Google account
+3. Click **"Create API Key"**
+4. Copy the key (starts with `AIza...`)
+
+The free tier provides:
+
+- 15 requests per minute
+- 1,000,000 tokens per minute
 
 ---
 
-## Step 2: Clone & Setup (2 minutes)
+## Step 2: Clone & Install
 
 ```bash
-# Clone repository
+# Clone the repository
 git clone https://github.com/HZhalex/ProfOcto.git
 cd ProfOcto
 
-# Create .env file with your API key
-echo "GEMINI_API_KEY=your-key-here" > .env
+# Create a virtual environment
+python -m venv .venv
+
+# Activate (Windows)
+.venv\Scripts\activate
+
+# Activate (macOS / Linux)
+source .venv/bin/activate
 
 # Install dependencies
 pip install -r requirements.txt
 ```
 
+**Dependencies installed** (4 packages):
+
+| Package        | Purpose                                      |
+| -------------- | -------------------------------------------- |
+| `google-genai` | Gemini API client                            |
+| `rich`         | Terminal formatting (panels, tables, colors) |
+| `fastapi`      | Web API framework                            |
+| `uvicorn`      | ASGI server for FastAPI                      |
+
 ---
 
-## Step 3: Verify Setup (1 minute)
+## Step 3: Configure Environment
 
 ```bash
-# Run test suite to verify everything works
-python test_phase7.py
+# Copy the example environment file
+cp .env.example .env
 ```
 
-You should see:
+Edit `.env` and paste your Gemini API key:
 
 ```
-==============================
-✓ PASS: Module Imports
-✓ PASS: Config Flags
-✓ PASS: Cost Estimator
-✓ PASS: Bookmark System
-✓ PASS: Elevator Pitch
-✓ PASS: Dashboard
-✓ PASS: PDF Exporter
-
-Total: 7/7 tests passed
-==============================
+GEMINI_API_KEY=AIzaSyD...your-key-here
 ```
 
 ---
 
-## Switching Models
+## Step 4: Run
 
-Edit [config.py](../../config.py) to change the default model:
-
-```python
-MODEL = "gemma-3-1b-it"
-```
-
-
-## Step 4: Run First Analysis (3 minutes)
+### Terminal UI
 
 ```bash
 python main.py
 ```
 
-Enter your research topic and let ProfOcto analyze it!
+Enter your research topic when prompted. ProfOcto handles everything else with default settings.
+
+You can also pass the topic directly:
+
+```bash
+python main.py "MoE vs Dense Models" "Distributed Training"
+```
+
+### Web UI (Optional)
+
+You need two terminals running simultaneously:
+
+**Terminal 1 — FastAPI backend:**
+
+```bash
+# Make sure the virtual environment is activated
+uvicorn web.server:app --reload --port 8000
+```
+
+**Terminal 2 — React dev server:**
+
+```bash
+cd web
+npm install    # first time only
+npm run dev
+```
+
+Open http://localhost:5173 in your browser.
+
+For production deployment, build the frontend:
+
+```bash
+cd web
+npm run build
+```
+
+After building, FastAPI serves the React frontend automatically from `web/dist/`.
 
 ---
 
 ## Configuration (Optional)
 
-Edit `config.py` to customize behavior:
+Edit `config.py` to customize behavior. Key settings:
 
 ```python
-# Startup
-QUICK_START_MODE = True          # Ask topic only
-INTERACTIVE_SETUP = True         # Allow inline refinement
+# AI model (free tier)
+MODEL = "gemma-3-1b-it"
+
+# Debate structure
+NUM_PROFESSORS = 2              # Panel size (2–5)
+MAX_ROUNDS = 1                  # Debate rounds
+MAX_TOKENS_PER_TURN = 700       # Response length
 
 # Features
-ESTIMATE_API_COST = True         # Show cost before running
-SHOW_TOP_GAP_DASHBOARD = True   # Highlight #1 gap
-ENABLE_BOOKMARKING = True        # Save favorite gaps
-ENABLE_PDF_EXPORT = True         # Export for advisor
-ENABLE_ELEVATOR_PITCH = True     # Generate pitches
+QUICK_START_MODE = True         # Minimal prompts
+ESTIMATE_API_COST = True        # Show cost before running
+SHOW_TOP_GAP_DASHBOARD = True   # Highlight top gap
+ENABLE_BOOKMARKING = True       # Save favorite gaps
+ENABLE_PDF_EXPORT = True        # Export for advisor
+ENABLE_ELEVATOR_PITCH = True    # Generate verbal summaries
 
-# Performance
-USE_RETRY_CACHE = True           # 60% API cost savings
-FAST_MODE = False                # Skip optional features
+# Caching (~60% cost savings)
+USE_RETRY_CACHE = True
+CACHE_PHASE5_RESULTS = True
 ```
 
-[→ Full config reference](../development/CONFIG_REFERENCE.md)
+See [Configuration Reference](../development/CONFIG_REFERENCE.md) for all 100+ flags.
+
+---
+
+## Directory Structure
+
+After setup and first run, your project will look like:
+
+```
+ProfOcto/
+├── main.py                 # Entry point
+├── config.py               # Configuration (all flags)
+├── orchestrator.py         # Professor generation & debate setup
+├── .env                    # Your API key (not committed)
+├── requirements.txt        # Python dependencies
+│
+├── agents/                 # 13 AI analysis agents
+├── debate/                 # Session state & turn management
+├── output/                 # Export & display modules
+├── prompts/                # System prompts for AI agents
+├── utils/                  # Logging, caching, bookmarking
+├── web/                    # Web UI (React + FastAPI)
+├── docs/                   # Documentation
+│
+├── transcripts/            # Saved debate transcripts
+├── research_kits/          # Generated research kits
+├── logs/                   # Session & debug logs
+└── phd_analysis/           # PhD analysis output
+    ├── bookmarks.json      #   Bookmarked gaps
+    ├── run_history.json    #   Session history
+    ├── advisor_reports/    #   Exported reports
+    ├── batch_results/      #   Batch processing output
+    └── .cache/             #   API result cache
+```
 
 ---
 
@@ -108,9 +187,9 @@ FAST_MODE = False                # Skip optional features
 
 ### API Key Error
 
-- Verify `.env` file exists and is in root directory
-- Check key is correct (copy from [Google AI Studio](https://aistudio.google.com/app/apikey))
-- Regenerate key if needed
+- Verify `.env` file exists in the project root (not in a subfolder)
+- Ensure the key is correct — copy it again from [Google AI Studio](https://aistudio.google.com/app/apikey)
+- Check there are no extra spaces or quotes around the key
 
 ### Import Errors
 
@@ -119,49 +198,29 @@ FAST_MODE = False                # Skip optional features
 pip install --upgrade -r requirements.txt
 ```
 
-### Permission Errors
+Make sure you're using the virtual environment (`.venv`) and not the system Python.
+
+### Permission Errors (Windows)
+
+Run your terminal as Administrator, or use:
 
 ```bash
-# On Windows, run as administrator:
-pip install -r requirements.txt
-
-# On Mac/Linux:
-sudo pip install -r requirements.txt
+pip install --user -r requirements.txt
 ```
 
----
+### Rate Limiting (429 errors)
 
-## Directory Structure
+The free tier allows 15 requests per minute. If you hit rate limits:
 
-After setup, you'll have:
-
-```
-ProfOcto/
-├── main.py                 # Main entry point
-├── config.py              # Configuration
-├── orchestrator.py        # Debate engine
-├── agents/                # AI agent modules
-├── output/                # Output generation
-├── docs/                  # User documentation
-├── phd_analysis/          # Results & cache
-│   ├── logs/
-│   ├── bookmarks.json
-│   ├── run_history.json
-│   ├── advisor_reports/
-│   └── .cache/
-└── requirements.txt       # Dependencies
-```
+- Wait 60 seconds and try again
+- Reduce `NUM_PROFESSORS` to 2 in `config.py`
+- Reduce `MAX_ROUNDS` to 1
 
 ---
 
 ## Next Steps
 
-1. **Run first analysis:** `python main.py`
-2. **Read user guide:** [Phase 7 Features](03_PHASE7_USER_GUIDE.md)
-3. **Bookmark gaps:** Tag your favorites for later
-4. **Export to advisor:** Share analysis as PDF
-5. **Generate pitch:** Create 30-sec explanation
-
----
-
-**Help:** Check [Debugging Guide](../development/DEBUGGING.md) or [Docs Index](../README.md)
+1. **Run your first analysis**: `python main.py`
+2. **Explore features**: [Feature Guide](03_PHASE7_USER_GUIDE.md)
+3. **Customize settings**: [Configuration Reference](../development/CONFIG_REFERENCE.md)
+4. **Try the Web UI**: [Web UI Guide](../../web/README_WEB.md)

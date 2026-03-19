@@ -1,342 +1,358 @@
 <div align="center">
 
-# ⚔️ ProfOcto
+# ProfOcto
 
-**AI-Powered Research Gap Discovery Platform**
-
-_Transform your research brainstorming into ICLR-ready papers through structured academic debate_
+**AI-Powered Research Gap Discovery Through Structured Academic Debate**
 
 [![Python 3.10+](https://img.shields.io/badge/Python-3.10%2B-3776AB?style=flat-square&logo=python&logoColor=white)](https://python.org)
 [![Gemini API](https://img.shields.io/badge/Gemini_API-Free_Tier-4285F4?style=flat-square&logo=google&logoColor=white)](https://aistudio.google.com)
 [![React 18+](https://img.shields.io/badge/React-18%2B-61DAFB?style=flat-square&logo=react&logoColor=white)](https://react.dev)
 [![License: MIT](https://img.shields.io/badge/License-MIT-green?style=flat-square)](LICENSE)
 
-[🚀 Get Started](#quick-start) • [📖 Documentation](#documentation) • [✨ Features](#features) • [🎯 Use Cases](#use-cases)
+[Get Started](#-quick-start) · [Documentation](#-documentation) · [Features](#-features) · [Use Cases](#-use-cases)
 
 </div>
 
 ---
 
-## 🎯 What is ProfOcto?
+## What is ProfOcto?
 
-ProfOcto helps PhD students and researchers discover novel research gaps by facilitating **structured academic debates** between AI professors. Instead of unstructured brainstorming, you:
+ProfOcto orchestrates **structured academic debates** between AI-generated professors to help PhD students and researchers discover novel research gaps. Each professor has a distinct role (Empiricist, Theorist, Skeptic, Pragmatist, Historian), a realistic academic affiliation, and a specific methodological stance.
 
-1. **Pose a research question** to a panel of diverse AI professors
-2. **Watch them debate** with mathematical rigor and counter-arguments
-3. **Identify gaps** between different viewpoints
-4. **Export insights** as structured research briefs for your advisor
+**How it works:**
 
-### Why ProfOcto?
+1. You provide a **research topic** and field (e.g., "MoE vs Dense Models" in "Distributed Training")
+2. ProfOcto generates a panel of AI professors with diverse viewpoints
+3. The professors **debate** with mathematical rigor, citing theorems and proofs
+4. A moderator summarizes key disagreements after each round
+5. The system **identifies research gaps** from contradictions and trade-offs in the debate
+6. Optionally, an **ICLR readiness pipeline** scores each gap for novelty, feasibility, and publication readiness
 
-- 🧠 **Rigorous debate format** ensures you explore all angles of your research question
-- 📊 **Visual gap analysis** reveals unexplored areas in the research landscape
-- 💾 **Export capabilities** - generate elevator pitches, PDF reports, research outlines
-- ⚡ **Free to use** - powered by Gemini free tier API
-- 🌍 **International** - English-first, designed for global research collaboration
+**Powered by**: Google Gemini API (free tier) — default model: `gemma-3-1b-it`
 
 ---
 
-## ✨ Key Features
+## Features
 
-### 🎓 Academic Debate Engine
+### Academic Debate Engine
 
-- Multi-professor panel with distinct viewpoints (Empiricist, Theorist, Skeptic, Pragmatist, Historian)
-- Automatic moderator summarizing key disagreements
-- Web search fact-checking with claim verification
+- **Multi-professor panel** (2–5 professors) with distinct roles and stances
+- **Fact-checking** with web search verification on each turn
+- **Theorem extraction** — automatically identifies theorems, lemmas, proofs, and citations
+- **Rigor scoring** — rates each turn on mathematical backing (0–10 scale)
+- **Moderator summaries** after each round highlighting key disagreements
+- **Real-time streaming** of professor responses
 
-### 📈 Research Gap Discovery
+### Research Gap Discovery
 
-- Automatic identification of contradictions and disagreements
-- Structured gap analysis with difficulty levels (Beginner/Master/PhD)
+- Automatic detection of **contradictions**, **assumption violations**, and **efficiency-quality trade-offs**
+- Gaps tagged by difficulty level (Beginner / Master / PhD)
 - PhD-ready research recommendations
 
-### 📊 Export & Analysis Tools
+### ICLR Readiness Pipeline (Phase 5)
 
-- Generate elevator pitches for advisors
-- Export debates as Markdown or PDF
-- Bookmark important research gaps
-- Session history and tracking
+When enabled, processes each gap through four stages:
 
-### 🎨 Modern UI/UX
+1. **Gap Formalization** — converts informal gaps into formal mathematical problem statements
+2. **Novelty Analysis** — scores novelty vs. state-of-the-art (0–100)
+3. **Solution Sketch** — generates proof strategies and methodological approaches
+4. **Readiness Assessment** — combines novelty, feasibility, and evidence quality into a final score
 
-- **Web UI**: Real-time streaming debate display, dark mode, responsive design
-- **Terminal UI**: Rich formatting with colors, panels, and progress indicators
-- **Configuration**: 100+ flags to customize behavior
+### PhD-Friendly UX (Phase 7)
+
+- **Quick Start Mode** — just enter your topic, everything else uses sensible defaults
+- **Cost & Runtime Estimator** — shows projected API cost and runtime before execution
+- **Top Gap Dashboard** — prominently displays the #1 recommended gap with scores
+- **Bookmarking** — save gaps for long-term research planning
+- **Elevator Pitch Generator** — 15/30/60-second verbal summaries for advisor meetings
+- **Advisor Export** — export gap analyses as TXT, HTML, or JSON reports
+- **Batch Mode** — process multiple topics from a CSV file
+- **Run History** — track and compare past debate sessions
+
+### Dual Interface
+
+- **Web UI** — React 18 frontend with real-time SSE streaming, dark mode, topic library, and debate history
+- **Terminal UI** — Rich-formatted output with colored panels, tables, and progress indicators
 
 ---
 
-## 🚀 Quick Start
+## Quick Start
 
 ### Prerequisites
 
-- Python 3.10+
-- Node.js 18+ (for Web UI, optional)
-- Gemini API key (free at [aistudio.google.com](https://aistudio.google.com))
+- **Python 3.10+**
+- **Node.js 18+** (only for Web UI — optional)
+- **Gemini API key** — free at [aistudio.google.com](https://aistudio.google.com/app/apikey)
 
-### 1. Installation (2 minutes)
+### 1. Install
 
 ```bash
-# Clone repository
 git clone https://github.com/HZhalex/ProfOcto.git
 cd ProfOcto
 
-# Create virtual environment
+# Create and activate virtual environment
 python -m venv .venv
+.venv\Scripts\activate        # Windows
+source .venv/bin/activate     # macOS / Linux
 
-# Activate (Windows)
-.venv\Scripts\activate
-
-# Activate (macOS/Linux)
-source .venv/bin/activate
-
-# Install dependencies
+# Install dependencies (only 4 packages)
 pip install -r requirements.txt
 ```
 
-### 2. Configure API Key (1 minute)
+### 2. Configure
 
 ```bash
-# Create .env file
 cp .env.example .env
-
-# Edit .env with your Gemini API key
-# Get key: https://aistudio.google.com → Get API key → Create API key
+# Edit .env and paste your Gemini API key:
+# GEMINI_API_KEY=AIza...
 ```
 
-### 3. Run Terminal UI (5 minutes)
+### 3. Run (Terminal)
 
 ```bash
-# Default: interactive mode
+# Interactive mode — prompts for topic
 python main.py
 
-# Or pass topic directly
+# Direct mode — pass topic and field as arguments
 python main.py "MoE vs Dense Models" "Distributed Training"
 ```
 
-### 4. Run Web UI (Optional)
+### 4. Run (Web UI — Optional)
 
 ```bash
-# Terminal 1 - Backend
+# Terminal 1: Start FastAPI backend
 uvicorn web.server:app --reload --port 8000
 
-# Terminal 2 - Frontend
+# Terminal 2: Start React dev server
 cd web
+npm install   # first time only
 npm run dev
 
-# Open http://localhost:3000
+# Open http://localhost:5173
 ```
 
----
-
-## 📖 Documentation
-
-### Getting Started
-
-- [**Quick Start Guide**](docs/guides/01_QUICK_START.md) — 5-minute setup walkthrough
-- [**Setup Instructions**](docs/guides/02_SETUP.md) — Detailed installation guide
-- [**Feature Guide**](docs/guides/03_PHASE7_USER_GUIDE.md) — Complete feature walkthrough
-
-### Features & How They Work
-
-- [**Configuration Reference**](docs/development/CONFIG_REFERENCE.md) — 100+ settable flags explained
-- [**Debate System**](docs/features/DEBATE_SYSTEM.md) — How academic debates work
-- [**Research Gap Analysis**](docs/features/ACADEMIC_RIGOR.md) — Identifying high-value research directions
-
-### Troubleshooting
-
-- [**Debugging Guide**](docs/development/DEBUGGING.md) — Common issues and solutions
-- [**Architecture Overview**](docs/development/ARCHITECTURE.md) — System design details
+For production, run `npm run build` inside `web/` — FastAPI will serve the built frontend from `web/dist/`.
 
 ---
 
-## 🎯 Use Cases
+## Documentation
 
-### 👨‍🎓 PhD Students
-
-- **Discover novel research directions** before starting your PhD
-- **Validate research ideas** against diverse expert viewpoints
-- **Generate talking points** for advisor meetings
-- **Create research outlines** for paper drafting
-
-### 🔬 Researchers
-
-- **Explore emerging fields** through structured debate
-- **Identify white spaces** in the research landscape
-- **Benchmark ideas** against academic consensus
-- **Accelerate literature review** with AI-powered analysis
-
-### 📚 Academic Teams
-
-- **Collaborative ideation** - debate together in real-time
-- **Export briefs** for team discussions
-- **Track historical debates** and insights
-- **Build institutional knowledge**
+| Guide                                                           | Description                          |
+| --------------------------------------------------------------- | ------------------------------------ |
+| [Quick Start](docs/guides/01_QUICK_START.md)                    | Get running in 5 minutes             |
+| [Setup & Installation](docs/guides/02_SETUP.md)                 | Detailed environment setup           |
+| [Feature Guide](docs/guides/03_PHASE7_USER_GUIDE.md)            | Complete walkthrough of all features |
+| [Configuration Reference](docs/development/CONFIG_REFERENCE.md) | All 100+ config flags explained      |
+| [Web UI Guide](web/README_WEB.md)                               | Web interface setup and usage        |
 
 ---
 
-## ⚙️ Configuration Examples
+## Use Cases
 
-### Run with different Gemini models
+### PhD Students
+
+- Discover novel research directions before committing to a topic
+- Validate ideas against diverse expert viewpoints
+- Generate elevator pitches and talking points for advisor meetings
+- Export structured research briefs for proposals
+
+### Researchers
+
+- Explore emerging fields through structured multi-perspective debate
+- Identify white spaces in the research landscape
+- Accelerate literature review with AI-powered gap analysis
+
+### Academic Teams
+
+- Run batch analyses across multiple research questions
+- Track debate history to find robust, recurring gaps
+- Share professional exports with committee members
+
+---
+
+## Configuration Highlights
+
+All configuration is in `config.py`. Key settings:
 
 ```python
-# In config.py
-MODEL = "gemma-3-1b-it"             # Fastest (free tier)
+# AI Model (default: gemma-3-1b-it, free tier)
+MODEL = "gemma-3-1b-it"
+
+# Debate structure
+NUM_PROFESSORS = 2              # Panel size (2–5)
+MAX_ROUNDS = 1                  # Debate rounds
+MAX_TOKENS_PER_TURN = 700       # Max tokens per response
+FACT_CHECK_ENABLED = True       # Fact-check each turn
+
+# Research analysis
+RESEARCH_MODE = True            # Generate research kit after debate
+ACADEMIC_RIGOR_MODE = True      # Enforce mathematical backing
+THEOREM_EXTRACTION_ENABLED = True
+RIGOR_SCORING_ENABLED = True
+RESEARCH_GAP_DETECTION_ENABLED = True
+
+# ICLR Pipeline (disabled by default — resource intensive)
+GAP_TO_FORMAL_PROBLEM_ENABLED = False
+NOVELTY_ANALYZER_ENABLED = False
+SOLUTION_SKETCH_ENABLED = False
+ICLR_READINESS_ENABLED = False
+
+# PhD UX features (all enabled by default)
+QUICK_START_MODE = True
+ESTIMATE_API_COST = True
+SHOW_TOP_GAP_DASHBOARD = True
+ENABLE_BOOKMARKING = True
+ENABLE_ELEVATOR_PITCH = True
+ENABLE_PDF_EXPORT = True
+ENABLE_BATCH_MODE = True
+
+# Caching (enabled by default — ~60% cost savings)
+USE_RETRY_CACHE = True
+CACHE_PHASE5_RESULTS = True
 ```
 
-### Customize debate structure
-
-```python
-NUM_PROFESSORS = 5                  # Panel size (2-5)
-MAX_ROUNDS = 3                      # Debate rounds
-MAX_TOKENS_PER_TURN = 500           # Response length
-FACT_CHECK_ENABLED = True           # Enable/disable fact-checking
-```
-
-### Export preferences
-
-```python
-SAVE_TRANSCRIPT = True              # Save debate as .md
-ENABLE_PDF_EXPORT = True            # Generate PDF reports
-ENABLE_BOOKMARKING = True           # Save favorite gaps
-```
+See [Configuration Reference](docs/development/CONFIG_REFERENCE.md) for all 100+ flags.
 
 ---
 
-## 🏗️ Project Structure
+## Project Structure
 
 ```
 ProfOcto/
-├── main.py                    # Entry point - Terminal UI
-├── config.py                  # System configuration
-├── orchestrator.py            # Generate professors & opening question
+├── main.py                         # Entry point (Terminal UI)
+├── config.py                       # 100+ configuration flags
+├── orchestrator.py                 # Professor generation & debate setup
+├── requirements.txt                # Dependencies (4 packages)
+├── .env.example                    # Environment variable template
 │
-├── agents/                    # AI Agent modules
-│   ├── professor.py           # Debate participant
-│   ├── moderator.py           # Debate summaries
-│   └── fact_checker.py        # Claim verification
+├── agents/                         # 13 AI analysis agents
+│   ├── professor.py                #   Generate professor debate responses
+│   ├── moderator.py                #   Moderator summaries & openings
+│   ├── fact_checker.py             #   Web search fact verification
+│   ├── research_synthesizer.py     #   Research kit & paper outline generation
+│   ├── theorem_extractor.py        #   Extract theorems, lemmas, proofs
+│   ├── rigor_scorer.py             #   Mathematical rigor scoring (0–10)
+│   ├── gap_identifier.py           #   Identify research gaps from debate
+│   ├── gap_ranker.py               #   Rank gaps by novelty/feasibility/impact
+│   ├── gap_to_formal_problem.py    #   Convert gaps to formal problem statements
+│   ├── novelty_analyzer.py         #   Score novelty vs SOTA (0–100)
+│   ├── solution_sketch.py          #   Generate proof strategies
+│   ├── iclr_readiness_scorer.py    #   ICLR publication readiness assessment
+│   └── academic_validator.py       #   Citation extraction & claim verification
 │
-├── debate/                    # Debate engine
-│   ├── session.py             # Session state management
-│   └── turn_manager.py        # Speaking order & flow
+├── debate/                         # Debate engine
+│   ├── session.py                  #   Session state, Turn, ProfessorProfile
+│   └── turn_manager.py             #   Round-robin order & repetition detection
 │
-├── output/                    # Export modules
-│   ├── terminal_renderer.py   # Terminal UI with Rich
-│   └── exporter.py            # PDF/Markdown export
+├── output/                         # Output & export modules
+│   ├── terminal_renderer.py        #   Rich terminal formatting
+│   ├── exporter.py                 #   Markdown transcript export
+│   ├── phase5_exporter.py          #   ICLR analysis export (JSON + HTML)
+│   ├── interactive_cli.py          #   Interactive gap exploration menu
+│   ├── phd_startup_cli.py          #   Quick/interactive startup flow
+│   ├── cost_estimator.py           #   API cost & runtime estimation
+│   ├── gap_dashboard.py            #   Top gap dashboard display
+│   ├── elevator_pitch.py           #   Verbal summary generator
+│   ├── pdf_exporter.py             #   Advisor report export (TXT/HTML/JSON)
+│   └── batch_processor.py          #   Multi-topic batch processing
 │
-├── prompts/                   # System prompts
-│   ├── professor_base.txt
-│   └── moderator.txt
+├── prompts/                        # System prompts for AI agents
+│   ├── professor_base.txt          #   Core professor personality
+│   ├── moderator.txt               #   Moderator role definition
+│   ├── fact_checker.txt            #   Fact-checker instructions
+│   ├── system/                     #   Advanced professor & moderator prompts
+│   ├── research/                   #   Research synthesis prompts
+│   └── templates/                  #   Turn & output formatting templates
 │
-├── web/                       # Web UI (React + FastAPI)
-│   ├── server.py              # Backend API
-│   └── src/                   # React components
+├── utils/                          # Utilities
+│   ├── logger.py                   #   Centralized logging (5 log files)
+│   ├── bookmark_history.py         #   Bookmark & run history managers
+│   └── retry_cache.py             #   LRU API cache with disk persistence
 │
-└── docs/                      # Documentation
-    ├── guides/                # User guides
-    ├── features/              # Feature documentation
-    └── development/           # Dev & config reference
+├── web/                            # Web UI
+│   ├── server.py                   #   FastAPI backend with SSE streaming
+│   └── src/                        #   React 18 frontend
+│
+├── docs/                           # Documentation
+│   ├── guides/                     #   User guides (quick start, setup, features)
+│   └── development/                #   Configuration reference
+│
+├── transcripts/                    # Saved debate transcripts
+├── research_kits/                  # Generated research kits
+└── logs/                           # Session & debug logs
 ```
 
 ---
 
-## 📊 Performance & Costs
+## Dependencies
 
-| Model                | Free Tier     | Quality    | Speed  | Cost/Month |
-| -------------------- | ------------- | ---------- | ------ | ---------- |
-| **Gemma 3.1B**       | ✅ 30 req     | ⭐⭐       | ⚡⚡⚡ | Free       |
+ProfOcto has a minimal dependency footprint:
 
-### Estimated costs for a typical debate:
-
-- **Model**: Gemma 3.1B (recommended)
-- **Topic complexity**: Medium (5 professors, 2 rounds)
-- **Cost per debate**: ~$0.01-0.05 USD
-- **100 debates/month**: <$5 USD
+| Package        | Version | Purpose                                      |
+| -------------- | ------- | -------------------------------------------- |
+| `google-genai` | 1.10.0  | Gemini API client                            |
+| `rich`         | 13.9.4  | Terminal formatting (tables, panels, colors) |
+| `fastapi`      | 0.115.0 | Web API framework                            |
+| `uvicorn`      | 0.30.6  | ASGI server for FastAPI                      |
 
 ---
 
-## 🤝 Contributing
+## Troubleshooting
 
-We welcome contributions! Please:
+### "GEMINI_API_KEY not found"
+
+Create a `.env` file in the project root with your API key:
+
+```
+GEMINI_API_KEY=AIza...
+```
+
+Get a free key at [aistudio.google.com](https://aistudio.google.com/app/apikey).
+
+### "429 Too Many Requests"
+
+The free tier has rate limits (15 requests/minute). Reduce `NUM_PROFESSORS` or `MAX_ROUNDS` in `config.py`, or wait a minute between runs.
+
+### Web UI shows blank page
+
+Make sure both the backend and frontend are running:
+
+```bash
+# Terminal 1: Backend
+uvicorn web.server:app --reload --port 8000
+
+# Terminal 2: Frontend
+cd web && npm install && npm run dev
+```
+
+### Low-quality debate responses
+
+- Make your topic more specific (e.g., "MoE routing strategies for long-context LLMs" instead of "LLMs")
+- Increase `MAX_TOKENS_PER_TURN` in `config.py`
+
+---
+
+## Contributing
 
 1. Fork the repository
 2. Create a feature branch (`git checkout -b feature/improvement`)
-3. Make your changes and test thoroughly
+3. Make your changes
 4. Submit a pull request
 
-### Development Setup
+---
 
-```bash
-# Install dev dependencies
-pip install -r requirements-dev.txt
+## License
 
-# Run tests
-pytest tests/
-
-# Format code
-black . && isort .
-```
+MIT License — free for personal, educational, and commercial use. See [LICENSE](LICENSE) for details.
 
 ---
 
-## 🐛 Troubleshooting
+## Acknowledgments
 
-### API Key Issues
-
-**Problem**: "GEMINI_API_KEY not found"  
-**Solution**: Create `.env` file with your API key from [aistudio.google.com](https://aistudio.google.com)
-
-### Rate Limiting
-
-**Problem**: "429 Too Many Requests"  
-**Solution**: Switch to a model with higher free tier limits or add a 1-2 second delay between requests
-
-### Web UI Not Loading
-
-**Problem**: Frontend shows blank page  
-**Solution**:
-
-```bash
-# Restart backend
-.venv\Scripts\activate
-uvicorn web.server:app --reload --port 8000
-
-# In another terminal, restart frontend
-cd web && npm run dev
-```
-
-### Debate Quality Issues
-
-**Problem**: Professors responding with generic answers  
-**Solution**:
-
-- Use a stronger model (Gemma 3.1B)
-- Make topic more specific
-- Increase `MAX_TOKENS_PER_TURN` in config
-
----
-
-## 📚 Learning Resources
-
-- [Prompts Engineering Guide](https://platform.openai.com/docs/guides/prompt-engineering)
-- [Academic Writing Best Practices](https://www.citefactor.org/)
-- [Research Gap Analysis Methods](https://www.jstor.org/)
-- [Gemini API Documentation](https://ai.google.dev)
-
----
-
-## 📄 License
-
-MIT License - Free for personal, educational, and commercial use. See [LICENSE](LICENSE) for details.
-
----
-
-## 🙌 Acknowledgments
-
-- Built with [Google Gemini API](https://ai.google.dev)
-- UI powered by [React](https://react.dev) and [Rich](https://rich.readthedocs.io)
-- Database management with [SQLite](https://www.sqlite.org/)
-
----
+- [Google Gemini API](https://ai.google.dev) — LLM backend
+- [Rich](https://rich.readthedocs.io) — Terminal UI framework
+- [React](https://react.dev) — Web frontend framework
+- [FastAPI](https://fastapi.tiangolo.com) — Web API framework
 
 ## 💡 Roadmap
 

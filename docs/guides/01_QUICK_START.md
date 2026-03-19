@@ -1,110 +1,116 @@
-# 🚀 Quick Start Guide (5 Minutes)
+# Quick Start Guide
 
-Get ProfOcto running and analyze your first research gap in 5 minutes.
+Get ProfOcto running and analyze your first research gap in under 5 minutes.
+
+---
 
 ## Prerequisites
 
-- Python 3.8+
-- Gemini API key (free from [Google AI Studio](https://aistudio.google.com/app/apikey))
-  - Free tier: `gemini-2.0-flash` or `gemini-1.5-flash` recommended
-  - Rate limit: 15 requests/min, 1M tokens/min
+- **Python 3.10+**
+- **Gemini API key** — free from [Google AI Studio](https://aistudio.google.com/app/apikey)
 
-## 1. Setup (2 minutes)
+---
+
+## 1. Setup
 
 ```bash
-# Clone or download ProfOcto
 cd ProfOcto
 
-# Create .env file with your API key
-echo "GEMINI_API_KEY=your-key-here" > .env
+# Create and activate virtual environment
+python -m venv .venv
+.venv\Scripts\activate          # Windows
+source .venv/bin/activate       # macOS / Linux
 
 # Install dependencies
 pip install -r requirements.txt
+
+# Create .env file with your API key
+cp .env.example .env
+# Edit .env and paste your key: GEMINI_API_KEY=AIza...
 ```
 
-## 2. Run Your First Analysis (3 minutes)
+## 2. Run Your First Analysis
 
 ```bash
 python main.py
 ```
 
-You'll be asked just **one question**:
+You'll be prompted for one thing:
 
 ```
-🎯 Research Gap Analysis
 What research topic or problem would you like to explore?
-> [Your research question here]
+> [Type your research question]
 ```
 
-Then ProfOcto will:
+ProfOcto then runs automatically:
 
-1. ✅ Create multi-professor debate on your topic (~2-3 min)
-2. ✅ Identify research gaps
-3. ✅ Run Phase 5 ICLR readiness pipeline (~2-3 min)
-4. ✅ Show top gap on dashboard
-5. 📊 Display cost estimate
+1. Generates a panel of AI professors with distinct viewpoints
+2. Runs a structured debate on your topic
+3. Fact-checks claims via web search
+4. Extracts theorems, scores rigor, identifies research gaps
+5. Displays a dashboard with research gap recommendations
+6. Offers interactive options (bookmark, export, elevator pitch)
 
 ## 3. What You'll See
 
-### Cost Estimate (before running)
+### Cost Estimate (shown before execution)
 
 ```
-📊 Estimated Cost & Timeline:
-  • API Cost: $0.87
-  • Runtime: 2.7 minutes
+Cost & Timeline Estimate
+  Estimated API Cost: $0.87
+  Estimated Runtime: 2.7m
+  Cache Status: Enabled (60% cost reduction)
 ```
 
-### Top Gap Dashboard (after finishing)
+### Top Gap Dashboard (shown after analysis)
 
 ```
-╔════════════════════════════════════════════════════════════════╗
-║ TOP GAP #1 (RECOMMENDED FOR PURSUIT)                          ║
-║ Your top research opportunity...                              ║
-║ ✅ Readiness: 85/100                                         ║
-║ 📊 Novelty: 80/100 | Feasibility: 85/100                    ║
-║ ⏱️  Timeline: ~6 months                                       ║
-╚════════════════════════════════════════════════════════════════╝
+╔════════════════════════════════════════════╗
+║ TOP GAP #1 (RECOMMENDED FOR PURSUIT)       ║
+║ Readiness: 85/100                         ║
+║ Novelty: 80/100 | Feasibility: 85/100     ║
+║ Timeline: ~6 months                       ║
+╚════════════════════════════════════════════╝
 ```
 
 ### Interactive Menu
 
-```
-🔍 Explore gaps interactively?
-[2] 📌 Bookmark your favorite gap
-[3] 🚀 Export gap analysis for advisor
-[4] 💬 Generate elevator pitch
-[5] 📋 Compare with previous runs
-```
+After analysis completes, you can:
 
-## 4. What to Do Next
+- **Bookmark** a gap for later review
+- **Export** gap analysis as a report for your advisor
+- **Generate** an elevator pitch (15/30/60 seconds)
+- **Compare** with previous debate sessions
 
-**Option A: Share with Advisor**
+## 4. Output Files
 
-```
-[3] 🚀 Export gap analysis for advisor
-# Creates PDF/TXT file with full analysis
-```
-
-**Option B: Get Elevator Pitch**
+After a run, your results are saved to:
 
 ```
-[4] 💬 Generate elevator pitch
-# 30-second summary for presentations
+transcripts/                    # Debate transcript (Markdown)
+research_kits/                  # Research kit (JSON)
+logs/                           # Detailed session logs
+phd_analysis/
+├── bookmarks.json             # Bookmarked gaps
+├── run_history.json           # Past sessions
+├── advisor_reports/           # Exported reports
+└── .cache/                    # API cache (~60% cost savings)
 ```
 
-**Option C: Save for Later**
+## 5. CLI Arguments (Optional)
+
+You can skip the interactive prompt by passing topic and field directly:
+
+```bash
+python main.py "MoE vs Dense Models" "Distributed Training"
+```
+
+## 6. Customization (Optional)
+
+Before a run, you can optionally refine settings:
 
 ```
-[2] 📌 Bookmark your favorite gap
-# Saved in phd_analysis/bookmarks.json
-```
-
-## 5. Customization (Optional)
-
-Want to adjust settings before running?
-
-```
-⚙️  Customize settings before running? [y/N]: y
+Customize settings before running? [y/N]: y
 
 Options:
   [1] Change topic
@@ -113,69 +119,38 @@ Options:
   [5] Skip optional features (fast mode)
 ```
 
----
-
-## 📁 Files & Output
-
-After running, you'll find:
-
-```
-phd_analysis/
-├── logs/                    # Debate logs
-├── bookmarks.json          # Your saved gaps
-├── run_history.json        # All past debates
-├── advisor_reports/        # PDF exports
-├── batch_results/          # Batch processing results
-└── .cache/                 # API result cache (60% cost savings!)
-```
+Or edit `config.py` directly. See [Configuration Reference](../development/CONFIG_REFERENCE.md) for all flags.
 
 ---
 
-## ⚡ Speed Tips
+## Speed Tips
 
-**Too slow?** Enable fast mode:
-
-```
-[5] Skip optional features (fast mode)
-# Cuts runtime by 30-40%
-```
-
-**Too expensive?** Set budget:
-
-```python
-# In config.py:
-COST_CONFIRMATION_THRESHOLD = 0.25  # Ask before $0.25+
-```
+- **Fast mode**: Set `FAST_MODE = True` in `config.py` — skips optional features, reduces runtime by ~30–40%
+- **Budget control**: Set `COST_CONFIRMATION_THRESHOLD = 0.25` — asks before spending more than $0.25
 
 ---
 
-## 🐛 Troubleshooting
+## Troubleshooting
 
 ### "API key error"
 
-- Check `.env` file has correct key
-- Regenerate key at [Google AI Studio](https://aistudio.google.com/app/apikey)
+- Verify `.env` exists in the project root with the correct key
+- Regenerate your key at [Google AI Studio](https://aistudio.google.com/app/apikey)
 
-### "Cost too high"
+### "429 Too Many Requests"
 
-- Caching is ON by default (60% savings)
-- Use FAST_MODE for optional features skip
-- Reduce `NUM_PROFESSORS` in config.py
+- Free tier limit: 15 requests/minute. Wait a minute and try again
+- Reduce `NUM_PROFESSORS` in `config.py`
 
-### "Dashboard not showing"
+### Dashboard not showing
 
-- Check Phase 5 completed (see logs)
-- Verify `SHOW_TOP_GAP_DASHBOARD = True` in config
-
----
-
-## 📖 Next Steps
-
-- **Learn all features:** See [Phase 7 User Guide](03_PHASE7_USER_GUIDE.md)
-- **Configure everything:** See [Config Reference](../development/CONFIG_REFERENCE.md)
-- **Run multiple debates:** Use batch mode (ENABLE_BATCH_MODE = True)
-- **Understand the code:** See [Architecture](../development/ARCHITECTURE.md)
+- Ensure `SHOW_TOP_GAP_DASHBOARD = True` in `config.py`
+- Ensure `RESEARCH_GAP_DETECTION_ENABLED = True`
 
 ---
 
-**Stuck?** Check [Debugging Guide](../development/DEBUGGING.md)
+## Next Steps
+
+- [Setup & Installation](02_SETUP.md) — Detailed environment setup
+- [Feature Guide](03_PHASE7_USER_GUIDE.md) — Complete walkthrough of all features
+- [Configuration Reference](../development/CONFIG_REFERENCE.md) — All 100+ config flags

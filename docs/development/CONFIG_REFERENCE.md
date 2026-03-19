@@ -1,190 +1,275 @@
 # Configuration Reference
 
-Complete guide to all 100+ configuration flags in `config.py`.
-
-## Organization
-
-Flags are organized by feature area:
-
-- [Debate Settings](#debate-settings)
-- [Research & Rigor](#research--rigor)
-- [Phase 5: ICLR Pipeline](#phase-5-iclr-pipeline)
-- [Phase 7: PhD UX](#phase-7-phd-ux)
-- [Caching & Performance](#caching--performance)
-- [Display & Output](#display--output)
-- [File Paths](#file-paths)
+Complete reference for all configuration flags in `config.py`. All settings have sensible defaults — most users only need to set `GEMINI_API_KEY` in their `.env` file.
 
 ---
 
-## AI Model Settings
+## Table of Contents
+
+- [AI Model](#ai-model)
+- [Debate Settings](#debate-settings)
+- [Research & Academic Rigor](#research--academic-rigor)
+- [ICLR Readiness Pipeline (Phase 5)](#iclr-readiness-pipeline-phase-5)
+- [Caching & Performance (Phase 6)](#caching--performance-phase-6)
+- [Phase 5 Export & Visualization](#phase-5-export--visualization)
+- [PhD UX — Startup (Phase 7)](#phd-ux--startup-phase-7)
+- [PhD UX — Output Style](#phd-ux--output-style)
+- [PhD UX — Feature Toggles](#phd-ux--feature-toggles)
+- [PhD UX — Cost Management](#phd-ux--cost-management)
+- [PhD UX — Dashboard](#phd-ux--dashboard)
+- [PhD UX — Bookmarking & History](#phd-ux--bookmarking--history)
+- [PhD UX — Advisor Export](#phd-ux--advisor-export)
+- [PhD UX — Elevator Pitch](#phd-ux--elevator-pitch)
+- [PhD UX — Batch Mode](#phd-ux--batch-mode)
+- [PhD UX — Preferences](#phd-ux--preferences)
+- [File Paths](#file-paths)
+- [Preset Configurations](#preset-configurations)
+
+---
+
+## AI Model
 
 ```python
-# Choose AI model (all free tier)
-MODEL = "gemini-2.0-flash"      # Options: "gemini-2.0-flash" (default, fastest)
-                                #          "gemini-1.5-flash" (balanced)
-                                #          "gemini-1.5-pro" (highest quality, limited)
-
-GEMINI_API_KEY = os.environ.get("GEMINI_API_KEY", "")  # From .env file
-LANGUAGE = "en"                 # Enforce English responses
+GEMINI_API_KEY = os.environ.get("GEMINI_API_KEY", "")   # Loaded from .env file
+MODEL = "gemma-3-1b-it"                                 # Default model (free tier)
+LANGUAGE = "en"                                          # All responses in English
 ```
 
-**Free Tier Rate Limits:**
+The `GEMINI_API_KEY` must be set, either via the `.env` file or as an environment variable. Get a free key at [aistudio.google.com](https://aistudio.google.com/app/apikey).
 
-- 15 requests per minute
-- 1,000,000 tokens per minute
-- Resets daily
-
-**Model Comparison:**
-
-| Model              | Speed  | Quality    | Best For                     | Max Context |
-| ------------------ | ------ | ---------- | ---------------------------- | ----------- |
-| `gemini-2.0-flash` | ⚡⚡⚡ | ⭐⭐⭐     | Fast debates, quick feedback | 1M tokens   |
-| `gemini-1.5-flash` | ⚡⚡   | ⭐⭐⭐⭐   | Balanced performance         | 1M tokens   |
-| `gemini-1.5-pro`   | ⚡     | ⭐⭐⭐⭐⭐ | Rigorous PhD debates         | 2M tokens   |
+You can change `MODEL` to any Gemini-compatible model identifier. The default `gemma-3-1b-it` is the fastest free-tier option.
 
 ---
 
 ## Debate Settings
 
 ```python
-NUM_PROFESSORS = 2              # Number of professors (2-5, more = more expensive)
-MAX_ROUNDS = 2                  # Debate rounds
-MAX_TURNS_PER_ROUND = 1         # Turns per professor per round
-MAX_TOKENS_PER_TURN = 700       # Max tokens per response (increased for math rigor)
-FACT_CHECK_ENABLED = True       # Fact-check each turn
-STREAM_OUTPUT = True            # Stream responses in real-time
-SAVE_TRANSCRIPT = True          # Save debate transcript
+NUM_PROFESSORS = 2              # Number of professors in the panel (2–5)
+MAX_TURNS_PER_ROUND = 1         # Number of turns per professor per round
+MAX_ROUNDS = 1                  # Total debate rounds
+MAX_TOKENS_PER_TURN = 700       # Maximum tokens per professor response
+FACT_CHECK_ENABLED = True       # Fact-check each turn via web search
 ```
+
+**Notes:**
+
+- More professors and rounds produce richer debates but consume more API calls
+- `MAX_TOKENS_PER_TURN = 700` is set high to allow mathematical rigor (theorems, proofs)
+- With fact-checking enabled, each professor turn triggers an additional API call for verification
 
 ---
 
-## Research & Rigor
+## Research & Academic Rigor
 
 ```python
-# Research Synthesis
+# Research synthesis
 RESEARCH_MODE = True                    # Generate research kit after debate
-RESEARCH_MAX_RECOMMENDATIONS = 5        # Max PhD recommendations
+RESEARCH_MAX_RECOMMENDATIONS = 5        # Maximum number of PhD recommendations
 
-# Academic Rigor
-ACADEMIC_RIGOR_MODE = True              # Enforce math backing
-THEOREM_EXTRACTION_ENABLED = True       # Extract theorems/proofs
-RIGOR_SCORING_ENABLED = True            # Score rigor per turn (0-10)
-RESEARCH_GAP_DETECTION_ENABLED = True  # Find PhD-level gaps
+# Academic rigor enforcement
+ACADEMIC_RIGOR_MODE = True              # Require mathematical backing in responses
+THEOREM_EXTRACTION_ENABLED = True       # Extract theorems, lemmas, proofs from debate
+RIGOR_SCORING_ENABLED = True            # Score each turn for mathematical rigor (0–10)
+RESEARCH_GAP_DETECTION_ENABLED = True   # Identify PhD-level research gaps
+PhD_RECOMMENDATIONS_ENABLED = True      # Generate PhD research directions
 
-# Display Rigor
-SHOW_RIGOR_SCORES = True                # Show rigor scores
-DETAILED_THEOREM_ANALYSIS = True        # Show theorem details
-PhD_RECOMMENDATIONS_ENABLED = True      # Generate PhD advice
+# Display options
+SHOW_RIGOR_SCORES = True                # Display rigor scores during debate
+DETAILED_THEOREM_ANALYSIS = True        # Show theorem breakdowns per turn
 ```
+
+**Rigor scoring breakdown:**
+
+| Component           | Weight | Description                                       |
+| ------------------- | ------ | ------------------------------------------------- |
+| Theorem citations   | 35%    | References to formal theorems and lemmas          |
+| Proof density       | 30%    | Presence of mathematical proofs or proof sketches |
+| Citation quality    | 20%    | Quality and relevance of academic citations       |
+| Logical consistency | 15%    | Internal consistency of arguments                 |
+
+**Rigor verdicts:** HIGHLY_RIGOROUS, RIGOROUS, MODERATELY_BACKED, OPINION_BASED, UNSUPPORTED
 
 ---
 
-## Phase 5: ICLR Pipeline
+## ICLR Readiness Pipeline (Phase 5)
+
+These features are **disabled by default** because they are resource-intensive (multiple additional API calls per gap).
 
 ### Enable/Disable
 
 ```python
-GAP_TO_FORMAL_PROBLEM_ENABLED = False   # Convert gaps to formal problems (disabled)
-NOVELTY_ANALYZER_ENABLED = False        # Analyze novelty (disabled by default)
-SOLUTION_SKETCH_ENABLED = False         # Generate proof sketches (disabled)
-ICLR_READINESS_ENABLED = False          # Complete readiness scoring (disabled)
+GAP_TO_FORMAL_PROBLEM_ENABLED = False   # Convert gaps to formal problem statements
+NOVELTY_ANALYZER_ENABLED = False        # Assess novelty vs SOTA (0–100)
+SOLUTION_SKETCH_ENABLED = False         # Generate proof strategies
+ICLR_READINESS_ENABLED = False          # Complete readiness scoring
 ```
 
 ### Thresholds
 
 ```python
-ICLR_NOVELTY_THRESHOLD = 60             # Min novelty to recommend
-ICLR_FEASIBILITY_THRESHOLD = 50         # Min feasibility
-ICLR_EVIDENCE_QUALITY_THRESHOLD = 0.5   # Min evidence quality (0-1)
-ICLR_OVERALL_THRESHOLD = 50             # Min readiness score
+ICLR_NOVELTY_THRESHOLD = 60            # Minimum novelty score to recommend
+ICLR_FEASIBILITY_THRESHOLD = 50        # Minimum feasibility score
+ICLR_EVIDENCE_QUALITY_THRESHOLD = 0.5  # Minimum evidence quality (0–1)
+ICLR_OVERALL_THRESHOLD = 50            # Minimum overall readiness score
 ```
 
 ### Display
 
 ```python
-SHOW_FORMAL_PROBLEMS = True             # Show formalized problems
+SHOW_FORMAL_PROBLEMS = True             # Show formalized problem statements
 SHOW_NOVELTY_ANALYSIS = True            # Show novelty scores
 SHOW_SOLUTION_SKETCHES = True           # Show proof strategies
-SHOW_ICLR_READINESS = True              # Show readiness scores
-SHOW_ACTION_ITEMS = True                # Show action items
+SHOW_ICLR_READINESS = True             # Show readiness scores
+SHOW_ACTION_ITEMS = True                # Show recommended action items
 ```
 
 ---
 
-## Phase 7: PhD UX
-
-### Startup Mode
+## Caching & Performance (Phase 6)
 
 ```python
-QUICK_START_MODE = True                 # Ask topic only (recommended)
-INTERACTIVE_SETUP = True                # Allow inline refinement
+CACHE_PHASE5_RESULTS = True             # Cache Gemini API results to disk
+CACHE_DIR = "phd_analysis/.cache"       # Cache directory location
+CACHE_MAX_SIZE = 500                    # Maximum cached items (LRU eviction)
+USE_RETRY_CACHE = True                  # Enable LRU in-memory cache
 ```
 
-### Output Style
-
-```python
-MINIMAL_OUTPUT = False                  # Skip verbose output
-DETAILED_OUTPUT = True                  # Allow detailed output
-SHOW_PROGRESS_BARS = True               # Show progress during Phase 5
-VERBOSE_LOGGING = False                 # Log to console (not just file)
-```
-
-### Feature Toggles
-
-```python
-ESTIMATE_API_COST = True                # Show cost before running
-SHOW_TOP_GAP_DASHBOARD = True           # Highlight #1 gap
-SHOW_STATISTICS_DASHBOARD = True        # Show score averages
-ENABLE_BOOKMARKING = True               # Save favorite gaps
-ENABLE_RUN_HISTORY = True               # Track past debates
-ENABLE_PDF_EXPORT = True                # Export for advisor
-ENABLE_ELEVATOR_PITCH = True            # Generate pitches
-ENABLE_BATCH_MODE = True                # Run multiple topics
-```
-
-### Cost Management
-
-```python
-COST_CONFIRMATION_THRESHOLD = 0.50      # Ask before $X cost
-FAST_MODE = False                       # Skip optional features
-SKIP_RESEARCH_KIT = False               # Skip synthesis
-SKIP_RIGOR_SCORING = False              # Skip rigor analysis
-SKIP_FACT_CHECK = False                 # Skip fact-checking
-```
-
-### Advanced Settings
-
-```python
-DEFAULT_NUM_GAPS = 5                    # Default gaps for cost estimation
-COST_PER_API_CALL = 0.001              # Cost per call (for estimation)
-ELEVATOR_PITCH_SECONDS = 15             # 15, 30, or 60 seconds
-DASHBOARD_TOP_N = 3                     # Top N gaps on dashboard
-PDF_INCLUDE_TRACE = False               # Include debug logs in PDF
-MAX_HISTORY_ENTRIES = 50                # Keep last N debates
-```
+Caching yields approximately **60% cost savings** on repeated or similar analyses. Cached results are stored as hashed files on disk and persist across sessions.
 
 ---
 
-## Caching & Performance
+## Phase 5 Export & Visualization
 
 ```python
-CACHE_PHASE5_RESULTS = True             # Cache API results (60% savings!)
-USE_RETRY_CACHE = True                  # Enable LRU cache
-CACHE_MAX_SIZE = 500                    # Max cached items
-BATCH_SKIP_DUPLICATE_TOPICS = True      # Don't re-run cached topics
-```
-
----
-
-## Display & Output
-
-```python
-LANGUAGE = "vi"                         # UI language (vi, en)
-LANGUAGE_MIXED_MODE = True              # Vietnamese UI + English technical
-COLOR_THEME = "purple"                  # purple, blue, or green
-AUTO_SAVE_RESULTS = True                # Auto-save without asking
+EXPORT_PHASE5_JSON = True               # Export Phase 5 results to JSON
+EXPORT_PHASE5_HTML = True               # Export Phase 5 results to HTML
 EXPORT_INCLUDE_DETAILED_ANALYSIS = True # Include full analysis in exports
-EXPORT_AUTO_OPEN_HTML = False           # Auto-open HTML in browser
+EXPORT_AUTO_OPEN_HTML = False           # Auto-open HTML in browser after export
+ENABLE_INTERACTIVE_REFINEMENT = True    # Enable interactive gap exploration menu
+ENABLE_GAP_COMPARISON = True            # Enable gap comparison tables
+```
+
+---
+
+## PhD UX — Startup (Phase 7)
+
+```python
+QUICK_START_MODE = True                 # Skip setup questions, just ask for topic
+INTERACTIVE_SETUP = True                # Allow refining settings inline after quick start
+```
+
+When `QUICK_START_MODE` is enabled, ProfOcto asks only for your research topic and uses defaults for everything else. If `INTERACTIVE_SETUP` is also enabled, you get an optional prompt to adjust settings before the debate starts.
+
+---
+
+## PhD UX — Output Style
+
+```python
+MINIMAL_OUTPUT = False                  # Suppress verbose output
+DETAILED_OUTPUT = True                  # Allow detailed output sections
+SHOW_PROGRESS_BARS = True              # Show progress bars during Phase 5
+VERBOSE_LOGGING = False                 # Log to console in addition to log files
+```
+
+---
+
+## PhD UX — Feature Toggles
+
+```python
+ESTIMATE_API_COST = True                # Show cost estimate before running
+SHOW_TOP_GAP_DASHBOARD = True          # Highlight the #1 recommended gap
+SHOW_STATISTICS_DASHBOARD = True        # Show score averages across gaps
+ENABLE_BOOKMARKING = True               # Save favorite gaps for later
+ENABLE_RUN_HISTORY = True               # Track past debate sessions
+ENABLE_PDF_EXPORT = True                # Export reports for advisor
+ENABLE_ELEVATOR_PITCH = True            # Generate verbal summaries
+ENABLE_BATCH_MODE = True                # Process multiple topics from CSV
+```
+
+---
+
+## PhD UX — Cost Management
+
+```python
+ESTIMATE_API_COST = True                # Show projected cost before execution
+COST_CONFIRMATION_THRESHOLD = 0.50      # Ask for confirmation if cost exceeds this (USD)
+ESTIMATE_RUNTIME = True                 # Show projected runtime
+COST_PER_API_CALL = 0.001              # Estimated cost per API call (USD)
+SKIP_IF_COST_EXCEEDS = None            # Auto-skip if cost exceeds this value (None = never)
+DEFAULT_NUM_GAPS = 5                    # Default gap count for cost estimation
+```
+
+---
+
+## PhD UX — Dashboard
+
+```python
+SHOW_TOP_GAP_DASHBOARD = True          # Show #1 recommended gap prominently
+SHOW_STATISTICS_DASHBOARD = True        # Show average scores across all gaps
+DASHBOARD_TOP_N = 3                     # Number of top gaps to display
+DASHBOARD_MINIMAL_VIEW = False          # Compact dashboard layout
+```
+
+---
+
+## PhD UX — Bookmarking & History
+
+```python
+ENABLE_BOOKMARKING = True               # Save favorite gaps with notes
+BOOKMARK_FILE = "phd_analysis/bookmarks.json"   # Bookmark storage location
+ENABLE_RUN_HISTORY = True               # Track all debate sessions
+HISTORY_FILE = "phd_analysis/run_history.json"   # History storage location
+MAX_HISTORY_ENTRIES = 50                # Maximum number of entries to keep
+```
+
+---
+
+## PhD UX — Advisor Export
+
+```python
+ENABLE_PDF_EXPORT = True                # Enable advisor report export
+PDF_INCLUDE_TRACE = False               # Include debug trace in export
+ADVISOR_EXPORT_DIR = "phd_analysis/advisor_reports"  # Export directory
+```
+
+Exports are available in TXT, HTML, and JSON formats.
+
+---
+
+## PhD UX — Elevator Pitch
+
+```python
+ENABLE_ELEVATOR_PITCH = True            # Enable pitch generation
+ELEVATOR_PITCH_SECONDS = 15             # Default duration: 15, 30, or 60 seconds
+```
+
+---
+
+## PhD UX — Batch Mode
+
+```python
+ENABLE_BATCH_MODE = True                # Enable multi-topic batch processing
+BATCH_FILE = None                       # Path to CSV file (None = prompt user)
+BATCH_RESULTS_DIR = "phd_analysis/batch_results"  # Output directory
+BATCH_SKIP_DUPLICATE_TOPICS = True      # Skip previously processed topics
+```
+
+CSV format:
+
+```csv
+topic,field
+"Transformer efficiency optimization","NLP"
+"MoE scaling strategies","Distributed Systems"
+```
+
+---
+
+## PhD UX — Preferences
+
+```python
+LANGUAGE_MIXED_MODE = False             # Mixed language mode
+COLOR_THEME = "purple"                  # Terminal theme: "purple", "blue", or "green"
+AUTO_SAVE_RESULTS = True                # Auto-save without asking
 ```
 
 ---
@@ -192,24 +277,27 @@ EXPORT_AUTO_OPEN_HTML = False           # Auto-open HTML in browser
 ## File Paths
 
 ```python
-TRANSCRIPT_DIR = "transcripts"          # Debate transcripts
-RESEARCH_KIT_DIR = "research_kits"      # Research kits
-PhD_ANALYSIS_DIR = "phd_analysis"       # PhD analysis output
+# Output directories
+STREAM_OUTPUT = True                    # Stream responses in real-time
+SAVE_TRANSCRIPT = True                  # Save debate transcript to file
+TRANSCRIPT_DIR = "transcripts"          # Debate transcript location
+RESEARCH_KIT_DIR = "research_kits"      # Research kit output location
+PhD_ANALYSIS_DIR = "phd_analysis"       # PhD analysis output directory
 
-# Phase 7 locations
-BOOKMARK_FILE = "phd_analysis/bookmarks.json"
-HISTORY_FILE = "phd_analysis/run_history.json"
-ADVISOR_EXPORT_DIR = "phd_analysis/advisor_reports"
-BATCH_FILE = None                       # CSV with topics (None = ask)
-BATCH_RESULTS_DIR = "phd_analysis/batch_results"
-CACHE_DIR = "phd_analysis/.cache"       # API cache
+# Skip optional phases
+SKIP_RESEARCH_KIT = False               # Skip research kit generation
+SKIP_RIGOR_SCORING = False              # Skip rigor analysis
+SKIP_FACT_CHECK = False                 # Skip fact-checking
+FAST_MODE = False                       # Skip all optional features for speed
 ```
 
 ---
 
-## Recommended Configurations
+## Preset Configurations
 
-### 🔥 Maximum Speed
+### Maximum Speed
+
+Skip optional features, minimize API calls:
 
 ```python
 QUICK_START_MODE = True
@@ -220,27 +308,36 @@ MAX_ROUNDS = 1
 USE_RETRY_CACHE = True
 ```
 
-### 💰 Budget Conscious
+### Budget-Conscious
+
+Maximize quality while controlling cost:
 
 ```python
 USE_RETRY_CACHE = True
 COST_CONFIRMATION_THRESHOLD = 0.25
-FAST_MODE = False  # Still get quality
 NUM_PROFESSORS = 2
+MAX_ROUNDS = 1
 ```
 
-### 🎓 Maximum Quality (Default)
+### Full Analysis
+
+Enable all features for thorough research:
 
 ```python
 QUICK_START_MODE = True
 NUM_PROFESSORS = 3
 MAX_ROUNDS = 2
+GAP_TO_FORMAL_PROBLEM_ENABLED = True
+NOVELTY_ANALYZER_ENABLED = True
+SOLUTION_SKETCH_ENABLED = True
 ICLR_READINESS_ENABLED = True
 USE_RETRY_CACHE = True
 SHOW_TOP_GAP_DASHBOARD = True
 ```
 
-### 🏃 Development Testing
+### Development / Testing
+
+Fast iteration with minimal output:
 
 ```python
 QUICK_START_MODE = True
@@ -253,40 +350,40 @@ STREAM_OUTPUT = False
 
 ---
 
-## 💡 Tips
+## Tips
 
-1. **Always enable caching** (`USE_RETRY_CACHE = True`) — 60% cost savings
-2. **Use `QUICK_START_MODE`** — Most use cases need defaults only
-3. **Set `COST_CONFIRMATION_THRESHOLD`** — Prevent surprise API costs
-4. **Enable `SHOW_TOP_GAP_DASHBOARD`** — See results clearly
-5. **Use `FAST_MODE` for preliminary runs** — Then deep dive later
+1. **Always enable caching** — `USE_RETRY_CACHE = True` provides ~60% cost savings
+2. **Use quick start** — Most sessions only need topic input
+3. **Set a cost threshold** — `COST_CONFIRMATION_THRESHOLD` prevents surprise API spending
+4. **Start with defaults** — Run a quick debate first, then enable Phase 5 for promising topics
+5. **Use fast mode for exploration** — Switch to full analysis once you have a strong candidate gap
 
 ---
 
-## 🐛 Common Issues
+## Common Issues
 
-### Cost is too high
+### API cost is too high
 
-- Enable: `USE_RETRY_CACHE = True`
-- Reduce: `NUM_PROFESSORS = 2`
-- Use: `FAST_MODE = True`
+- Enable caching: `USE_RETRY_CACHE = True`
+- Reduce panel size: `NUM_PROFESSORS = 2`
+- Use fast mode: `FAST_MODE = True`
+- Disable Phase 5 pipeline (disabled by default)
 
 ### Debates are too long
 
-- Reduce: `MAX_ROUNDS = 1`
-- Reduce: `MAX_TOKENS_PER_TURN = 300`
-- Use: `FAST_MODE = True`
+- Reduce rounds: `MAX_ROUNDS = 1`
+- Reduce response length: `MAX_TOKENS_PER_TURN = 300`
+- Enable fast mode: `FAST_MODE = True`
 
-### Not seeing results
+### Dashboard not showing results
 
-- Set: `SHOW_TOP_GAP_DASHBOARD = True`
-- Set: `SHOW_ICLR_READINESS = True`
-- Check logs in: `phd_analysis/logs/`
+- Ensure `SHOW_TOP_GAP_DASHBOARD = True`
+- Ensure `RESEARCH_GAP_DETECTION_ENABLED = True`
+- Check that at least 2 gaps were identified in the debate
 
 ---
 
-**See Also:**
+**See also:**
 
-- [Quick Start](../guides/01_QUICK_START.md)
-- [Phase 7 Guide](../guides/03_PHASE7_USER_GUIDE.md)
-- [Debugging](DEBUGGING.md)
+- [Quick Start](../guides/01_QUICK_START.md) — Get running in 5 minutes
+- [Feature Guide](../guides/03_PHASE7_USER_GUIDE.md) — Complete feature walkthrough
