@@ -6,8 +6,8 @@ RECENT DEBATE:
 {recent_history}
 
 ---
-RESPOND IN VIETNAMESE ONLY - Bạn phải trả lời bằng tiếng Việt. Không tiếng Anh.
+RESPOND IN ENGLISH ONLY - All responses must be in English.
 ---
 
-Your turn — {speaker_name}. Respond now in Vietnamese:
+Your turn — {speaker_name}. Respond now:
 

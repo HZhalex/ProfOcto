@@ -1,0 +1,22 @@
+{
+  "topic": "Tensor Parallelism vs Pipeline Parallelism: Optimal Strategy for Scaling Large Language Models",
+  "field": "Systems",
+  "outline": "# Optimal Strategy for Scaling LLMs: Comparative Analysis of Tensor Parallelism, Pipeline Parallelism, and Mixture of Experts\n\n## 1. Abstract\n\nLarge language models (LLMs) continue to grow in scale, pushing the boundaries of distributed training. This paper presents a comprehensive comparison of three major parallelization strategies: Tensor Parallelism (TP), Pipeline Parallelism (PP), and Mixture of Experts (MoE). We evaluate these approaches across multiple dimensions including training throughput, memory efficiency, communication overhead, and scalability characteristics. Our findings show that the optimal strategy depends on cluster topology and model architecture, and we propose a decision framework for practitioners.\n\n## 2. Introduction\n\n### Problem Statement\nDistributing training of LLMs with hundreds of billions of parameters across multiple GPUs/TPUs requires sophisticated parallelization strategies. Traditional approaches like data parallelism hit memory limitations, necessitating model parallelism techniques.\n\n### Key Challenges\n- Memory constraints on individual accelerators\n- Communication bottlenecks in heterogeneous clusters\n- Trade-offs between computation and communication overlap\n- Dynamic allocation of resources\n\n## 3. Related Work\n\n- Megatron-LM (NVIDIA): Tensor Parallelism implementation\n- GPT-3 (OpenAI): Large-scale training with model parallelism\n- Switch Transformers: MoE-based scalability\n\n## 4. Methodology\n\n### Tensor Parallelism\n- Splits weight matrices across devices\n- High communication overhead\n- Good for compute-intensive operations\n\n### Pipeline Parallelism  \n- Divides model layers across devices\n- Pipeline bubbles reduce utilization\n- Benefits from large batch sizes\n\n### Mixture of Experts\n- Sparse activation patterns\n- Reduced computation per token\n- Load balancing complexity\n\n## 5. Experimental Results\n\n(See paper for detailed benchmarks)\n\n## 6. Conclusion\n\nNo single strategy dominates across all scenarios. Optimal choice depends on:\n- Cluster interconnect bandwidth\n- Model architecture and layer structure  \n- Batch size and sequence length\n- Cost constraints\n\n## 7. Recommendations\n\nFor practitioners choosing a parallelization strategy:\n1. Profile your cluster network topology\n2. Benchmark with representative model sizes\n3. Consider hybrid approaches\n4. Monitor communication overhead\n",
+  "research_gaps": [
+    {
+      "gap": "Lack of unified framework for comparing parallelization strategies across different hardware",
+      "difficulty": "PhD-level",
+      "proposed_solution": "Develop a hardware-agnostic abstraction layer for parallelism strategies"
+    },
+    {
+      "gap": "Missing analysis of dynamic load balancing in MoE under heterogeneous compute capabilities",
+      "difficulty": "Master-level",
+      "proposed_solution": "Implement adaptive load balancing based on device performance metrics"
+    }
+  ],
+  "next_steps": [
+    "Implement hybrid parallelism combining TP and PP",
+    "Benchmark on latest hardware (H100, MI300)",
+    "Study impact of sparsity on communication patterns"
+  ]
+}

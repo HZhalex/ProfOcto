@@ -13,7 +13,7 @@ import config
 from utils.logger import get_logger
 
 
-def _call_gemini_formalize(prompt: str, max_tokens: int = 2000) -> str:
+def _call_gemini_formalize(prompt: str, max_tokens: int = 800) -> str:
     """Call Gemini to formalize problem."""
     logger = get_logger()
     

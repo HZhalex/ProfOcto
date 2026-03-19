@@ -49,19 +49,19 @@ def fact_check_turn(content: str, speaker_name: str) -> list[dict]:
 
     client = genai.Client(api_key=config.GEMINI_API_KEY)
 
-    # Bước 1: Dùng Gemini + Google Search để kiểm chứng
-    search_prompt = f"""Kiểm chứng các claim trong phát biểu học thuật sau bằng cách tìm kiếm thông tin:
+    # Step 1: Use Gemini + Google Search to verify claims
+    search_prompt = f"""Verify the claims in the following academic statement by searching for information:
 
-Phát biểu của {speaker_name}:
+Statement from {speaker_name}:
 "{content}"
 
-Hãy:
-1. Xác định tối đa 3 claim quan trọng nhất (bỏ qua opinion)
-2. Tìm kiếm để kiểm chứng từng claim
-3. Trả về JSON array, không markdown, không text thừa:
-[{{"claim": "mô tả ngắn tối đa 8 từ", "status": "VERIFIED|UNVERIFIED|CONTESTED|OPINION", "reason": "lý do 1 câu"}}]
+Please:
+1. Identify at most 3 most important claims (exclude opinions)
+2. Search to verify each claim
+3. Return JSON array, no markdown, no extra text:
+[{{"claim": "short description up to 8 words", "status": "VERIFIED|UNVERIFIED|CONTESTED|OPINION", "reason": "one sentence explanation"}}]
 
-Nếu không có claim đáng chú ý, trả về []"""
+If no notable claims, return []"""
 
     try:
         def do():

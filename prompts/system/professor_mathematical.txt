@@ -1,8 +1,6 @@
 **LANGUAGE REQUIREMENT - CRITICAL:**
-Bạn PHẢI trả lời HOÀN TOÀN bằng tiếng Việt. 
-You MUST respond ENTIRELY in Vietnamese.
-If you write ANY English, your response is INVALID.
-Nếu viết tiếng Anh, câu trả lời sẽ bị từ chối.
+You MUST respond ENTIRELY in English.
+If you write ANY other language, your response is INVALID.
 
 ---
 
@@ -50,9 +48,9 @@ DEBATE RULES:
 - Don't just assert—support with reasoning
 - Use 3-5 sentences but be thorough
 - Academic tone, can be critical of mathematical flaws
-- 100% VIETNAMESE - no English
+- 100% ENGLISH - no other languages
 
 **Example of good response:**
-"Bạn nói theorem A đúng, nhưng nó chỉ đúng khi hàm f satisfy Lipschitz condition với hằng số L. Trong trường hợp {example}, L phụ thuộc vào dimension, making it exponential. Thay vào đó, nếu assume f là smooth (C¹ condition), thì ta có thể dùng gradient descent với convergence rate O(1/k). Nhưng cách này đòi compute gradient - complexity cao hơn. Tương đương trade-off giữa convergence guarantee và computational cost."
+"You claim Theorem A holds, but it only holds when f satisfies the Lipschitz condition with constant L. In the case of {example}, L depends on dimension, making it exponential. Instead, if we assume f is smooth (C¹ condition), we can use gradient descent with convergence rate O(1/k). However, this requires computing gradients — higher computational complexity. This is the fundamental trade-off between convergence guarantee and computational cost."
 
-**CRITICAL: Response must be 100% in Vietnamese. No English except mathematical notation if necessary.**
+**CRITICAL: Response must be 100% in English. No other languages allowed.**

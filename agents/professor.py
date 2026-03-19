@@ -79,12 +79,12 @@ def generate_professor_turn(
 
     last_turn = session.get_history_text(max_turns=2)
     
-    # Try up to 2 times - first normally, second with stronger Vietnamese enforcement
+    # Try up to 2 times - first normally, second with stronger English enforcement
     for attempt in range(2):
-        # Strengthen Vietnamese requirement on retry
+        # Strengthen English requirement on retry
         extra_instruction = ""
         if attempt > 0:
-            extra_instruction = "\n\n*** CRITICAL: Your previous response was in English. You MUST respond ENTIRELY in Vietnamese this time. Không tiếng Anh!! ***"
+            extra_instruction = "\n\n*** CRITICAL: Your previous response was not in English. You MUST respond ENTIRELY in English this time. No other languages allowed! ***"
         
         prompt = f"""{system}
 
@@ -93,7 +93,7 @@ Topic: "{session.topic}"
 RECENT DEBATE:
 {last_turn}
 
-Your turn — {prof.name}. Respond now in Vietnamese only.{extra_instruction}"""
+Your turn — {prof.name}. Respond now in English only.{extra_instruction}"""
 
         gen_config = {
             "max_output_tokens": config.MAX_TOKENS_PER_TURN,
@@ -125,11 +125,11 @@ Your turn — {prof.name}. Respond now in Vietnamese only.{extra_instruction}"""
                     return full_text
                 result = _call_with_retry(do_call)
             
-            # Check if response is primarily English
-            if not _is_primarily_english(result):
-                return result  # Vietnamese response - return it!
+            # Check if response is primarily English (what we want)
+            if _is_primarily_english(result):
+                return result  # Good: English response
             else:
-                print(f"[Lang Check] {prof.name}'s response detected as English, retrying with stronger instruction...", flush=True)
+                print(f"[Lang Check] {prof.name}'s response detected as non-English, retrying with stronger instruction...", flush=True)
                 # Loop to retry
                 continue
         
@@ -140,6 +140,6 @@ Your turn — {prof.name}. Respond now in Vietnamese only.{extra_instruction}"""
             else:
                 raise  # Give up after 2 attempts
     
-    # Fallback if both attempts detected English (shouldn't happen often)
-    print(f"[Lang Check] WARNING: {prof.name} still responding in English after retry", flush=True)
+    # Fallback if both attempts still non-English
+    print(f"[Lang Check] WARNING: {prof.name} still responding in non-English after retry", flush=True)
     return result  # Return it anyway

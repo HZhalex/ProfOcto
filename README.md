@@ -1,241 +1,363 @@
 <div align="center">
 
-# ⚔️ Academic Debate Arena
+# ⚔️ ProfOcto
 
-**AI-Powered Research Gap Discovery for PhD Students**
+**AI-Powered Research Gap Discovery Platform**
 
-Research smarter by debating with multiple AI professors, identifying ICLR-ready gaps, and sharing with your advisor.
+_Transform your research brainstorming into ICLR-ready papers through structured academic debate_
 
-[![Python](https://img.shields.io/badge/Python-3.10+-3776AB?style=flat-square&logo=python&logoColor=white)](https://python.org)
-[![Gemini](https://img.shields.io/badge/Gemini_API-Free_Tier-4285F4?style=flat-square&logo=google&logoColor=white)](https://aistudio.google.com)
-[![License](https://img.shields.io/badge/License-MIT-green?style=flat-square)](LICENSE)
+[![Python 3.10+](https://img.shields.io/badge/Python-3.10%2B-3776AB?style=flat-square&logo=python&logoColor=white)](https://python.org)
+[![Gemini API](https://img.shields.io/badge/Gemini_API-Free_Tier-4285F4?style=flat-square&logo=google&logoColor=white)](https://aistudio.google.com)
+[![React 18+](https://img.shields.io/badge/React-18%2B-61DAFB?style=flat-square&logo=react&logoColor=white)](https://react.dev)
+[![License: MIT](https://img.shields.io/badge/License-MIT-green?style=flat-square)](LICENSE)
+
+[🚀 Get Started](#quick-start) • [📖 Documentation](#documentation) • [✨ Features](#features) • [🎯 Use Cases](#use-cases)
 
 </div>
 
 ---
 
-## 🎯 Quick Start
+## 🎯 What is ProfOcto?
 
-```bash
-# 1. Setup (2 min)
-echo "GEMINI_API_KEY=your-key" > .env
-pip install -r requirements.txt
+ProfOcto helps PhD students and researchers discover novel research gaps by facilitating **structured academic debates** between AI professors. Instead of unstructured brainstorming, you:
 
-# 2. Run (5 min)
-python main.py
+1. **Pose a research question** to a panel of diverse AI professors
+2. **Watch them debate** with mathematical rigor and counter-arguments
+3. **Identify gaps** between different viewpoints
+4. **Export insights** as structured research briefs for your advisor
 
-# 3. Explore
-[dashboard shows top gap]
-[bookmark / export / pitch options]
-```
+### Why ProfOcto?
 
-**Full guide:** See [Quick Start Guide](docs/guides/01_QUICK_START.md)
-
----
-
-## 📚 Documentation
-
-All documentation is organized in the **`docs/`** folder:
-
-### Getting Started
-
-- **[Quick Start](docs/guides/01_QUICK_START.md)** — 5-minute setup
-- **[Phase 7 User Guide](docs/guides/03_PHASE7_USER_GUIDE.md)** — All 7 new features (bookmarking, PDF export, elevator pitch, etc.)
-
-### Features & How They Work
-
-- **[Config Reference](docs/development/CONFIG_REFERENCE.md)** — 100+ configuration flags
-- **[Phase 5: ICLR Pipeline](docs/features/PHASE5_ICLR_PIPELINE.md)** — Readiness scoring
-- **[Phase 7 Report](docs/features/PHASE7_COMPLETION_REPORT.md)** — Implementation details
-
-### Troubleshooting
-
-- **[Debugging Guide](docs/development/DEBUGGING.md)** — Common issues & logs
-
-**[→ View all docs](docs/README.md)**
+- 🧠 **Rigorous debate format** ensures you explore all angles of your research question
+- 📊 **Visual gap analysis** reveals unexplored areas in the research landscape
+- 💾 **Export capabilities** - generate elevator pitches, PDF reports, research outlines
+- ⚡ **Free to use** - powered by Gemini free tier API
+- 🌍 **International** - English-first, designed for global research collaboration
 
 ---
 
-## ✨ Features (Phase 7)
+## ✨ Key Features
 
-(tóm tắt, câu hỏi mới) (Google Search + tag claim)
-│
-▼
-Output Layer
-├── Terminal (Rich UI)
-├── Web UI (React + SSE streaming)
-└── Transcript (.md export)
+### 🎓 Academic Debate Engine
 
-```
+- Multi-professor panel with distinct viewpoints (Empiricist, Theorist, Skeptic, Pragmatist, Historian)
+- Automatic moderator summarizing key disagreements
+- Web search fact-checking with claim verification
 
-### Cấu trúc thư mục
+### 📈 Research Gap Discovery
 
-```
+- Automatic identification of contradictions and disagreements
+- Structured gap analysis with difficulty levels (Beginner/Master/PhD)
+- PhD-ready research recommendations
 
-academic_debate_arena/
-├── main.py # Entry point — Terminal UI
-├── config.py # Cấu hình toàn bộ hệ thống
-├── orchestrator.py # Tạo professors + câu hỏi mở màn
-│
-├── agents/
-│ ├── professor.py # Professor agent — generate lượt nói
-│ ├── moderator.py # Tóm tắt round + key insights cuối
-│ └── fact_checker.py # Web search + gắn tag claim
-│
-├── debate/
-│ ├── session.py # State: professors, turns, history
-│ └── turn_manager.py # Quản lý thứ tự, phát hiện lặp lại
-│
-├── output/
-│ ├── terminal_renderer.py # Rich terminal — màu sắc, panel
-│ └── exporter.py # Export Markdown + PDF
-│
-├── prompts/
-│ ├── professor_base.txt # System prompt professor
-│ ├── moderator.txt # System prompt moderator
-│ └── fact_checker.txt # System prompt fact-checker
-│
-├── web/
-│ ├── server.py # FastAPI + SSE streaming
-│ └── src/
-│ ├── App.jsx # React UI
-│ └── topics.js # Topic library data
-│
-└── transcripts/ # Transcript .md tự động lưu
+### 📊 Export & Analysis Tools
 
-````
+- Generate elevator pitches for advisors
+- Export debates as Markdown or PDF
+- Bookmark important research gaps
+- Session history and tracking
+
+### 🎨 Modern UI/UX
+
+- **Web UI**: Real-time streaming debate display, dark mode, responsive design
+- **Terminal UI**: Rich formatting with colors, panels, and progress indicators
+- **Configuration**: 100+ flags to customize behavior
 
 ---
 
 ## 🚀 Quick Start
 
-### Yêu cầu
+### Prerequisites
 
 - Python 3.10+
-- Node.js 18+ (chỉ cần cho Web UI)
-- Gemini API key (miễn phí tại [aistudio.google.com](https://aistudio.google.com))
+- Node.js 18+ (for Web UI, optional)
+- Gemini API key (free at [aistudio.google.com](https://aistudio.google.com))
 
-### 1. Cài đặt
+### 1. Installation (2 minutes)
 
 ```bash
-# Clone hoặc giải nén project
-cd academic_debate_arena
+# Clone repository
+git clone https://github.com/HZhalex/ProfOcto.git
+cd ProfOcto
 
-# Tạo virtual environment
+# Create virtual environment
 python -m venv .venv
 
-# Windows
-.venv\Scripts\pip install -r requirements.txt
+# Activate (Windows)
+.venv\Scripts\activate
 
-# macOS / Linux
-.venv/bin/pip install -r requirements.txt
-````
+# Activate (macOS/Linux)
+source .venv/bin/activate
 
-### 2. Cấu hình API Key
+# Install dependencies
+pip install -r requirements.txt
+```
+
+### 2. Configure API Key (1 minute)
 
 ```bash
-# Copy file mẫu
+# Create .env file
 cp .env.example .env
 
-# Mở .env và điền key
-GEMINI_API_KEY=AIza...your_key_here...
+# Edit .env with your Gemini API key
+# Get key: https://aistudio.google.com → Get API key → Create API key
 ```
 
-Lấy key miễn phí tại: [aistudio.google.com](https://aistudio.google.com) → **Get API key** → **Create API key**
-
-### 3a. Chạy Terminal UI
+### 3. Run Terminal UI (5 minutes)
 
 ```bash
-# Windows
-.venv\Scripts\activate
+# Default: interactive mode
 python main.py
 
-# macOS / Linux
-source .venv/bin/activate
-python main.py
-
-# Hoặc truyền thẳng argument
-python main.py "MoE vs Dense: trade-off nào tốt hơn cho production?" "Distributed LLM"
+# Or pass topic directly
+python main.py "MoE vs Dense Models" "Distributed Training"
 ```
 
-### 3b. Chạy Web UI
-
-Cài Node packages (lần đầu):
+### 4. Run Web UI (Optional)
 
 ```bash
+# Terminal 1 - Backend
+uvicorn web.server:app --reload --port 8000
+
+# Terminal 2 - Frontend
 cd web
-npm install
+npm run dev
+
+# Open http://localhost:3000
 ```
 
-Mở **2 terminal song song**:
+---
+
+## 📖 Documentation
+
+### Getting Started
+
+- [**Quick Start Guide**](docs/guides/01_QUICK_START.md) — 5-minute setup walkthrough
+- [**Setup Instructions**](docs/guides/02_SETUP.md) — Detailed installation guide
+- [**Feature Guide**](docs/guides/03_PHASE7_USER_GUIDE.md) — Complete feature walkthrough
+
+### Features & How They Work
+
+- [**Configuration Reference**](docs/development/CONFIG_REFERENCE.md) — 100+ settable flags explained
+- [**Debate System**](docs/features/DEBATE_SYSTEM.md) — How academic debates work
+- [**Research Gap Analysis**](docs/features/ACADEMIC_RIGOR.md) — Identifying high-value research directions
+
+### Troubleshooting
+
+- [**Debugging Guide**](docs/development/DEBUGGING.md) — Common issues and solutions
+- [**Architecture Overview**](docs/development/ARCHITECTURE.md) — System design details
+
+---
+
+## 🎯 Use Cases
+
+### 👨‍🎓 PhD Students
+
+- **Discover novel research directions** before starting your PhD
+- **Validate research ideas** against diverse expert viewpoints
+- **Generate talking points** for advisor meetings
+- **Create research outlines** for paper drafting
+
+### 🔬 Researchers
+
+- **Explore emerging fields** through structured debate
+- **Identify white spaces** in the research landscape
+- **Benchmark ideas** against academic consensus
+- **Accelerate literature review** with AI-powered analysis
+
+### 📚 Academic Teams
+
+- **Collaborative ideation** - debate together in real-time
+- **Export briefs** for team discussions
+- **Track historical debates** and insights
+- **Build institutional knowledge**
+
+---
+
+## ⚙️ Configuration Examples
+
+### Run with different Gemini models
+
+```python
+# In config.py
+MODEL = "gemini-2.0-flash"          # Highest quality (slower)
+MODEL = "gemini-1.5-flash"          # Balanced quality/speed
+MODEL = "gemma-3-1b-it"             # Fastest (free tier)
+```
+
+### Customize debate structure
+
+```python
+NUM_PROFESSORS = 5                  # Panel size (2-5)
+MAX_ROUNDS = 3                      # Debate rounds
+MAX_TOKENS_PER_TURN = 500           # Response length
+FACT_CHECK_ENABLED = True           # Enable/disable fact-checking
+```
+
+### Export preferences
+
+```python
+SAVE_TRANSCRIPT = True              # Save debate as .md
+ENABLE_PDF_EXPORT = True            # Generate PDF reports
+ENABLE_BOOKMARKING = True           # Save favorite gaps
+```
+
+---
+
+## 🏗️ Project Structure
+
+```
+ProfOcto/
+├── main.py                    # Entry point - Terminal UI
+├── config.py                  # System configuration
+├── orchestrator.py            # Generate professors & opening question
+│
+├── agents/                    # AI Agent modules
+│   ├── professor.py           # Debate participant
+│   ├── moderator.py           # Debate summaries
+│   └── fact_checker.py        # Claim verification
+│
+├── debate/                    # Debate engine
+│   ├── session.py             # Session state management
+│   └── turn_manager.py        # Speaking order & flow
+│
+├── output/                    # Export modules
+│   ├── terminal_renderer.py   # Terminal UI with Rich
+│   └── exporter.py            # PDF/Markdown export
+│
+├── prompts/                   # System prompts
+│   ├── professor_base.txt
+│   └── moderator.txt
+│
+├── web/                       # Web UI (React + FastAPI)
+│   ├── server.py              # Backend API
+│   └── src/                   # React components
+│
+└── docs/                      # Documentation
+    ├── guides/                # User guides
+    ├── features/              # Feature documentation
+    └── development/           # Dev & config reference
+```
+
+---
+
+## 📊 Performance & Costs
+
+| Model                | Free Tier     | Quality    | Speed  | Cost/Month |
+| -------------------- | ------------- | ---------- | ------ | ---------- |
+| **Gemma 3.1B**       | ✅ Unlimited  | ⭐⭐       | ⚡⚡⚡ | Free       |
+| **Gemini 1.5 Flash** | ✅ 15 req/min | ⭐⭐⭐⭐   | ⚡⚡   | Free/tier  |
+| **Gemini 2.0 Flash** | ✅ 10 req/min | ⭐⭐⭐⭐⭐ | ⚡     | Free/tier  |
+
+### Estimated costs for a typical debate:
+
+- **Model**: Gemini 1.5 Flash (recommended)
+- **Topic complexity**: Medium (5 professors, 2 rounds)
+- **Cost per debate**: ~$0.01-0.05 USD
+- **100 debates/month**: <$5 USD
+
+---
+
+## 🤝 Contributing
+
+We welcome contributions! Please:
+
+1. Fork the repository
+2. Create a feature branch (`git checkout -b feature/improvement`)
+3. Make your changes and test thoroughly
+4. Submit a pull request
+
+### Development Setup
 
 ```bash
-# Terminal 1 — Backend
+# Install dev dependencies
+pip install -r requirements-dev.txt
+
+# Run tests
+pytest tests/
+
+# Format code
+black . && isort .
+```
+
+---
+
+## 🐛 Troubleshooting
+
+### API Key Issues
+
+**Problem**: "GEMINI_API_KEY not found"  
+**Solution**: Create `.env` file with your API key from [aistudio.google.com](https://aistudio.google.com)
+
+### Rate Limiting
+
+**Problem**: "429 Too Many Requests"  
+**Solution**: Switch to a model with higher free tier limits or add a 1-2 second delay between requests
+
+### Web UI Not Loading
+
+**Problem**: Frontend shows blank page  
+**Solution**:
+
+```bash
+# Restart backend
 .venv\Scripts\activate
 uvicorn web.server:app --reload --port 8000
 
-# Terminal 2 — Frontend
-cd web
-npm run dev
+# In another terminal, restart frontend
+cd web && npm run dev
 ```
 
-Mở trình duyệt: **http://127.0.0.1:3000**
+### Debate Quality Issues
+
+**Problem**: Professors responding with generic answers  
+**Solution**:
+
+- Use a stronger model (Gemini 2.0 Flash instead of Gemma)
+- Make topic more specific
+- Increase `MAX_TOKENS_PER_TURN` in config
 
 ---
 
-## ⚙️ Cấu hình
+## 📚 Learning Resources
 
-Tất cả tham số chỉnh trong `config.py`:
-
-| Tham số               | Mặc định        | Ý nghĩa                     |
-| --------------------- | --------------- | --------------------------- |
-| `MODEL`               | `gemma-3-1b-it` | Model Gemini đang dùng      |
-| `NUM_PROFESSORS`      | `4`             | Số giáo sư (2–5)            |
-| `MAX_ROUNDS`          | `2`             | Số vòng tranh luận          |
-| `MAX_TURNS_PER_ROUND` | `1`             | Số lượt nói/professor/round |
-| `MAX_TOKENS_PER_TURN` | `400`           | Độ dài tối đa mỗi lượt      |
-| `FACT_CHECK_ENABLED`  | `True`          | Bật/tắt fact-checker        |
-| `STREAM_OUTPUT`       | `True`          | Stream text real-time       |
-| `SAVE_TRANSCRIPT`     | `True`          | Lưu transcript .md          |
-
-### Chọn model
-
-| Model              | Free tier         | Chất lượng | Tốc độ |
-| ------------------ | ----------------- | ---------- | ------ |
-| `gemma-3-1b-it`    | ✅ Không giới hạn | ⭐⭐       | ⚡⚡⚡ |
-| `gemini-1.5-flash` | ✅ 15 req/phút    | ⭐⭐⭐⭐   | ⚡⚡   |
-| `gemini-2.5-flash` | ✅ 5 req/phút     | ⭐⭐⭐⭐⭐ | ⚡     |
-
----
-
-## 💡 Cách dùng hiệu quả
-
-**Chỉnh prompt** — Mở file trong `prompts/` để thay đổi tính cách professors, cách moderator tóm tắt, tiêu chí fact-check mà không cần sửa code.
-
-**Topic Library** — Trên Web UI, tab "📚 Library" có sẵn 19 topic chất lượng cao phân theo 5 lĩnh vực. Click chọn → nhấn Start là chạy ngay.
-
-**Export PDF** — Cài thêm `pip install reportlab` rồi gọi `exporter.export_pdf(session)` để xuất transcript ra PDF có formatting đẹp.
-
----
-
-## ✅ Roadmap
-
-- [x] Phase 1 — Terminal MVP: professors, moderator, fact-checker, transcript
-- [x] Phase 2 — Web search fact-check, professors quốc tế theo lĩnh vực
-- [x] Phase 3 — Web UI React + SSE streaming real-time
-- [x] Phase 4 — Topic library, session history, turn manager, exporter
-
----
-
-## ⚠️ Lưu ý
-
-- Project này dùng cho mục đích học tập cá nhân.
-- Gemini free tier có giới hạn requests/phút — hệ thống tự động retry khi bị rate limit.
-- Fact-check bằng AI không đảm bảo 100% chính xác — luôn verify lại các claim quan trọng từ nguồn gốc.
-- Với `gemma-3-1b-it` (model nhỏ), chất lượng tranh luận sẽ kém hơn — khuyến khích dùng `gemini-1.5-flash` để có kết quả tốt hơn.
+- [Prompts Engineering Guide](https://platform.openai.com/docs/guides/prompt-engineering)
+- [Academic Writing Best Practices](https://www.citefactor.org/)
+- [Research Gap Analysis Methods](https://www.jstor.org/)
+- [Gemini API Documentation](https://ai.google.dev)
 
 ---
 
 ## 📄 License
 
-MIT License — tự do sử dụng và chỉnh sửa cho mục đích cá nhân và học tập.
+MIT License - Free for personal, educational, and commercial use. See [LICENSE](LICENSE) for details.
+
+---
+
+## 🙌 Acknowledgments
+
+- Built with [Google Gemini API](https://ai.google.dev)
+- UI powered by [React](https://react.dev) and [Rich](https://rich.readthedocs.io)
+- Database management with [SQLite](https://www.sqlite.org/)
+
+---
+
+## 💡 Roadmap
+
+- [ ] Multi-language support (Vietnamese, Mandarin, Spanish)
+- [ ] Advanced debate modes (moderated adversarial, Socratic method)
+- [ ] Research paper auto-generation pipeline
+- [ ] Integration with academic databases (arXiv, Scholar)
+- [ ] Team collaboration features with real-time syncing
+- [ ] Mobile app for iOS/Android
+
+---
+
+<div align="center">
+
+**Have a question?** [Start a Discussion](https://github.com/HZhalex/ProfOcto/discussions)  
+**Found a bug?** [Report an Issue](https://github.com/HZhalex/ProfOcto/issues)
+
+Made with ❤️ for the research community
+
+</div>

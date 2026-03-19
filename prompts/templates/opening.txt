@@ -6,7 +6,7 @@ Participants: {participants}
 Requirements:
 - Ask a specific, focused question (not too broad)
 - Make it relevant to all participants' expertise
-- In Vietnamese
+- In English
 - Provocative enough to generate diverse viewpoints
 - 2-3 sentences max
 

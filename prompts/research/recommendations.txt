@@ -6,7 +6,7 @@ Field: {field}
 Key findings:
 {findings}
 
-Suggest {num_recommendations} concrete recommendations in Vietnamese:
+Suggest {num_recommendations} concrete recommendations in English:
 1. Type your recommendation
 2. Type your recommendation
 ...

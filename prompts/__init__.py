@@ -3,7 +3,7 @@ import os
 _DIR = os.path.dirname(__file__)
 
 def _load_from_path(path: str, **kwargs) -> str:
-    """Internal: Load prompt từ file path và fill placeholders."""
+    """Internal: Load prompt from file path and fill placeholders."""
     if not os.path.exists(path):
         raise FileNotFoundError(f"Prompt file not found: {path}")
     with open(path, encoding="utf-8") as f:
@@ -47,8 +47,8 @@ def load_research(template_name: str, **kwargs) -> str:
 
 # Legacy compatibility - keep old load() for backward compatibility
 def load(template_name: str, **kwargs) -> str:
-    """Load prompt từ file .txt và fill các placeholder {key}.
-    
+    """Load a prompt from a .txt file and fill {key} placeholders.
+
     DEPRECATED: Use load_system(), load_template(), or load_research() instead.
     This function tries to find prompts in the old flat structure.
     """

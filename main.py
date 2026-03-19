@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """
-Academic Debate Arena
-Chạy: python main.py
+ProfOcto — Research Gap Discovery Platform
+Run: python main.py
 """
 import sys
 import os
@@ -553,7 +553,7 @@ def run_debate(topic: str, field: str):
 
 
 def main():
-    console.print("\n[bold bright_blue]Academic Debate Arena[/bold bright_blue]\n")
+    console.print("\n[bold bright_blue]🐙 ProfOcto[/bold bright_blue]\n")
 
     # Phase 7: Hybrid startup CLI (quick by default, interactive optional)
     if config.QUICK_START_MODE or config.INTERACTIVE_SETUP:

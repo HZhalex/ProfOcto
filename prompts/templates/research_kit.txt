@@ -12,4 +12,4 @@ Generate components as specified:
 3. Open research questions
 4. Recommendations
 
-Use Vietnamese. Be specific and actionable for ICLR-level research.
+Use English. Be specific and actionable for ICLR-level research.

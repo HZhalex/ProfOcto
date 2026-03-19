@@ -3,7 +3,7 @@ Summarize the key points, areas of agreement, and remaining disagreements from t
 Debate so far:
 {debate_content}
 
-Format in Vietnamese:
+Format in English:
 1. Points of Agreement:
 2. Key Disagreements:
 3. New Questions Raised:

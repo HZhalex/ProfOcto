@@ -1,10 +1,10 @@
 """
 Theorem & Mathematical Foundation Extractor
 
-Trích xuất:
-- Theorems/Lemmas được cite
+Extracts:
+- Cited theorems/lemmas
 - Mathematical statements, proofs, assumptions
-- Citations liên quan
+- Related citations
 
 WITH COMPREHENSIVE LOGGING FOR DEBUG
 """
@@ -16,7 +16,7 @@ from utils.logger import get_logger
 
 
 def _call_gemini_extract(prompt: str, max_tokens: int = 2000) -> str:
-    """Call Gemini để extract theorems with error handling."""
+    """Call Gemini to extract theorems with error handling."""
     logger = get_logger()
     
     try:

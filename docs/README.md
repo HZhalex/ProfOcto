@@ -36,7 +36,6 @@ Welcome to ProfOcto - AI-Powered Research Gap Discovery for PhD Students.
 
 - **[Configuration Reference](development/CONFIG_REFERENCE.md)** — All 100+ config flags explained
 - **[Debugging Guide](development/DEBUGGING.md)** — Troubleshooting and logs
-- **[Vietnamese UI Guide](development/VIETNAMESE_ENFORCEMENT.md)** — Mixed Vietnamese/English setup
 
 ### 📋 Project Status
 
@@ -82,7 +81,6 @@ docs/
 │   ├── CONFIG_REFERENCE.md
 │   ├── DEBUGGING.md
 │   ├── TESTING.md
-│   ├── VIETNAMESE_ENFORCEMENT.md
 │   └── ARCHITECTURE.md
 └── archive/               # Legacy documentation (earlier phases)
     ├── ACADEMIC_RIGOR_SYSTEM.md
@@ -91,8 +89,7 @@ docs/
     ├── LOGGING_GUIDE.md
     ├── PROMPTS_STRUCTURE.md
     ├── RESEARCH_MODE_GUIDE.md
-    ├── START_HERE_TESTING.md
-    └── VIETNAMESE_ENFORCEMENT.md
+    └── START_HERE_TESTING.md
 ```
 
 ---

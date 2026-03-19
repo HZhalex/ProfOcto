@@ -34,10 +34,10 @@ def _call_gemini(prompt: str, max_tokens: int = 1000) -> str:
     return _retry(do)
 
 
-# Roles được chọn tự động theo NUM_PROFESSORS
+# Roles selected automatically based on NUM_PROFESSORS
 _ROLES = ["Empiricist", "Theorist", "Skeptic", "Pragmatist", "Historian"]
 
-# Các trường top ở Mỹ theo lĩnh vực
+# Top universities in the US by field
 _UNIVERSITIES = {
     "default":    ["MIT", "Stanford University", "Carnegie Mellon University",
                    "UC Berkeley", "University of Washington"],
@@ -54,7 +54,7 @@ _UNIVERSITIES = {
 }
 
 def _pick_universities(field: str, n: int) -> list[str]:
-    """Chọn n trường phù hợp với lĩnh vực."""
+    """Pick n universities appropriate for the research field."""
     field_lower = field.lower()
     key = "default"
     if any(w in field_lower for w in ["llm", "language", "nlp", "transformer"]):
@@ -78,7 +78,7 @@ def generate_professors(topic: str, field: str) -> list[ProfessorProfile]:
     roles = _ROLES[:n]
     universities = _pick_universities(field, n)
 
-    # Build danh sách slot để AI điền vào
+    # Build list of slots for AI to fill in
     slots = []
     for i, (role, uni) in enumerate(zip(roles, universities)):
         key = f"prof_{chr(97+i)}"  # prof_a, prof_b, ...
@@ -105,7 +105,7 @@ Fill in the JSON template below. Rules:
     raw = re.sub(r"```json|```", "", raw).strip()
 
     data = _parse_professors_json(raw, n)
-    # Chỉ lấy đúng fields, bỏ field lạ, điền default nếu thiếu
+    # Keep only correct fields, discard unknown fields, fill defaults if missing
     _DEFAULTS = {
         'key': 'prof_x',
         'name': 'Prof. Unknown',
@@ -125,12 +125,12 @@ Fill in the JSON template below. Rules:
 
 def generate_opening_question(topic: str, professors: list[ProfessorProfile]) -> str:
     names = ", ".join([f"{p.name} ({p.role})" for p in professors])
-    prompt = f"""You are a Moderator of an academic debate. Write in Vietnamese.
+    prompt = f"""You are a Moderator of an academic debate.
 
 Topic: "{topic}"
 Professors: {names}
 
-Write exactly 2 sentences in Vietnamese:
+Write exactly 2 sentences:
 Sentence 1: briefly introduce the topic and why it matters.
 Sentence 2: invite {professors[0].name} to speak first."""
     return _call_gemini(prompt, max_tokens=150)
@@ -145,10 +145,10 @@ def create_session(topic: str, field: str) -> DebateSession:
 
 
 def _parse_professors_json(raw: str, expected: int) -> list[dict]:
-    """Parse JSON linh hoạt — tự sửa các lỗi phổ biến của model nhỏ."""
+    """Parse JSON flexibly - auto-fix common errors from smaller models."""
     raw = re.sub(r"```json|```", "", raw).strip()
 
-    # Thử parse thẳng
+    # Try direct parse
     try:
         data = json.loads(raw)
         if isinstance(data, list):
@@ -156,7 +156,7 @@ def _parse_professors_json(raw: str, expected: int) -> list[dict]:
     except json.JSONDecodeError:
         pass
 
-    # Tìm tất cả objects {...} rồi ghép thành array
+    # Find all {...} objects and combine into array
     objects = re.findall(r'\{[^{}]+\}', raw, re.DOTALL)
     if objects:
         try:
@@ -166,8 +166,8 @@ def _parse_professors_json(raw: str, expected: int) -> list[dict]:
         except json.JSONDecodeError:
             pass
 
-    # Fallback — không crash chương trình
-    print("  [warn] JSON parse thất bại, dùng fallback professors", flush=True)
+    # Fallback - don't crash the program
+    print("  [warn] JSON parse failed, using fallback professors", flush=True)
     roles = _ROLES[:expected]
     unis = _pick_universities("default", expected)
     return [

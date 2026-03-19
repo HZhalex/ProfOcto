@@ -1,37 +1,43 @@
-# Web UI — Hướng dẫn chạy
+# ProfOcto Web UI — Setup Guide
 
-## Yêu cầu
-- Node.js >= 18 (tải tại nodejs.org)
-- Python venv đã setup (xem README chính)
+## Requirements
 
-## Lần đầu — cài Node packages
+- Node.js >= 18 (download from nodejs.org)
+- Python 3.10+ with venv already setup (see main README)
 
-```cmd
+## First Time — Install Node Packages
+
+```bash
 cd web
 npm install
 ```
 
-## Chạy (2 terminal song song)
+## Run (2 terminals in parallel)
 
-**Terminal 1 — FastAPI backend:**
-```cmd
-cd D:\project\academic_debate_arena
-.venv\Scripts\activate
+**Terminal 1 — FastAPI Backend:**
+
+```bash
+# From project root
+python -m venv .venv  # if not already created
+.venv\Scripts\activate  # Windows
+# or: source .venv/bin/activate  # macOS/Linux
 uvicorn web.server:app --reload --port 8000
 ```
 
-**Terminal 2 — React frontend:**
-```cmd
-cd D:\project\academic_debate_arena\web
+**Terminal 2 — React Frontend:**
+
+```bash
+cd web
 npm run dev
 ```
 
-Mở trình duyệt: http://localhost:5173
+Open browser: http://localhost:5173
 
-## Build production (optional)
+## Build for Production
 
-```cmd
+```bash
 cd web
 npm run build
 ```
-Sau khi build, FastAPI tự serve React từ `web/dist/`.
+
+After building, FastAPI will serve the React frontend from `web/dist/` directory.

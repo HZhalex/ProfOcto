@@ -1,4 +1,4 @@
-"""
+﻿"""
 Academic Validator - Extract foundational papers, verify mathematical claims, track citations
 For rigorous research AI assistant with mathematical backing
 """
@@ -68,9 +68,9 @@ Return as JSON:
 
     def call_api():
         response = client.models.generate_content(
-            model="gemini-2.0-flash",
+            model=config.MODEL,
             contents=prompt,
-            config={"temperature": 0.3, "max_output_tokens": 2000}
+            config={"temperature": 0.3, "max_output_tokens": 800}
         )
         text = response.text
         json_match = re.search(r'\{[\s\S]*\}', text)
@@ -140,9 +140,9 @@ Return JSON:
 
     def call_api():
         response = client.models.generate_content(
-            model="gemini-2.0-flash",
+            model=config.MODEL,
             contents=prompt,
-            config={"temperature": 0.2, "max_output_tokens": 1500}
+            config={"temperature": 0.2, "max_output_tokens": 700}
         )
         text = response.text
         json_match = re.search(r'\{[\s\S]*\}', text)
@@ -225,9 +225,9 @@ Return JSON:
 
     def call_api():
         response = client.models.generate_content(
-            model="gemini-2.0-flash",
+            model=config.MODEL,
             contents=prompt,
-            config={"temperature": 0.2, "max_output_tokens": 1500}
+            config={"temperature": 0.2, "max_output_tokens": 700}
         )
         text = response.text
         json_match = re.search(r'\{[\s\S]*\}', text)
@@ -277,9 +277,9 @@ Return JSON:
 
     def call_api():
         response = client.models.generate_content(
-            model="gemini-2.0-flash",
+            model=config.MODEL,
             contents=prompt,
-            config={"temperature": 0.2, "max_output_tokens": 1000}
+            config={"temperature": 0.2, "max_output_tokens": 600}
         )
         text = response.text
         json_match = re.search(r'\{[\s\S]*\}', text)
@@ -371,9 +371,9 @@ Return JSON:
 
     def call_api():
         response = client.models.generate_content(
-            model="gemini-2.0-flash",
+            model=config.MODEL,
             contents=prompt,
-            config={"temperature": 0.2, "max_output_tokens": 1500}
+            config={"temperature": 0.2, "max_output_tokens": 700}
         )
         text = response.text
         json_match = re.search(r'\{[\s\S]*\}', text)
@@ -412,8 +412,8 @@ Check each argument for this 4-part structure:
 
 Example of STRONG argument:
 "Gap: ReLU networks have spectral bias (Rahaman et al., 2019).
-Foundation: By spectral bias theorem, learning frequency ω requires O(ω²/ε) samples.
-Solution: Fourier positional encoding (Tancik et al., 2020) explicitly covers frequencies [2⁰, 2^L].
+Foundation: By spectral bias theorem, learning frequency Ï‰ requires O(Ï‰Â²/Îµ) samples.
+Solution: Fourier positional encoding (Tancik et al., 2020) explicitly covers frequencies [2â°, 2^L].
 Remaining: Only works for band-limited functions; natural images need learnable activations."
 
 Example of WEAK argument:
@@ -447,9 +447,9 @@ Return JSON:
 
     def call_api():
         response = client.models.generate_content(
-            model="gemini-2.0-flash",
+            model=config.MODEL,
             contents=prompt,
-            config={"temperature": 0.2, "max_output_tokens": 1500}
+            config={"temperature": 0.2, "max_output_tokens": 700}
         )
         text = response.text
         json_match = re.search(r'\{[\s\S]*\}', text)
@@ -481,19 +481,19 @@ def calculate_claim_evidence_score(claim: str, papers_cited: list) -> dict:
     # Base: number of papers
     if len(papers_cited) >= 5:
         score += 4.0
-        details.append("✓ 5+ papers cited")
+        details.append("âœ“ 5+ papers cited")
     elif len(papers_cited) >= 4:
         score += 3.5
-        details.append("✓ 4 papers cited")
+        details.append("âœ“ 4 papers cited")
     elif len(papers_cited) >= 3:
         score += 2.5
-        details.append("⚠ 3 papers (minimum for major claim)")
+        details.append("âš  3 papers (minimum for major claim)")
     elif len(papers_cited) >= 2:
         score += 1.5
-        details.append("⚠ 2 papers (inadequate)")
+        details.append("âš  2 papers (inadequate)")
     elif len(papers_cited) >= 1:
         score += 0.5
-        details.append("✗ 1 paper only")
+        details.append("âœ— 1 paper only")
     
     # Diversity bonus: different authors/years
     authors = set()
@@ -507,13 +507,13 @@ def calculate_claim_evidence_score(claim: str, papers_cited: list) -> dict:
     
     if len(authors) >= len(papers_cited) * 0.7:  # At least 70% different authors
         score += 2.0
-        details.append("✓ Diverse sources (different authors)")
+        details.append("âœ“ Diverse sources (different authors)")
     else:
-        details.append("⚠ Limited source diversity")
+        details.append("âš  Limited source diversity")
     
     if len(years) >= 2:  # Papers from multiple eras strengthen claims
         score += 1.5
-        details.append("✓ Multiple time periods")
+        details.append("âœ“ Multiple time periods")
     
     # Evidence type bonus (if mentions proof, theorems, experimental data)
     # This would need to be extracted from actual claim text
@@ -541,3 +541,4 @@ def calculate_claim_evidence_score(claim: str, papers_cited: list) -> dict:
         "year_range": f"{min(years)}-{max(years)}" if years else "N/A",
         "details": details
     }
+

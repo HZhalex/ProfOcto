@@ -41,7 +41,7 @@ def generate_research_kit(session: DebateSession, topic: str, field: str) -> dic
     
     client = genai.Client(api_key=config.GEMINI_API_KEY)
     
-    # 1. Tóm tắt debate để dùng làm context
+    # 1. Summarize debate for context
     debate_summary = _build_debate_summary(session)
     
     # 2. Generate paper outline
@@ -812,7 +812,7 @@ Topic: {topic}
 
 {debate_summary}
 
-Generate a structured paper outline with these sections in Vietnamese:
+Generate a structured paper outline with these sections in English:
 1. Abstract (3-4 sentences summarizing main contribution)
 2. Introduction (problem statement, motivation, contribution)
 3. Related Work (existing approaches and their limitations)
@@ -828,7 +828,7 @@ Format as markdown with bullet points. Be specific and research-focused."""
         response = client.models.generate_content(
             model=config.MODEL,
             contents=prompt,
-            config={"max_output_tokens": 1500, "temperature": 0.5},
+            config={"max_output_tokens": 800, "temperature": 0.5},
         )
         return response.text.strip()
     
@@ -889,7 +889,7 @@ Topic: {topic}
 
 {debate_summary}
 
-Generate 5-7 specific, actionable research questions in Vietnamese that:
+Generate 5-7 specific, actionable research questions in English that:
 - Extend the debate
 - Address mentioned limitations
 - Suggest new research directions
@@ -934,7 +934,7 @@ Field: {field}
 Key findings:
 {findings_str}
 
-Suggest {min(config.RESEARCH_MAX_RECOMMENDATIONS, 5)} concrete recommendations in Vietnamese:
+Suggest {min(config.RESEARCH_MAX_RECOMMENDATIONS, 5)} concrete recommendations in English:
 1. Type your recommendation
 2. Type your recommendation
 ...

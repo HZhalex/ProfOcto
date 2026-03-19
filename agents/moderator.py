@@ -45,7 +45,7 @@ Topic: "{session.topic}" | Round {session.current_round} just ended.
 RECENT DEBATE:
 {history}
 
-Write exactly 3 sentences in Vietnamese:
+Write exactly 3 sentences in English:
 1. The biggest point of disagreement.
 2. Who made the most compelling argument and why.
 3. A new question to deepen the debate."""
@@ -62,10 +62,10 @@ Topic: "{session.topic}"
 DEBATE:
 {history}
 
-Summarize in Vietnamese using this exact format, 1-2 lines each:
+Summarize in English using this exact format, 1-2 lines each:
 
-Đồng thuận: [write here]
-Bất đồng: [write here]
-Câu hỏi mở: [write here]
-Nghiên cứu tiếp: [write here]"""
+Consensus: [write here]
+Disagreement: [write here]
+Open Questions: [write here]
+Next Research: [write here]"""
     return _call(prompt, max_tokens=300)

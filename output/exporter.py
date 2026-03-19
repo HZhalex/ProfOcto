@@ -21,7 +21,7 @@ def export_markdown(session: DebateSession, directory: str = "transcripts") -> s
     }
 
     lines = [
-        "# 🎓 Academic Debate Arena",
+        "# 🐙 ProfOcto — Research Debate",
         "",
         f"**Topic:** {session.topic}",
         f"**Field:** {session.field}",
@@ -105,7 +105,7 @@ def export_pdf(session: DebateSession, directory: str = "transcripts") -> str:
         from reportlab.lib.enums import TA_LEFT, TA_CENTER
     except ImportError:
         raise ImportError(
-            "reportlab chưa được cài. Chạy: pip install reportlab"
+            "reportlab not installed. Run: pip install reportlab"
         )
 
     os.makedirs(directory, exist_ok=True)
@@ -132,7 +132,7 @@ def export_pdf(session: DebateSession, directory: str = "transcripts") -> str:
     story = []
 
     # Header
-    story.append(Paragraph("🎓 Academic Debate Arena", style_title))
+    story.append(Paragraph("🐙 ProfOcto — Research Debate", style_title))
     story.append(Paragraph(f"<b>Topic:</b> {session.topic}", style_body))
     story.append(Paragraph(f"<b>Field:</b> {session.field} | <b>Date:</b> {session.started_at[:10]}", style_meta))
     story.append(Spacer(1, 0.4*cm))

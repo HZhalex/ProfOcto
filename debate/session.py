@@ -28,9 +28,9 @@ class ProfessorProfile:
     name: str
     university: str
     role: str          # e.g. "Empiricist", "Skeptic"
-    personality: str   # mô tả tính cách và phong cách tranh luận
-    stance: str        # quan điểm cụ thể với topic này
-    expertise: str     # chuyên môn
+    personality: str   # description of personality and debate style
+    stance: str        # specific stance on this topic
+    expertise: str     # area of expertise
 
 
 class DebateSession:
@@ -101,7 +101,7 @@ class DebateSession:
         self.iclr_readiness_scores = scores
 
     def get_history_text(self, max_turns: Optional[int] = None) -> str:
-        """Trả về lịch sử tranh luận dạng text để truyền vào context."""
+        """Return debate history as text to pass into context."""
         turns = self.turns[-max_turns:] if max_turns else self.turns
         lines = []
         for t in turns:
@@ -124,7 +124,7 @@ class DebateSession:
         filename = f"{directory}/debate_{slug}_{datetime.now().strftime('%Y%m%d_%H%M%S')}.md"
 
         lines = [
-            f"# Academic Debate Arena",
+            f"# 🐙 ProfOcto — Research Debate",
             f"**Topic:** {self.topic}",
             f"**Field:** {self.field}",
             f"**Date:** {self.started_at}",

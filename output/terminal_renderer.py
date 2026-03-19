@@ -30,7 +30,7 @@ def _get_color(prof_key: str, professors: list) -> str:
 
 def print_header(topic: str, field: str):
     console.print()
-    console.print(Rule(f"[bold]Academic Debate Arena[/bold]", style="bright_blue"))
+    console.print(Rule(f"[bold]🐙 ProfOcto[/bold]", style="bright_blue"))
     console.print(f"[dim]Field:[/dim] {field}")
     console.print(f"[bold]Topic:[/bold] {topic}")
     console.print()
@@ -82,7 +82,7 @@ def print_professor_header(prof: ProfessorProfile, turn_num: int, professors: li
 
 
 def print_streaming_start():
-    """Gọi trước khi stream text của professor."""
+    """Called before streaming professor's response text."""
     pass
 
 
@@ -100,7 +100,7 @@ def print_fact_tags(fact_tags: list[dict]):
             f"[dim] — {ft.get('claim', '')}[/dim]"
         )
 
-        # Lý do (nếu có — từ web search)
+        # Reason (if available - from web search)
         reason = ft.get("reason", "")
         if reason:
             console.print(f"    [dim italic]{reason}[/dim italic]")

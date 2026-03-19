@@ -1,5 +1,5 @@
 """
-FastAPI server — Academic Debate Arena
+FastAPI server — ProfOcto
 Run: uvicorn web.server:app --reload --port 8000
 """
 import sys, os
@@ -26,7 +26,7 @@ from agents.research_synthesizer import generate_research_kit, save_research_kit
 from output.exporter import export_markdown
 from debate.session import Turn
 
-app = FastAPI(title="Academic Debate Arena")
+app = FastAPI(title="ProfOcto - Research Gap Discovery")
 
 app.add_middleware(
     CORSMiddleware,
@@ -35,7 +35,7 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# Serve React build (sau khi build xong)
+# Serve React build after npm run build
 static_dir = os.path.join(os.path.dirname(__file__), "dist")
 if os.path.exists(static_dir):
     app.mount("/assets", StaticFiles(directory=f"{static_dir}/assets"), name="assets")
@@ -239,7 +239,7 @@ def index():
     dist_index = os.path.join(os.path.dirname(__file__), "dist", "index.html")
     if os.path.exists(dist_index):
         return FileResponse(dist_index)
-    return {"message": "Academic Debate Arena API", "docs": "/docs"}
+    return {"message": "ProfOcto API", "docs": "/docs"}
 
 
 @app.post("/api/debate/stream")

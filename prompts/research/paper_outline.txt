@@ -4,7 +4,7 @@ Topic: {topic}
 
 {debate_summary}
 
-Generate a structured paper outline with these sections in Vietnamese:
+Generate a structured paper outline with these sections in English:
 1. Abstract (3-4 sentences summarizing main contribution)
 2. Introduction (problem statement, motivation, contribution)
 3. Related Work (existing approaches and their limitations)

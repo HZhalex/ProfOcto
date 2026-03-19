@@ -17,7 +17,7 @@ import config
 from utils.logger import get_logger
 
 
-def _call_gemini_gap_analysis(prompt: str, max_tokens: int = 2000) -> str:
+def _call_gemini_gap_analysis(prompt: str, max_tokens: int = 800) -> str:
     """Call Gemini for gap analysis with error handling."""
     logger = get_logger()
     

@@ -11,6 +11,11 @@ if os.path.exists(_env_path):
                 os.environ.setdefault(_k.strip(), _v.strip())
 
 GEMINI_API_KEY = os.environ.get("GEMINI_API_KEY", "")
+if not GEMINI_API_KEY:
+    raise ValueError(
+        "GEMINI_API_KEY is not set. Copy .env.example to .env and add your key, "
+        "or set the environment variable before running."
+    )
 
 MODEL = "gemma-3-4b-it"
 
@@ -48,12 +53,12 @@ RESEARCH_KIT_DIR = "research_kits"  # Where to save research kits
 # PhD Analysis Output Directory
 PhD_ANALYSIS_DIR = "phd_analysis"  # Where to save rigor scores, gaps, recommendations
 
-# ICLR READINESS PIPELINE (Phase 5 - NEW)
-# This pipeline: Gap → Formal Problem → Novelty → Solution Sketch → ICLR Readiness
-GAP_TO_FORMAL_PROBLEM_ENABLED = True  # Convert informal gaps to formal problem statements
-NOVELTY_ANALYZER_ENABLED = True  # Assess novelty vs SOTA (0-100 ICLR score)
-SOLUTION_SKETCH_ENABLED = True  # Generate proof strategies from debate
-ICLR_READINESS_ENABLED = True  # Complete PhD pursuit readiness assessment
+# ICLR READINESS PIPELINE (Phase 5)
+# Disabled by default to save tokens — enable manually for deep analysis
+GAP_TO_FORMAL_PROBLEM_ENABLED = False  # Convert informal gaps to formal problem statements
+NOVELTY_ANALYZER_ENABLED = False  # Assess novelty vs SOTA (0-100 ICLR score)
+SOLUTION_SKETCH_ENABLED = False  # Generate proof strategies from debate
+ICLR_READINESS_ENABLED = False  # Complete PhD pursuit readiness assessment
 
 # ICLR Readiness thresholds
 ICLR_NOVELTY_THRESHOLD = 60  # Minimum novelty score to consider

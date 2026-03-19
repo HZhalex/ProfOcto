@@ -1,5 +1,5 @@
 """
-TurnManager — quản lý thứ tự lượt nói và phát hiện vòng lặp.
+TurnManager - manages speaking order and detects repetitive loops.
 """
 from debate.session import DebateSession, ProfessorProfile
 
@@ -7,20 +7,20 @@ from debate.session import DebateSession, ProfessorProfile
 class TurnManager:
     def __init__(self, session: DebateSession):
         self.session = session
-        self._idx = 0                    # index professor hiện tại
-        self._repeat_count: dict[str, int] = {}  # đếm số lần lặp ý của mỗi prof
+        self._idx = 0                    # current professor index
+        self._repeat_count: dict[str, int] = {}  # count repetitions per professor
 
     # ── Lấy professor tiếp theo ───────────────────────────────────────────────
 
     def next_professor(self) -> ProfessorProfile:
-        """Trả về professor tiếp theo theo vòng tròn."""
+        """Return the next professor in round-robin order."""
         profs = self.session.professors
         prof = profs[self._idx % len(profs)]
         self._idx += 1
         return prof
 
     def peek_next(self) -> ProfessorProfile:
-        """Xem professor tiếp theo mà không advance index."""
+        """Preview next professor without advancing index."""
         return self.session.professors[self._idx % len(self.session.professors)]
 
     # ── Phát hiện vòng lặp ───────────────────────────────────────────────────
@@ -39,7 +39,7 @@ class TurnManager:
             return False
 
         words_new = set(content.lower().split())
-        for prev in prev_turns[-2:]:  # chỉ check 2 lượt gần nhất
+        for prev in prev_turns[-2:]:  # only check last 2 turns
             words_prev = set(prev.lower().split())
             if not words_prev:
                 continue
@@ -61,14 +61,14 @@ class TurnManager:
         return turns_this_round >= len(self.session.professors) * config.MAX_TURNS_PER_ROUND
 
     def should_end_debate(self) -> bool:
-        """Kết thúc debate nếu đã đủ rounds."""
+        """End debate if enough rounds have been completed."""
         import config
         return self.session.current_round >= config.MAX_ROUNDS
 
-    # ── Stats ─────────────────────────────────────────────────────────────────
+    # ── Stats ──────────────────────────────────────────────────────────────────
 
     def get_stats(self) -> dict:
-        """Thống kê số lượt nói của từng professor."""
+        """Get statistics of speaking turns for each professor."""
         counts = {}
         for t in self.session.turns:
             if not t.is_moderator:

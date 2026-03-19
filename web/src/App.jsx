@@ -60,8 +60,7 @@ function HistoryPanel({ onView }) {
   }, []);
 
   if (loading) return <div style={s.histEmpty}>Loading...</div>;
-  if (!sessions.length)
-    return <div style={s.histEmpty}>No debates yet.</div>;
+  if (!sessions.length) return <div style={s.histEmpty}>No debates yet.</div>;
 
   return (
     <div style={s.histWrap}>
@@ -138,9 +137,9 @@ function SetupForm({ onStart }) {
   return (
     <div style={s.setupOuter}>
       <div style={s.setupLeft}>
-        <h1 style={s.logo}>⚔ Academic Debate Arena</h1>
+        <h1 style={s.logo}>🐙 ProfOcto</h1>
         <p style={s.subtitle}>
-          Learn by debating with top AI professors
+          AI-powered research gap discovery through expert debate
         </p>
 
         <div style={s.tabs}>

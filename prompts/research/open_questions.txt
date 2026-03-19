@@ -2,7 +2,7 @@ Based on this academic debate about {topic} in {field}, identify open research q
 
 {debate_summary}
 
-Generate 5-7 specific, actionable research questions in Vietnamese that:
+Generate 5-7 specific, actionable research questions in English that:
 - Extend the debate further
 - Address mentioned limitations
 - Suggest new research directions
